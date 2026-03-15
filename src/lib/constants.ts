@@ -26,6 +26,38 @@ export const WHATSAPP_DEMO_URL = `https://wa.me/${SITE_CONFIG.contact.whatsapp}?
 export const getWhatsAppUrl = (message: string) =>
   `https://wa.me/${SITE_CONFIG.contact.whatsapp}?text=${encodeURIComponent(message)}`;
 
+export const LMS_REGISTER_URL = `${SITE_CONFIG.lms}/register`;
+export const LMS_FEEDBACK_URL = `${SITE_CONFIG.lms}/feedback`;
+
+export const FREE_PREVIEW = {
+  heading: "Not Sure Yet? Try a Free Class First.",
+  subheading:
+    "Access free AI Agent sessions on our learning platform. No payment, no commitment — just real content.",
+  sessions: [
+    {
+      title: "Build Your First AI Agent",
+      description: "60-minute hands-on session. Go from zero to a working AI agent with tool calling.",
+      duration: "60 min",
+      level: "Beginner",
+      icon: "Bot",
+    },
+    {
+      title: "RAG Pipeline Crash Course",
+      description: "Build a document Q&A system with vector search. Real retrieval-augmented generation.",
+      duration: "45 min",
+      level: "Intermediate",
+      icon: "Database",
+    },
+    {
+      title: "Vibe Coding Live Demo",
+      description: "Watch an AI app get built in real-time using Cursor. From idea to deployed product.",
+      duration: "30 min",
+      level: "All Levels",
+      icon: "Sparkles",
+    },
+  ],
+};
+
 export const STATS = [
   { value: 13, suffix: "+", label: "Years Enterprise Experience" },
   { value: 500, suffix: "", label: "Fortune 500 Clients Served" },

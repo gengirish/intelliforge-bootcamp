@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { WHATSAPP_DEMO_URL } from "@/lib/constants";
+import { LMS_REGISTER_URL, WHATSAPP_DEMO_URL } from "@/lib/constants";
 
 const headlineLines = [
   { text: "Build ", highlight: "AI Agents." },
@@ -103,6 +103,25 @@ export function Hero() {
           >
             View Curriculum
           </Link>
+        </motion.div>
+        <motion.div
+          className="mt-4 flex justify-center"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.6,
+            delay: 1.1,
+            ease: [0.25, 0.46, 0.45, 0.94],
+          }}
+        >
+          <a
+            href={LMS_REGISTER_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-accent underline-offset-2 hover:underline"
+          >
+            Or try a free class first →
+          </a>
         </motion.div>
 
         {/* Trust badges */}

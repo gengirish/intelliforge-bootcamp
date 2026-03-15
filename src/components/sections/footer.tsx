@@ -83,6 +83,26 @@ export function Footer() {
                 </a>
               </li>
               <li>{SITE_CONFIG.contact.location}</li>
+              <li className="pt-2">
+                <a
+                  href={SITE_CONFIG.lms}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors hover:text-foreground"
+                >
+                  Learning Platform
+                </a>
+              </li>
+              <li>
+                <a
+                  href={SITE_CONFIG.mainSite}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors hover:text-foreground"
+                >
+                  IntelliForge AI (Main)
+                </a>
+              </li>
             </ul>
           </div>
         </div>

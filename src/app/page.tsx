@@ -1,3 +1,4 @@
+import { AnnouncementBanner } from "@/components/announcement-banner";
 import { Header } from "@/components/sections/header";
 import { Hero } from "@/components/sections/hero";
 import { StatsBar } from "@/components/sections/stats-bar";
@@ -7,6 +8,7 @@ import { Curriculum } from "@/components/sections/curriculum";
 import { CapstoneProducts } from "@/components/sections/capstone-products";
 import { Instructor } from "@/components/sections/instructor";
 import { WhoIsFor } from "@/components/sections/who-is-for";
+import { FreePreview } from "@/components/sections/free-preview";
 import { Outcomes } from "@/components/sections/outcomes";
 import { Testimonials } from "@/components/sections/testimonials";
 import { Pricing } from "@/components/sections/pricing";
@@ -18,7 +20,10 @@ import { WhatsAppFAB } from "@/components/whatsapp-fab";
 export default function Home() {
   return (
     <>
-      <Header />
+      <div className="fixed top-0 left-0 right-0 z-50 flex flex-col">
+        <AnnouncementBanner />
+        <Header />
+      </div>
       <main>
         <Hero />
         <StatsBar />
@@ -28,6 +33,7 @@ export default function Home() {
         <CapstoneProducts />
         <Instructor />
         <WhoIsFor />
+        <FreePreview />
         <Outcomes />
         <Testimonials />
         <Pricing />

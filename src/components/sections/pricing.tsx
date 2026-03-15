@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Check } from "lucide-react";
 import Script from "next/script";
 import { FadeIn } from "@/components/animations/fade-in";
-import { PRICING, SITE_CONFIG, WHATSAPP_DEMO_URL } from "@/lib/constants";
+import { LMS_REGISTER_URL, PRICING, SITE_CONFIG, WHATSAPP_DEMO_URL } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 declare global {
@@ -265,6 +265,20 @@ export function Pricing() {
                 </span>
               ))}
             </div>
+          </FadeIn>
+
+          <FadeIn delay={0.4} className="mt-8">
+            <p className="text-center text-muted">
+              Not ready to commit?{" "}
+              <a
+                href={LMS_REGISTER_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent hover:underline transition-colors"
+              >
+                Try a free class on our learning platform →
+              </a>
+            </p>
           </FadeIn>
         </div>
       </section>
