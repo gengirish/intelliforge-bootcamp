@@ -9,6 +9,10 @@ async function agentMailSend(params: {
   html: string;
   reply_to?: string;
 }) {
+  const recipients = (Array.isArray(params.to) ? params.to : [params.to]).map(
+    (e) => e.trim()
+  );
+
   const res = await fetch(`${API_BASE}/inboxes/${INBOX_ID}/messages/send`, {
     method: "POST",
     headers: {
@@ -16,10 +20,10 @@ async function agentMailSend(params: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      to: Array.isArray(params.to) ? params.to : [params.to],
+      to: recipients,
       subject: params.subject,
       html: params.html,
-      ...(params.reply_to ? { reply_to: params.reply_to } : {}),
+      ...(params.reply_to ? { reply_to: params.reply_to.trim() } : {}),
     }),
   });
 
