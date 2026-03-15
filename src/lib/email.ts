@@ -1,7 +1,7 @@
 const API_BASE = "https://api.agentmail.to/v0";
-const API_KEY = process.env.AGENTMAIL_API_KEY!;
-const INBOX_ID = process.env.AGENTMAIL_INBOX || "learning@intelliforge.tech";
-const ADMIN_EMAIL = process.env.ADMIN_NOTIFY_EMAIL || INBOX_ID;
+const API_KEY = (process.env.AGENTMAIL_API_KEY || "").trim();
+const INBOX_ID = (process.env.AGENTMAIL_INBOX || "learning@intelliforge.tech").trim();
+const ADMIN_EMAIL = (process.env.ADMIN_NOTIFY_EMAIL || INBOX_ID).trim();
 
 async function agentMailSend(params: {
   to: string | string[];
