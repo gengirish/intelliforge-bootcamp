@@ -14,6 +14,7 @@ import { Testimonials } from "@/components/sections/testimonials";
 import { Pricing } from "@/components/sections/pricing";
 import { FAQ } from "@/components/sections/faq";
 import { FinalCTA } from "@/components/sections/final-cta";
+import { ContactForm } from "@/components/sections/contact-form";
 import { Footer } from "@/components/sections/footer";
 import { WhatsAppFAB } from "@/components/whatsapp-fab";
 
@@ -39,6 +40,7 @@ export default function Home() {
         <Pricing />
         <FAQ />
         <FinalCTA />
+        <ContactForm />
       </main>
       <Footer />
       <WhatsAppFAB />
