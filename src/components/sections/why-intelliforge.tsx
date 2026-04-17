@@ -52,7 +52,7 @@ export function WhyIntelliForge() {
                 <article
                   className={cn(
                     "flex flex-col rounded-xl border border-border bg-surface-light p-6 transition-all duration-300",
-                    "hover:border-primary/30 hover:shadow-[0_0_30px_rgba(124,58,237,0.08)] sm:p-8"
+                    "hover:border-primary/30 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(124,58,237,0.12)] sm:p-8"
                   )}
                 >
                   <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/20 text-primary">

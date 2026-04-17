@@ -48,7 +48,7 @@ export function Footer() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-muted transition-colors hover:text-foreground"
+                      className="inline-block text-sm text-muted transition-all duration-200 hover:translate-x-0.5 hover:text-foreground"
                     >
                       {link.label}
                     </Link>
@@ -67,7 +67,7 @@ export function Footer() {
               <li>
                 <a
                   href={`mailto:${SITE_CONFIG.contact.email}`}
-                  className="transition-colors hover:text-foreground"
+                  className="inline-block transition-all duration-200 hover:translate-x-0.5 hover:text-foreground"
                 >
                   {SITE_CONFIG.contact.email}
                 </a>
@@ -77,7 +77,7 @@ export function Footer() {
                   href={`https://wa.me/${SITE_CONFIG.contact.whatsapp}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="transition-colors hover:text-foreground"
+                  className="inline-block transition-all duration-200 hover:translate-x-0.5 hover:text-foreground"
                 >
                   {SITE_CONFIG.contact.phone}
                 </a>
@@ -88,7 +88,7 @@ export function Footer() {
                   href={SITE_CONFIG.lms}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="transition-colors hover:text-foreground"
+                  className="inline-block transition-all duration-200 hover:translate-x-0.5 hover:text-foreground"
                 >
                   Learning Platform
                 </a>
@@ -98,7 +98,7 @@ export function Footer() {
                   href={SITE_CONFIG.mainSite}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="transition-colors hover:text-foreground"
+                  className="inline-block transition-all duration-200 hover:translate-x-0.5 hover:text-foreground"
                 >
                   IntelliForge AI (Main)
                 </a>
@@ -115,13 +115,13 @@ export function Footer() {
           <div className="flex items-center gap-6 text-sm">
             <Link
               href="/terms"
-              className="text-muted transition-colors hover:text-foreground"
+              className="inline-block text-muted transition-all duration-200 hover:translate-x-0.5 hover:text-foreground"
             >
               Terms
             </Link>
             <Link
               href="/privacy"
-              className="text-muted transition-colors hover:text-foreground"
+              className="inline-block text-muted transition-all duration-200 hover:translate-x-0.5 hover:text-foreground"
             >
               Privacy
             </Link>
@@ -129,7 +129,7 @@ export function Footer() {
               type="button"
               onClick={scrollToTop}
               className={cn(
-                "inline-flex items-center gap-1.5 text-muted transition-colors hover:text-foreground"
+                "inline-flex cursor-pointer items-center gap-1.5 text-muted transition-all duration-200 hover:translate-x-0.5 hover:text-foreground"
               )}
               aria-label="Scroll to top"
             >

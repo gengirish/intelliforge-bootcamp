@@ -92,7 +92,12 @@ export function ContactForm() {
                 </div>
                 <div>
                   <p className="font-medium text-foreground">WhatsApp</p>
-                  <a href="https://wa.me/918555960837" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
+                  <a
+                    href="https://wa.me/918555960837"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cursor-pointer text-accent transition-colors duration-200 hover:underline"
+                  >
                     +91 85559 60837
                   </a>
                 </div>
@@ -128,7 +133,7 @@ export function ContactForm() {
                   type="text"
                   required
                   placeholder="Your full name"
-                  className="w-full rounded-lg border border-border bg-surface-light px-4 py-3 text-foreground placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
+                  className="w-full rounded-lg border border-border bg-surface-light px-4 py-3 text-foreground placeholder:text-muted/60 transition-colors duration-200 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 />
               </div>
 
@@ -142,7 +147,7 @@ export function ContactForm() {
                   type="email"
                   required
                   placeholder="you@example.com"
-                  className="w-full rounded-lg border border-border bg-surface-light px-4 py-3 text-foreground placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
+                  className="w-full rounded-lg border border-border bg-surface-light px-4 py-3 text-foreground placeholder:text-muted/60 transition-colors duration-200 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 />
               </div>
 
@@ -155,7 +160,7 @@ export function ContactForm() {
                   name="phone"
                   type="tel"
                   placeholder="+91 98765 43210"
-                  className="w-full rounded-lg border border-border bg-surface-light px-4 py-3 text-foreground placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
+                  className="w-full rounded-lg border border-border bg-surface-light px-4 py-3 text-foreground placeholder:text-muted/60 transition-colors duration-200 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 />
               </div>
 
@@ -169,7 +174,7 @@ export function ContactForm() {
                   required
                   rows={4}
                   placeholder="Tell us about your interest in the bootcamp..."
-                  className="w-full resize-none rounded-lg border border-border bg-surface-light px-4 py-3 text-foreground placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
+                  className="w-full resize-none rounded-lg border border-border bg-surface-light px-4 py-3 text-foreground placeholder:text-muted/60 transition-colors duration-200 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 />
               </div>
 
@@ -177,10 +182,10 @@ export function ContactForm() {
                 type="submit"
                 disabled={status === "submitting"}
                 className={cn(
-                  "flex w-full items-center justify-center gap-2 rounded-lg px-6 py-3.5 font-semibold transition-all",
+                  "flex w-full items-center justify-center gap-2 rounded-lg px-6 py-3.5 font-semibold transition-all duration-200",
                   status === "submitting"
                     ? "cursor-not-allowed bg-primary/50 text-foreground/60"
-                    : "bg-primary text-foreground hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/20"
+                    : "cursor-pointer bg-primary text-foreground hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/20"
                 )}
               >
                 {status === "submitting" ? (
@@ -197,14 +202,14 @@ export function ContactForm() {
               </button>
 
               {status === "success" && (
-                <div className="flex items-center gap-2 rounded-lg bg-green-500/10 p-4 text-sm text-green-400">
+                <div className="flex animate-[fadeIn_0.3s_ease-in] items-center gap-2 rounded-lg bg-green-500/10 p-4 text-sm text-green-400">
                   <CheckCircle className="h-5 w-5 shrink-0" />
                   Message sent! We&apos;ll get back to you within 24 hours.
                 </div>
               )}
 
               {status === "error" && (
-                <div className="flex items-center gap-2 rounded-lg bg-red-500/10 p-4 text-sm text-red-400">
+                <div className="flex animate-[fadeIn_0.3s_ease-in] items-center gap-2 rounded-lg bg-red-500/10 p-4 text-sm text-red-400">
                   <AlertCircle className="h-5 w-5 shrink-0" />
                   {errorMessage}
                 </div>

@@ -22,7 +22,7 @@ export function StatsBar() {
                   end={stat.value}
                   suffix={stat.suffix}
                   duration={2}
-                  className="text-3xl font-bold text-foreground sm:text-4xl lg:text-5xl"
+                  className="text-3xl font-bold gradient-text sm:text-4xl lg:text-5xl"
                 />
                 <p className="mt-2 text-sm text-muted sm:text-base">
                   {stat.label}
