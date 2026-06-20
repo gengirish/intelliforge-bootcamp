@@ -1,3 +1,5 @@
+import { SITE_CONFIG, WHATSAPP_DEMO_URL, ZOOM_MEETING, ZOOM_URL } from "@/lib/constants";
+
 const API_BASE = "https://api.agentmail.to/v0";
 const API_KEY = (process.env.AGENTMAIL_API_KEY || "").trim();
 const INBOX_ID = (process.env.AGENTMAIL_INBOX || "learning@intelliforge.tech").trim();
@@ -63,11 +65,12 @@ export async function sendEnquiryNotification(data: EnquiryPayload) {
       <p>We received your enquiry about the <strong>IntelliForge AI Bootcamp</strong>. Our team will get back to you within 24 hours.</p>
       <p>In the meantime, you can:</p>
       <ul style="padding-left: 20px;">
-        <li style="margin-bottom: 8px;"><a href="https://learning.intelliforge.tech" style="color: #06B6D4;">Try a free class on our LMS</a></li>
-        <li style="margin-bottom: 8px;"><a href="https://wa.me/918555960837" style="color: #06B6D4;">Chat with us on WhatsApp</a></li>
+        <li style="margin-bottom: 8px;"><a href="${ZOOM_URL}" style="color: #06B6D4;">Join our live session: ${ZOOM_MEETING.topic} (${ZOOM_MEETING.time})</a></li>
+        <li style="margin-bottom: 8px;"><a href="${SITE_CONFIG.lms}" style="color: #06B6D4;">Try a free class on our LMS</a></li>
+        <li style="margin-bottom: 8px;"><a href="${WHATSAPP_DEMO_URL}" style="color: #06B6D4;">Chat with us on WhatsApp</a></li>
       </ul>
       <hr style="border: none; border-top: 1px solid #1E293B; margin: 24px 0;" />
-      <p style="color: #94A3B8; font-size: 12px;">IntelliForge AI · Hyderabad, India · <a href="https://upskill.intelliforge.tech" style="color: #94A3B8;">upskill.intelliforge.tech</a></p>
+      <p style="color: #94A3B8; font-size: 12px;">IntelliForge AI · Hyderabad, India · <a href="${SITE_CONFIG.url}" style="color: #94A3B8;">upskill.intelliforge.tech</a></p>
     </div>
   `;
 

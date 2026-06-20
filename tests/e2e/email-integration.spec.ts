@@ -7,15 +7,15 @@ test.describe("Email Integration — Contact Form & New Sections", () => {
   });
 
   test.describe("Announcement Banner", () => {
-    test("renders with LMS link and dismiss button", async ({ page }) => {
+    test("renders with Zoom link and dismiss button", async ({ page }) => {
       const banner = page.locator('[class*="z-[60]"]');
       await expect(banner).toBeVisible();
-      await expect(banner.getByText("Try a Free AI Agent Class")).toBeVisible();
+      await expect(banner.getByText(/Live Session: Why Upskill and How/)).toBeVisible();
 
-      const lmsLink = banner.getByRole("link", { name: "Start Learning →" });
-      await expect(lmsLink).toBeVisible();
-      await expect(lmsLink).toHaveAttribute("href", /learning\.intelliforge\.tech/);
-      await expect(lmsLink).toHaveAttribute("target", "_blank");
+      const zoomLink = banner.getByRole("link", { name: "Join on Zoom →" });
+      await expect(zoomLink).toBeVisible();
+      await expect(zoomLink).toHaveAttribute("href", /\/zoom$/);
+      await expect(zoomLink).toHaveAttribute("target", "_blank");
     });
 
     test("can be dismissed with X button", async ({ page }) => {

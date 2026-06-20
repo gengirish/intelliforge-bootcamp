@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { X } from "lucide-react";
-import { LMS_REGISTER_URL } from "@/lib/constants";
+import { ZOOM_MEETING, ZOOM_URL } from "@/lib/constants";
 
 export function AnnouncementBanner() {
   const [isVisible, setIsVisible] = useState(true);
@@ -18,15 +18,15 @@ export function AnnouncementBanner() {
       }}
     >
       <span className="shrink-0">
-        🎓 Try a Free AI Agent Class — no signup needed
+        📅 Live Session: {ZOOM_MEETING.topic} — Jun 21, 9:00 AM IST
       </span>
       <a
-        href={LMS_REGISTER_URL}
+        href={ZOOM_URL}
         target="_blank"
         rel="noopener noreferrer"
         className="shrink-0 font-medium underline underline-offset-2 hover:no-underline"
       >
-        Start Learning →
+        Join on Zoom →
       </a>
       <button
         type="button"

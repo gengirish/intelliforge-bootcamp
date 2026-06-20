@@ -29,6 +29,18 @@ export const getWhatsAppUrl = (message: string) =>
 export const LMS_REGISTER_URL = `${SITE_CONFIG.lms}/register`;
 export const LMS_FEEDBACK_URL = `${SITE_CONFIG.lms}/feedback`;
 
+export const ZOOM_MEETING = {
+  topic: "Why Upskill and How?",
+  time: "Jun 21, 2026 09:00 AM Mumbai, Kolkata, New Delhi",
+  joinUrl:
+    "https://us06web.zoom.us/j/86071939853?pwd=VovRc9JnO1qDKxqK9L3JNJ3cp3KwCB.1",
+  meetingId: "86071939853",
+  passcode: "314874",
+  chatUrl: "https://us06web.zoom.us/launch/jc/86071939853",
+};
+
+export const ZOOM_URL = `${SITE_CONFIG.url}/zoom`;
+
 export const FREE_PREVIEW = {
   heading: "Not Sure Yet? Try a Free Class First.",
   subheading:
