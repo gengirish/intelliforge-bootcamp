@@ -41,6 +41,13 @@ export const ZOOM_MEETING = {
 
 export const ZOOM_URL = `${SITE_CONFIG.url}/zoom`;
 
+export const WHATSAPP_GROUP = {
+  name: "AI Roadmap Cohort!",
+  inviteUrl: "https://chat.whatsapp.com/LwxMCJ1EqLm4oLOG0fLqmE",
+};
+
+export const WHATSAPP_GROUP_URL = `${SITE_CONFIG.url}/whatsapp`;
+
 export const FREE_PREVIEW = {
   heading: "Not Sure Yet? Try a Free Class First.",
   subheading:

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ArrowUp } from "lucide-react";
-import { NAV_LINKS, SITE_CONFIG, ZOOM_URL } from "@/lib/constants";
+import { NAV_LINKS, SITE_CONFIG, WHATSAPP_GROUP_URL, ZOOM_URL } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 function scrollToTop() {
@@ -84,6 +84,16 @@ export function Footer() {
               </li>
               <li>{SITE_CONFIG.contact.location}</li>
               <li className="pt-2">
+                <a
+                  href={WHATSAPP_GROUP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block transition-all duration-200 hover:translate-x-0.5 hover:text-foreground"
+                >
+                  Join WhatsApp Group
+                </a>
+              </li>
+              <li>
                 <a
                   href={ZOOM_URL}
                   target="_blank"

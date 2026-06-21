@@ -1,4 +1,4 @@
-import { SITE_CONFIG, WHATSAPP_DEMO_URL, ZOOM_MEETING, ZOOM_URL } from "@/lib/constants";
+import { SITE_CONFIG, WHATSAPP_DEMO_URL, WHATSAPP_GROUP, WHATSAPP_GROUP_URL, ZOOM_MEETING, ZOOM_URL } from "@/lib/constants";
 
 const API_BASE = "https://api.agentmail.to/v0";
 const API_KEY = (process.env.AGENTMAIL_API_KEY || "").trim();
@@ -66,6 +66,7 @@ export async function sendEnquiryNotification(data: EnquiryPayload) {
       <p>In the meantime, you can:</p>
       <ul style="padding-left: 20px;">
         <li style="margin-bottom: 8px;"><a href="${ZOOM_URL}" style="color: #06B6D4;">Join our live session: ${ZOOM_MEETING.topic} (${ZOOM_MEETING.time})</a></li>
+        <li style="margin-bottom: 8px;"><a href="${WHATSAPP_GROUP_URL}" style="color: #06B6D4;">Join our WhatsApp group: ${WHATSAPP_GROUP.name}</a></li>
         <li style="margin-bottom: 8px;"><a href="${SITE_CONFIG.lms}" style="color: #06B6D4;">Try a free class on our LMS</a></li>
         <li style="margin-bottom: 8px;"><a href="${WHATSAPP_DEMO_URL}" style="color: #06B6D4;">Chat with us on WhatsApp</a></li>
       </ul>
