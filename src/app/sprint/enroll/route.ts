@@ -1,0 +1,94 @@
+import { auth, currentUser } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
+import Razorpay from "razorpay";
+import { z } from "zod";
+import { prisma } from "@/lib/prisma";
+import type { ApiResponse } from "@/lib/api-response";
+
+const rzp = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID!,
+  key_secret: process.env.RAZORPAY_KEY_SECRET!,
+});
+
+const schema = z.object({
+  sprintSlug: z.string().default("ai-sprint-jun-2026"),
+});
+
+export async function POST(req: Request) {
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json<ApiResponse<null>>(
+      { success: false, error: "Unauthorized" },
+      { status: 401 }
+    );
+  }
+
+  const parsed = schema.safeParse(await req.json());
+  if (!parsed.success) {
+    return NextResponse.json<ApiResponse<null>>(
+      { success: false, error: "Invalid input" },
+      { status: 400 }
+    );
+  }
+
+  const { sprintSlug } = parsed.data;
+  const user = await currentUser();
+
+  const sprint = await prisma.sprint.findFirst({
+    where: { slug: sprintSlug, isActive: true },
+  });
+  if (!sprint) {
+    return NextResponse.json<ApiResponse<null>>(
+      { success: false, error: "Sprint not found or inactive" },
+      { status: 404 }
+    );
+  }
+
+  if (sprint.seatsFilled >= sprint.seatsTotal) {
+    return NextResponse.json<ApiResponse<null>>(
+      { success: false, error: "No seats remaining" },
+      { status: 400 }
+    );
+  }
+
+  const existing = await prisma.sprintEnrollment.findFirst({
+    where: { userId, sprintId: sprint.id, status: "PAID" },
+  });
+  if (existing) {
+    return NextResponse.json<ApiResponse<null>>(
+      { success: false, error: "Already enrolled in this sprint" },
+      { status: 400 }
+    );
+  }
+
+  const order = await rzp.orders.create({
+    amount: sprint.priceInPaise,
+    currency: "INR",
+    receipt: `sprint_${userId}_${Date.now()}`,
+    notes: { sprintId: sprint.id, userId, sprintSlug },
+  });
+
+  await prisma.sprintEnrollment.create({
+    data: {
+      sprintId: sprint.id,
+      userId,
+      email: user?.emailAddresses[0]?.emailAddress ?? "",
+      name: `${user?.firstName ?? ""} ${user?.lastName ?? ""}`.trim(),
+      phone: user?.phoneNumbers[0]?.phoneNumber ?? null,
+      razorpayOrderId: order.id,
+      amountInPaise: sprint.priceInPaise,
+      status: "PENDING",
+    },
+  });
+
+  return NextResponse.json<
+    ApiResponse<{ orderId: string; amount: number; currency: string }>
+  >({
+    success: true,
+    data: {
+      orderId: order.id,
+      amount: sprint.priceInPaise,
+      currency: "INR",
+    },
+  });
+}

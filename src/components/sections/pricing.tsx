@@ -6,36 +6,7 @@ import Script from "next/script";
 import { FadeIn } from "@/components/animations/fade-in";
 import { LMS_REGISTER_URL, PRICING, SITE_CONFIG, WHATSAPP_DEMO_URL } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-
-declare global {
-  interface Window {
-    Razorpay?: new (options: RazorpayCheckoutOptions) => RazorpayInstance;
-  }
-}
-
-interface RazorpayCheckoutOptions {
-  key: string;
-  amount?: number;
-  currency: string;
-  name: string;
-  description?: string;
-  order_id: string;
-  handler?: (response: RazorpayPaymentResponse) => void;
-  prefill?: { name?: string; email?: string; contact?: string };
-  theme?: { color?: string };
-  modal?: { ondismiss?: () => void };
-}
-
-interface RazorpayPaymentResponse {
-  razorpay_payment_id: string;
-  razorpay_order_id: string;
-  razorpay_signature: string;
-}
-
-interface RazorpayInstance {
-  open: () => void;
-  on: (event: string, handler: (response: RazorpayPaymentResponse) => void) => void;
-}
+import type { RazorpayCheckoutOptions } from "@/types/razorpay";
 
 const RAZORPAY_SCRIPT_URL = "https://checkout.razorpay.com/v1/checkout.js";
 
