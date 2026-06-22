@@ -5,14 +5,18 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import type { ApiResponse } from "@/lib/api-response";
 
-const rzp = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID!,
-  key_secret: process.env.RAZORPAY_KEY_SECRET!,
-});
-
 const schema = z.object({
   sprintSlug: z.string().default("ai-sprint-jun-2026"),
 });
+
+function getRazorpay() {
+  const keyId = process.env.RAZORPAY_KEY_ID;
+  const keySecret = process.env.RAZORPAY_KEY_SECRET;
+  if (!keyId || !keySecret) {
+    return null;
+  }
+  return new Razorpay({ key_id: keyId, key_secret: keySecret });
+}
 
 export async function POST(req: Request) {
   const { userId } = await auth();
@@ -58,6 +62,14 @@ export async function POST(req: Request) {
     return NextResponse.json<ApiResponse<null>>(
       { success: false, error: "Already enrolled in this sprint" },
       { status: 400 }
+    );
+  }
+
+  const rzp = getRazorpay();
+  if (!rzp) {
+    return NextResponse.json<ApiResponse<null>>(
+      { success: false, error: "Payment provider not configured" },
+      { status: 500 }
     );
   }
 
