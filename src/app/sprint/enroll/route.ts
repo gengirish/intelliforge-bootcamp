@@ -18,6 +18,11 @@ function getRazorpay() {
   return new Razorpay({ key_id: keyId, key_secret: keySecret });
 }
 
+/** Razorpay receipt max length is 40; Clerk user IDs make longer strings fail validation. */
+function createSprintReceipt() {
+  return `spr_${Date.now().toString(36)}`;
+}
+
 export async function POST(req: Request) {
   const userId =
     process.env.E2E_BYPASS_CLERK === "1"
@@ -78,34 +83,42 @@ export async function POST(req: Request) {
     );
   }
 
-  const order = await rzp.orders.create({
-    amount: sprint.priceInPaise,
-    currency: "INR",
-    receipt: `sprint_${userId}_${Date.now()}`,
-    notes: { sprintId: sprint.id, userId, sprintSlug },
-  });
-
-  await prisma.sprintEnrollment.create({
-    data: {
-      sprintId: sprint.id,
-      userId,
-      email: user?.emailAddresses[0]?.emailAddress ?? "",
-      name: `${user?.firstName ?? ""} ${user?.lastName ?? ""}`.trim(),
-      phone: user?.phoneNumbers[0]?.phoneNumber ?? null,
-      razorpayOrderId: order.id,
-      amountInPaise: sprint.priceInPaise,
-      status: "PENDING",
-    },
-  });
-
-  return NextResponse.json<
-    ApiResponse<{ orderId: string; amount: number; currency: string }>
-  >({
-    success: true,
-    data: {
-      orderId: order.id,
+  try {
+    const order = await rzp.orders.create({
       amount: sprint.priceInPaise,
       currency: "INR",
-    },
-  });
+      receipt: createSprintReceipt(),
+      notes: { sprintId: sprint.id, userId, sprintSlug },
+    });
+
+    await prisma.sprintEnrollment.create({
+      data: {
+        sprintId: sprint.id,
+        userId,
+        email: user?.emailAddresses[0]?.emailAddress ?? "",
+        name: `${user?.firstName ?? ""} ${user?.lastName ?? ""}`.trim(),
+        phone: user?.phoneNumbers[0]?.phoneNumber ?? null,
+        razorpayOrderId: order.id,
+        amountInPaise: sprint.priceInPaise,
+        status: "PENDING",
+      },
+    });
+
+    return NextResponse.json<
+      ApiResponse<{ orderId: string; amount: number; currency: string }>
+    >({
+      success: true,
+      data: {
+        orderId: order.id,
+        amount: sprint.priceInPaise,
+        currency: "INR",
+      },
+    });
+  } catch (err) {
+    console.error("[Sprint enroll] Order creation failed:", err);
+    return NextResponse.json<ApiResponse<null>>(
+      { success: false, error: "Failed to create payment order" },
+      { status: 500 }
+    );
+  }
 }
