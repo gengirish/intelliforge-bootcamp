@@ -12,14 +12,16 @@ async function main() {
         "Ship your first AI product in 14 days. Claude API chatbot + RAG system deployed to Vercel.",
       priceInPaise: 499900,
       originalPriceInPaise: 1299900,
-      startDate: new Date("2026-06-29T03:30:00.000Z"),
-      endDate: new Date("2026-07-12T03:30:00.000Z"),
+      startDate: new Date("2026-07-04T03:30:00.000Z"),
+      endDate: new Date("2026-07-18T03:30:00.000Z"),
       seatsTotal: 30,
       seatsFilled: 0,
       isActive: true,
     },
     update: {
       isActive: true,
+      startDate: new Date("2026-07-04T03:30:00.000Z"),
+      endDate: new Date("2026-07-18T03:30:00.000Z"),
     },
   });
   console.log("Sprint seeded.");

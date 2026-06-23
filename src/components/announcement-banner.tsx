@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { X } from "lucide-react";
-import { ZOOM_MEETING, ZOOM_URL } from "@/lib/constants";
+import { SPRINT_CONFIG } from "@/lib/constants";
 
 export function AnnouncementBanner() {
   const [isVisible, setIsVisible] = useState(true);
@@ -18,16 +19,15 @@ export function AnnouncementBanner() {
       }}
     >
       <span className="shrink-0">
-        📅 Live Session: {ZOOM_MEETING.topic} — {ZOOM_MEETING.displayShort}
+        🔥 2-Week AI Sprint — starts {SPRINT_CONFIG.cohortStartDate} ·{" "}
+        {SPRINT_CONFIG.priceDisplay}
       </span>
-      <a
-        href={ZOOM_URL}
-        target="_blank"
-        rel="noopener noreferrer"
+      <Link
+        href={SPRINT_CONFIG.href}
         className="shrink-0 font-medium underline underline-offset-2 hover:no-underline"
       >
-        Join on Zoom →
-      </a>
+        Enroll now →
+      </Link>
       <button
         type="button"
         aria-label="Dismiss announcement"

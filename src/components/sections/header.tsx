@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons/whatsapp-icon";
 import { cn } from "@/lib/utils";
-import { NAV_LINKS, SITE_CONFIG, WHATSAPP_DEMO_URL } from "@/lib/constants";
+import { NAV_LINKS, SITE_CONFIG, SPRINT_CONFIG, WHATSAPP_DEMO_URL } from "@/lib/constants";
 
 const HASH_SECTION_IDS = NAV_LINKS.filter((link) => link.href.startsWith("#")).map(
   (link) => link.href.slice(1)
@@ -113,15 +113,12 @@ export function Header() {
 
         {/* Desktop CTA */}
         <div className="hidden md:block">
-          <a
-            href={WHATSAPP_DEMO_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href={SPRINT_CONFIG.href}
             className="glow-cta inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-cta px-4 py-2 text-sm font-medium text-background transition-transform duration-200 hover:scale-105 hover:bg-cta-hover"
           >
-            <WhatsAppIcon className="h-4 w-4" />
-            Book Free Demo
-          </a>
+            Join AI Sprint
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -153,11 +150,18 @@ export function Header() {
               {link.label}
             </Link>
           ))}
+          <Link
+            href={SPRINT_CONFIG.href}
+            className="mt-2 inline-flex items-center justify-center gap-2 rounded-lg bg-cta px-4 py-3 text-sm font-medium text-background hover:bg-cta-hover transition-colors"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Join AI Sprint — {SPRINT_CONFIG.priceDisplay}
+          </Link>
           <a
             href={WHATSAPP_DEMO_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-2 inline-flex items-center justify-center gap-2 rounded-lg bg-cta px-4 py-3 text-sm font-medium text-background hover:bg-cta-hover transition-colors"
+            className="mt-2 inline-flex items-center justify-center gap-2 rounded-lg border border-border px-4 py-3 text-sm font-medium text-foreground hover:bg-surface-light transition-colors"
             onClick={() => setIsMobileMenuOpen(false)}
           >
             <WhatsAppIcon className="h-4 w-4" />

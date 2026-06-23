@@ -30,7 +30,7 @@ test.describe("Responsive — Mobile (375x812)", () => {
 
   test("hero stacks vertically on mobile", async ({ page }) => {
     await expect(page.getByText("Build AI Agents.")).toBeVisible();
-    await expect(page.getByRole("link", { name: "Book Free Demo Class" }).first()).toBeVisible();
+    await expect(page.getByRole("link", { name: /Join 2-Week AI Sprint/ }).first()).toBeVisible();
   });
 
   test("pricing cards stack on mobile", async ({ page }) => {

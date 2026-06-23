@@ -7,15 +7,14 @@ test.describe("Email Integration — Contact Form & New Sections", () => {
   });
 
   test.describe("Announcement Banner", () => {
-    test("renders with Zoom link and dismiss button", async ({ page }) => {
+    test("renders with sprint enroll link and dismiss button", async ({ page }) => {
       const banner = page.locator('[class*="z-[60]"]');
       await expect(banner).toBeVisible();
-      await expect(banner.getByText(/Live Session: Why Upskill and How/)).toBeVisible();
+      await expect(banner.getByText(/2-Week AI Sprint/)).toBeVisible();
 
-      const zoomLink = banner.getByRole("link", { name: "Join on Zoom →" });
-      await expect(zoomLink).toBeVisible();
-      await expect(zoomLink).toHaveAttribute("href", /\/zoom$/);
-      await expect(zoomLink).toHaveAttribute("target", "_blank");
+      const sprintLink = banner.getByRole("link", { name: "Enroll now →" });
+      await expect(sprintLink).toBeVisible();
+      await expect(sprintLink).toHaveAttribute("href", "/sprint");
     });
 
     test("can be dismissed with X button", async ({ page }) => {
@@ -32,7 +31,7 @@ test.describe("Email Integration — Contact Form & New Sections", () => {
   test.describe("Hero — Free Class CTA", () => {
     test("shows 'try a free class' link pointing to LMS", async ({ page }) => {
       const freeClassLink = page.getByRole("link", {
-        name: "Or try a free class first →",
+        name: "Try a free class →",
         exact: true,
       });
       await expect(freeClassLink).toBeVisible();
@@ -113,20 +112,25 @@ test.describe("Email Integration — Contact Form & New Sections", () => {
   });
 
   test.describe("Final CTA — Dual Path", () => {
-    test("has both WhatsApp and free class CTAs", async ({ page }) => {
+    test("has sprint, WhatsApp, and free class CTAs", async ({ page }) => {
       const finalCtaSection = page.locator("section", {
         has: page.getByText("Stop Learning AI"),
       });
 
+      const sprintCTA = finalCtaSection.getByRole("link", {
+        name: /Join 2-Week AI Sprint/,
+      });
+      await expect(sprintCTA).toBeVisible();
+      await expect(sprintCTA).toHaveAttribute("href", "/sprint");
+
       const whatsappCTA = finalCtaSection.getByRole("link", {
-        name: /Book Your Free Demo Class/i,
+        name: /Or Book a Free Demo First/i,
       });
       await expect(whatsappCTA).toBeVisible();
       await expect(whatsappCTA).toHaveAttribute("href", /wa\.me/);
 
       const freeClassCTA = finalCtaSection.getByRole("link", {
-        name: "Or Try a Free Class First",
-        exact: true,
+        name: /Try a free class on our LMS/i,
       });
       await expect(freeClassCTA).toBeVisible();
       await expect(freeClassCTA).toHaveAttribute(

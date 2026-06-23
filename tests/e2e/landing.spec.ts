@@ -22,8 +22,10 @@ test.describe("Landing Page — All Sections", () => {
     await expect(page.getByText("Build AI Agents.")).toBeVisible();
     await expect(page.getByText("Ship AI Products.")).toBeVisible();
     await expect(page.getByText("Own Your AI Future.")).toBeVisible();
-    await expect(page.getByRole("link", { name: "Book Free Demo Class" }).first()).toBeVisible();
-    await expect(page.getByRole("link", { name: "View Curriculum" })).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: /Join 2-Week AI Sprint/ }).first()
+    ).toBeVisible();
+    await expect(page.getByRole("link", { name: "12-Week Bootcamp" })).toBeVisible();
   });
 
   test("trust badges are visible", async ({ page }) => {

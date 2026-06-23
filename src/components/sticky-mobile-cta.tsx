@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { WHATSAPP_DEMO_URL } from "@/lib/constants";
+import { SPRINT_CONFIG, WHATSAPP_DEMO_URL } from "@/lib/constants";
 
 export function StickyMobileCta() {
   const [isHidden, setIsHidden] = useState(false);
@@ -49,14 +50,14 @@ export function StickyMobileCta() {
           rel="noopener noreferrer"
           className="flex flex-1 items-center justify-center rounded-lg border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-surface-light"
         >
-          Book Demo
+          Free Demo
         </a>
-        <a
-          href="#pricing"
+        <Link
+          href={SPRINT_CONFIG.href}
           className="glow-cta flex flex-1 items-center justify-center rounded-lg bg-cta px-4 py-2.5 text-sm font-medium text-background transition-colors hover:bg-cta-hover"
         >
-          Enroll
-        </a>
+          AI Sprint {SPRINT_CONFIG.priceDisplay}
+        </Link>
       </div>
     </div>
   );
