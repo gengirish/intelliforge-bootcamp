@@ -1,5 +1,3 @@
-"use client";
-
 import { Linkedin } from "lucide-react";
 import { FadeIn } from "@/components/animations/fade-in";
 import { SITE_CONFIG } from "@/lib/constants";

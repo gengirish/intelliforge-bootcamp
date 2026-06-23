@@ -1,7 +1,4 @@
-"use client";
-
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { LMS_REGISTER_URL, WHATSAPP_DEMO_URL } from "@/lib/constants";
 
@@ -36,52 +33,21 @@ export function Hero() {
       </div>
 
       <div className="relative z-10 mx-auto max-w-4xl text-center">
-        {/* Headline with staggered animation */}
         <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
           {headlineLines.map((line, i) => (
-            <motion.span
-              key={i}
-              className="block"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.6,
-                delay: i * 0.2,
-                ease: [0.25, 0.46, 0.45, 0.94],
-              }}
-            >
+            <span key={i} className="hero-animate-headline block">
               {line.text}
               <span className="gradient-text">{line.highlight}</span>
-            </motion.span>
+            </span>
           ))}
         </h1>
 
-        {/* Subheading */}
-        <motion.p
-          className="mx-auto mt-6 max-w-2xl text-lg text-muted sm:text-xl"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.6,
-            delay: 0.8,
-            ease: [0.25, 0.46, 0.45, 0.94],
-          }}
-        >
+        <p className="hero-animate-subheading mx-auto mt-6 max-w-2xl text-lg text-muted sm:text-xl">
           Most bootcamps teach you to build for someone else. We teach you to
           build, ship & monetize your own AI-powered products — in 12 weeks.
-        </motion.p>
+        </p>
 
-        {/* CTAs */}
-        <motion.div
-          className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.6,
-            delay: 1,
-            ease: [0.25, 0.46, 0.45, 0.94],
-          }}
-        >
+        <div className="hero-animate-cta mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <a
             href={WHATSAPP_DEMO_URL}
             target="_blank"
@@ -103,17 +69,8 @@ export function Hero() {
           >
             View Curriculum
           </Link>
-        </motion.div>
-        <motion.div
-          className="mt-4 flex justify-center"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.6,
-            delay: 1.1,
-            ease: [0.25, 0.46, 0.45, 0.94],
-          }}
-        >
+        </div>
+        <div className="hero-animate-secondary mt-4 flex justify-center">
           <a
             href={LMS_REGISTER_URL}
             target="_blank"
@@ -122,19 +79,9 @@ export function Hero() {
           >
             Or try a free class first →
           </a>
-        </motion.div>
+        </div>
 
-        {/* Trust badges */}
-        <motion.div
-          className="mt-12 flex flex-wrap items-center justify-center gap-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{
-            duration: 0.6,
-            delay: 1.2,
-            ease: [0.25, 0.46, 0.45, 0.94],
-          }}
-        >
+        <div className="hero-animate-badges mt-12 flex flex-wrap items-center justify-center gap-4">
           {trustBadges.map((badge) => (
             <span
               key={badge}
@@ -143,7 +90,7 @@ export function Hero() {
               {badge}
             </span>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

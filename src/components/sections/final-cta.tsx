@@ -1,5 +1,3 @@
-"use client";
-
 import { FadeIn } from "@/components/animations/fade-in";
 import { cn } from "@/lib/utils";
 import { LMS_REGISTER_URL, WHATSAPP_DEMO_URL } from "@/lib/constants";

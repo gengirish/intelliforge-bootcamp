@@ -1,29 +1,35 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import {
   LMS_REGISTER_URL,
-  SPRINT_CONFIG,
+  SITE_CONFIG,
   WHATSAPP_GROUP_URL,
 } from "@/lib/constants";
 
-export default async function SprintSuccessPage({
+export const metadata: Metadata = {
+  title: "Enrollment Confirmed — IntelliForge AI Bootcamp",
+  description: "You're enrolled in the IntelliForge AI Bootcamp. Here's what to do next.",
+};
+
+export default async function EnrollmentSuccessPage({
   searchParams,
 }: {
-  searchParams: Promise<{ payment_id?: string; order_id?: string }>;
+  searchParams: Promise<{ payment_id?: string }>;
 }) {
   const params = await searchParams;
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background px-6">
-      <div className="w-full max-w-lg text-center">
+    <main className="min-h-screen bg-background px-6 py-16">
+      <div className="mx-auto max-w-lg text-center">
         <div className="mb-6 text-6xl" aria-hidden>
           🎉
         </div>
         <h1 className="mb-4 text-3xl font-bold text-foreground">
-          You&apos;re in, Cohort 1!
+          You&apos;re enrolled!
         </h1>
         <p className="mb-8 text-lg leading-relaxed text-muted">
-          Payment confirmed. Your seat in the 2-Week AI Sprint is reserved.
-          Check WhatsApp — the cohort group link has been sent to your number.
+          Payment confirmed. Welcome to the IntelliForge AI Bootcamp — your seat
+          in the upcoming cohort is reserved.
         </p>
 
         <div className="mb-8 rounded-xl border border-border bg-surface p-6 text-left">
@@ -31,20 +37,22 @@ export default async function SprintSuccessPage({
           <ul className="space-y-3 text-sm text-muted">
             <li className="flex gap-3">
               <span className="shrink-0 font-bold text-accent">1.</span>
-              Join the WhatsApp cohort group using the link below
+              Join the WhatsApp cohort group to meet your batchmates and get
+              session updates
             </li>
             <li className="flex gap-3">
               <span className="shrink-0 font-bold text-accent">2.</span>
-              Session 1 is {SPRINT_CONFIG.session1Date} · 9:00 AM IST — Zoom link in WhatsApp
+              Register on the LMS to access course materials, recordings, and
+              assignments
             </li>
             <li className="flex gap-3">
               <span className="shrink-0 font-bold text-accent">3.</span>
-              Pre-read: Anthropic Claude API docs + The Illustrated Transformer
+              Live sessions run Saturdays &amp; Sundays (4–5 hours per day) over
+              12 weeks — schedule details will be shared in WhatsApp
             </li>
             <li className="flex gap-3">
               <span className="shrink-0 font-bold text-accent">4.</span>
-              Your research docs (IF-RES-2026-012 + 013) will be shared in the
-              group
+              Check your email for a payment receipt and onboarding instructions
             </li>
           </ul>
         </div>
@@ -67,10 +75,10 @@ export default async function SprintSuccessPage({
             Register on LMS →
           </a>
           <Link
-            href="/sprint"
+            href="/"
             className="text-sm text-muted transition-colors hover:text-foreground"
           >
-            Back to sprint page
+            Back to homepage
           </Link>
         </div>
 
@@ -79,6 +87,16 @@ export default async function SprintSuccessPage({
             Payment ID: {params.payment_id}
           </p>
         )}
+
+        <p className="mt-8 text-xs text-muted">
+          Questions? Email{" "}
+          <a
+            href={`mailto:${SITE_CONFIG.contact.email}`}
+            className="text-accent hover:underline"
+          >
+            {SITE_CONFIG.contact.email}
+          </a>
+        </p>
       </div>
     </main>
   );

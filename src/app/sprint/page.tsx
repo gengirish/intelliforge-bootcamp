@@ -3,12 +3,13 @@ import { SprintLandingClient } from "@/components/sprint/SprintLandingClient";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "2-Week AI Sprint — ₹4,999 · IntelliForge AI",
+  title: "2-Week AI Sprint — Ship Live in 14 Days · IntelliForge AI",
   description:
-    "Ship your first AI product in 14 days. Claude API + RAG system deployed. ₹4,999 · Zero-risk guarantee.",
+    "Your team shipped an AI demo. You didn't. Fix that in 14 days — Claude chatbot + RAG system deployed to Vercel. ₹4,999 · Cohort 1.",
   openGraph: {
-    title: "2-Week AI Sprint — ₹4,999",
-    description: "Ship real AI projects in 14 days. Not notes. Deployed code.",
+    title: "Your Team Shipped an AI Demo. You Didn't.",
+    description:
+      "Two live AI products in 14 days. Not courses — deployed code you can show in your next interview.",
     images: ["/og-sprint.png"],
   },
 };

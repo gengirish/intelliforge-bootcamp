@@ -8,11 +8,9 @@ test.describe("Sprint Landing Page", () => {
 
   test("loads with correct title and hero", async ({ page }) => {
     await expect(page).toHaveTitle(/2-Week AI Sprint/);
-    await expect(page.getByText("Ship Your First AI Product in")).toBeVisible();
-    await expect(page.getByText("14 Days")).toBeVisible();
-    await expect(
-      page.getByText("Claude API chatbot + RAG system")
-    ).toBeVisible();
+    await expect(page.getByText("Your Team Shipped an AI Demo.")).toBeVisible();
+    await expect(page.getByText("You Didn't.")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Is This You Right Now?" })).toBeVisible();
   });
 
   test("shows pricing and savings", async ({ page }) => {
@@ -47,7 +45,7 @@ test.describe("Sprint Landing Page", () => {
       page.getByRole("button", { name: /Secure My Seat — ₹4,999/ })
     ).toBeVisible();
     await expect(
-      page.getByRole("link", { name: /View full 12-week bootcamp/ })
+      page.getByRole("link", { name: /Full 12-Week Bootcamp/ }).first()
     ).toBeVisible();
   });
 
@@ -160,7 +158,7 @@ test.describe("Sprint — Mobile", () => {
 
   test("landing page is usable on mobile", async ({ page }) => {
     await page.goto("/sprint");
-    await expect(page.getByText("Ship Your First AI Product in")).toBeVisible();
+    await expect(page.getByText("Your Team Shipped an AI Demo.")).toBeVisible();
     await expect(
       page.getByRole("button", { name: /Enroll Now — ₹4,999/ })
     ).toBeVisible();

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface SprintCheckoutButtonProps {
   sprintSlug?: string;
@@ -19,6 +20,7 @@ export function SprintCheckoutButtonClerk({
   className,
 }: SprintCheckoutButtonProps) {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { user, isSignedIn } = useUser();
   const router = useRouter();
 
@@ -28,6 +30,7 @@ export function SprintCheckoutButtonClerk({
       return;
     }
 
+    setError(null);
     setLoading(true);
     try {
       const res = await fetch("/sprint/enroll", {
@@ -37,7 +40,7 @@ export function SprintCheckoutButtonClerk({
       });
       const json = await res.json();
       if (!json.success) {
-        alert(json.error);
+        setError(json.error ?? "Enrollment failed. Please try again.");
         return;
       }
 
@@ -70,7 +73,7 @@ export function SprintCheckoutButtonClerk({
           email: user?.emailAddresses[0]?.emailAddress ?? "",
           contact: user?.phoneNumbers[0]?.phoneNumber ?? "",
         },
-        theme: { color: "#3B82F6" },
+        theme: { color: "#F59E0B" },
         handler: (response: { razorpay_payment_id: string }) => {
           router.push(
             `/sprint/success?payment_id=${response.razorpay_payment_id}&order_id=${orderId}`
@@ -84,15 +87,26 @@ export function SprintCheckoutButtonClerk({
       rzp.open();
     } catch (err) {
       console.error(err);
-      alert("Something went wrong. Please try again.");
+      setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Button onClick={handleCheckout} disabled={loading} className={className}>
-      {loading ? "Opening checkout..." : label}
-    </Button>
+    <div className="flex flex-col gap-2">
+      <Button
+        onClick={handleCheckout}
+        disabled={loading}
+        className={cn("bg-cta hover:bg-cta-hover", className)}
+      >
+        {loading ? "Opening checkout..." : label}
+      </Button>
+      {error && (
+        <p className="text-sm text-red-400" role="alert">
+          {error}
+        </p>
+      )}
+    </div>
   );
 }

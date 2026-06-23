@@ -1,5 +1,3 @@
-"use client";
-
 import { FadeIn } from "@/components/animations/fade-in";
 import { TESTIMONIALS } from "@/lib/constants";
 import { cn } from "@/lib/utils";

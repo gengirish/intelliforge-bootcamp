@@ -1,10 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { Check } from "lucide-react";
 import Script from "next/script";
 import { FadeIn } from "@/components/animations/fade-in";
-import { LMS_REGISTER_URL, PRICING, SITE_CONFIG, WHATSAPP_DEMO_URL } from "@/lib/constants";
+import { LMS_REGISTER_URL, PRICING, SPRINT_CONFIG, WHATSAPP_DEMO_URL } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import type { RazorpayCheckoutOptions } from "@/types/razorpay";
 
@@ -59,7 +60,7 @@ export function Pricing() {
         theme: { color: "#F59E0B" },
         handler(response) {
           if (response.razorpay_payment_id) {
-            window.location.href = SITE_CONFIG.lms;
+            window.location.href = `/enrollment/success?payment_id=${encodeURIComponent(response.razorpay_payment_id)}`;
           }
         },
         modal: {
@@ -238,7 +239,13 @@ export function Pricing() {
             </div>
           </FadeIn>
 
-          <FadeIn delay={0.4} className="mt-8">
+          <FadeIn delay={0.4} className="mt-8 space-y-3">
+            <p className="text-center text-muted">
+              Not ready for 12 weeks?{" "}
+              <Link href="/sprint" className="text-accent hover:underline transition-colors">
+                Try the 2-Week AI Sprint ({SPRINT_CONFIG.priceDisplay}) →
+              </Link>
+            </p>
             <p className="text-center text-muted">
               Not ready to commit?{" "}
               <a

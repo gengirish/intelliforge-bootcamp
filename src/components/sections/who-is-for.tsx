@@ -1,5 +1,3 @@
-"use client";
-
 import { CheckCircle, XCircle } from "lucide-react";
 import { FadeIn } from "@/components/animations/fade-in";
 import { cn } from "@/lib/utils";

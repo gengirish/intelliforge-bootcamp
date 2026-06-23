@@ -31,7 +31,10 @@ export const LMS_FEEDBACK_URL = `${SITE_CONFIG.lms}/feedback`;
 
 export const ZOOM_MEETING = {
   topic: "Why Upskill and How?",
-  time: "Jun 21, 2026 09:00 AM Mumbai, Kolkata, New Delhi",
+  // Update `time` when the next live session is confirmed
+  time: "Jun 28, 2026 09:00 AM Mumbai, Kolkata, New Delhi",
+  displayShort: "Jun 28, 9:00 AM IST",
+  displayDate: "Next session — check WhatsApp for schedule",
   joinUrl:
     "https://us06web.zoom.us/j/86071939853?pwd=VovRc9JnO1qDKxqK9L3JNJ3cp3KwCB.1",
   meetingId: "86071939853",
@@ -433,11 +436,23 @@ export const FAQ_ITEMS = [
   },
 ];
 
+export const SPRINT_CONFIG = {
+  name: "2-Week AI Sprint",
+  priceDisplay: "₹4,999",
+  originalPriceDisplay: "₹12,999",
+  session1Date: "Saturday, July 12, 2026",
+  cohortStartDate: "July 12, 2026",
+  cohortEndDate: "July 25, 2026",
+  slug: "ai-sprint-jun-2026",
+};
+
 export const NAV_LINKS = [
+  { label: "Free Preview", href: "#free-preview" },
   { label: "Why Us", href: "#why-intelliforge" },
   { label: "Curriculum", href: "#curriculum" },
   { label: "Projects", href: "#projects" },
   { label: "Pricing", href: "#pricing" },
   { label: "FAQ", href: "#faq" },
+  { label: "AI Sprint", href: "/sprint" },
   { label: "Contact", href: "#contact" },
 ];

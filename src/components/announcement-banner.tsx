@@ -18,7 +18,7 @@ export function AnnouncementBanner() {
       }}
     >
       <span className="shrink-0">
-        📅 Live Session: {ZOOM_MEETING.topic} — Jun 21, 9:00 AM IST
+        📅 Live Session: {ZOOM_MEETING.topic} — {ZOOM_MEETING.displayShort}
       </span>
       <a
         href={ZOOM_URL}

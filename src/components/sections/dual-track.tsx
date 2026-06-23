@@ -1,5 +1,3 @@
-"use client";
-
 import { Bot, Sparkles, Merge } from "lucide-react";
 import { FadeIn } from "@/components/animations/fade-in";
 import { cn } from "@/lib/utils";

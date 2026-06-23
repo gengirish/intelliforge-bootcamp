@@ -1,5 +1,3 @@
-"use client";
-
 import { Bot, Database, Sparkles } from "lucide-react";
 import { Fragment } from "react";
 import Link from "next/link";

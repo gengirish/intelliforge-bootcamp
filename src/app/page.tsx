@@ -1,22 +1,65 @@
+import dynamic from "next/dynamic";
 import { AnnouncementBanner } from "@/components/announcement-banner";
+import { StickyMobileCta } from "@/components/sticky-mobile-cta";
 import { Header } from "@/components/sections/header";
 import { Hero } from "@/components/sections/hero";
 import { StatsBar } from "@/components/sections/stats-bar";
 import { WhyIntelliForge } from "@/components/sections/why-intelliforge";
 import { DualTrack } from "@/components/sections/dual-track";
 import { Curriculum } from "@/components/sections/curriculum";
-import { CapstoneProducts } from "@/components/sections/capstone-products";
-import { Instructor } from "@/components/sections/instructor";
-import { WhoIsFor } from "@/components/sections/who-is-for";
-import { FreePreview } from "@/components/sections/free-preview";
-import { Outcomes } from "@/components/sections/outcomes";
-import { Testimonials } from "@/components/sections/testimonials";
-import { Pricing } from "@/components/sections/pricing";
-import { FAQ } from "@/components/sections/faq";
-import { FinalCTA } from "@/components/sections/final-cta";
-import { ContactForm } from "@/components/sections/contact-form";
-import { Footer } from "@/components/sections/footer";
-import { WhatsAppFAB } from "@/components/whatsapp-fab";
+import { WhatsAppFAB } from "@/components/whatsapp-fab-lazy";
+
+const CapstoneProducts = dynamic(() =>
+  import("@/components/sections/capstone-products").then((m) => ({
+    default: m.CapstoneProducts,
+  }))
+);
+const Instructor = dynamic(() =>
+  import("@/components/sections/instructor").then((m) => ({
+    default: m.Instructor,
+  }))
+);
+const WhoIsFor = dynamic(() =>
+  import("@/components/sections/who-is-for").then((m) => ({
+    default: m.WhoIsFor,
+  }))
+);
+const FreePreview = dynamic(() =>
+  import("@/components/sections/free-preview").then((m) => ({
+    default: m.FreePreview,
+  }))
+);
+const Outcomes = dynamic(() =>
+  import("@/components/sections/outcomes").then((m) => ({
+    default: m.Outcomes,
+  }))
+);
+const Testimonials = dynamic(() =>
+  import("@/components/sections/testimonials").then((m) => ({
+    default: m.Testimonials,
+  }))
+);
+const Pricing = dynamic(() =>
+  import("@/components/sections/pricing").then((m) => ({
+    default: m.Pricing,
+  }))
+);
+const FAQ = dynamic(() =>
+  import("@/components/sections/faq").then((m) => ({ default: m.FAQ }))
+);
+const FinalCTA = dynamic(() =>
+  import("@/components/sections/final-cta").then((m) => ({
+    default: m.FinalCTA,
+  }))
+);
+const ContactForm = dynamic(() =>
+  import("@/components/sections/contact-form").then((m) => ({
+    default: m.ContactForm,
+  }))
+);
+const Footer = dynamic(() =>
+  import("@/components/sections/footer").then((m) => ({ default: m.Footer }))
+);
 
 export default function Home() {
   return (
@@ -25,7 +68,7 @@ export default function Home() {
         <AnnouncementBanner />
         <Header />
       </div>
-      <main>
+      <main id="main-content">
         <Hero />
         <StatsBar />
         <WhyIntelliForge />
@@ -44,6 +87,7 @@ export default function Home() {
       </main>
       <Footer />
       <WhatsAppFAB />
+      <StickyMobileCta />
     </>
   );
 }

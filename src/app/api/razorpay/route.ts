@@ -13,12 +13,18 @@ const PLAN_AMOUNTS: Record<PlanType, number> = {
   regular: 7499900, // ₹74,999 in paise
 };
 
+function getRazorpay() {
+  const keyId = process.env.RAZORPAY_KEY_ID;
+  const keySecret = process.env.RAZORPAY_KEY_SECRET;
+  if (!keyId || !keySecret) return null;
+  return new Razorpay({ key_id: keyId, key_secret: keySecret });
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const keyId = process.env.RAZORPAY_KEY_ID;
-    const keySecret = process.env.RAZORPAY_KEY_SECRET;
+    const rzp = getRazorpay();
 
-    if (!keyId || !keySecret) {
+    if (!rzp) {
       return NextResponse.json(
         {
           error: "Razorpay credentials not configured",
@@ -55,12 +61,7 @@ export async function POST(req: NextRequest) {
 
     const amount = PLAN_AMOUNTS[plan];
 
-    const instance = new Razorpay({
-      key_id: keyId,
-      key_secret: keySecret,
-    });
-
-    const order = await instance.orders.create({
+    const order = await rzp.orders.create({
       amount,
       currency: "INR",
       receipt: receipt ?? `bootcamp_${plan}_${Date.now()}`,
