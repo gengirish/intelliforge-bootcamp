@@ -440,13 +440,13 @@ export const SPRINT_CONFIG = {
   name: "2-Week AI Sprint",
   priceDisplay: "₹4,999",
   originalPriceDisplay: "₹12,999",
-  session1Date: "Saturday, July 4, 2026",
-  cohortStartDate: "July 4, 2026",
-  cohortEndDate: "July 18, 2026",
+  session1Date: "Saturday, August 1, 2026",
+  cohortStartDate: "August 1, 2026",
+  cohortEndDate: "August 15, 2026",
   slug: "ai-sprint-jun-2026",
   href: "/sprint",
   ctaLabel: "Join 2-Week AI Sprint — ₹4,999",
-  urgencyLine: "Cohort 1 starts July 4 · 30 seats · Live weekends",
+  urgencyLine: "Cohort 1 starts August 1 · 30 seats · Live weekends",
 };
 
 export const NAV_LINKS = [
