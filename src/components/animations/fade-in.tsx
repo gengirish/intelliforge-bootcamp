@@ -2,6 +2,7 @@
 
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion";
 
 interface FadeInProps {
   children: ReactNode;
@@ -30,18 +31,11 @@ export function FadeIn({
 }: FadeInProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
-
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    if (prefersReducedMotion) {
-      setVisible(true);
-      return;
-    }
+    if (!el || prefersReducedMotion) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -57,16 +51,18 @@ export function FadeIn({
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, [once]);
+  }, [once, prefersReducedMotion]);
+
+  const isVisible = prefersReducedMotion || visible;
 
   return (
     <div
       ref={ref}
       className={cn(
         "transition-[opacity,transform] ease-[cubic-bezier(0.25,0.46,0.45,0.94)]",
-        !visible && "opacity-0",
-        !visible && directionClasses[direction],
-        visible && "opacity-100 translate-x-0 translate-y-0",
+        !isVisible && "opacity-0",
+        !isVisible && directionClasses[direction],
+        isVisible && "opacity-100 translate-x-0 translate-y-0",
         className
       )}
       style={{

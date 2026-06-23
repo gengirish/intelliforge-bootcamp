@@ -20,13 +20,13 @@ test.describe("Bootcamp Razorpay API", () => {
     expect(body.code).toBe("INVALID_PLAN");
   });
 
-  test("POST /api/razorpay rejects malformed JSON", async ({ request }) => {
-    const response = await request.fetch("/api/razorpay", {
+  test("POST /api/razorpay rejects malformed JSON", async ({ baseURL }) => {
+    const response = await fetch(`${baseURL}/api/razorpay`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: "not-json",
     });
-    expect(response.status()).toBe(400);
+    expect(response.status).toBe(400);
     const body = await response.json();
     expect(body.code).toBe("INVALID_BODY");
   });

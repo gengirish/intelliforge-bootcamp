@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion";
 
 interface CountUpProps {
   end: number;
@@ -14,6 +15,7 @@ export function CountUp({ end, suffix = "", duration = 2, className }: CountUpPr
   const ref = useRef<HTMLSpanElement>(null);
   const [isInView, setIsInView] = useState(false);
   const hasAnimated = useRef(false);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const el = ref.current;
@@ -34,16 +36,8 @@ export function CountUp({ end, suffix = "", duration = 2, className }: CountUpPr
   }, []);
 
   useEffect(() => {
-    if (!isInView || hasAnimated.current) return;
+    if (!isInView || hasAnimated.current || prefersReducedMotion) return;
     hasAnimated.current = true;
-
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    if (prefersReducedMotion) {
-      setCount(end);
-      return;
-    }
 
     const startTime = performance.now();
     const step = (currentTime: number) => {
@@ -59,11 +53,13 @@ export function CountUp({ end, suffix = "", duration = 2, className }: CountUpPr
       }
     };
     requestAnimationFrame(step);
-  }, [isInView, end, duration]);
+  }, [isInView, end, duration, prefersReducedMotion]);
+
+  const displayCount = prefersReducedMotion && isInView ? end : count;
 
   return (
     <span ref={ref} className={className}>
-      {count}
+      {displayCount}
       {suffix}
     </span>
   );

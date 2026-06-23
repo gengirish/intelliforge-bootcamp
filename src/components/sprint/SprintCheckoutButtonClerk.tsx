@@ -15,7 +15,6 @@ interface SprintCheckoutButtonProps {
 
 export function SprintCheckoutButtonClerk({
   sprintSlug = "ai-sprint-jun-2026",
-  priceInPaise: _priceInPaise,
   label = "Enroll Now",
   className,
 }: SprintCheckoutButtonProps) {
