@@ -7,11 +7,11 @@ test.describe("Interactions & Navigation", () => {
   });
 
   test("header becomes blurred on scroll", async ({ page }) => {
-    await page.evaluate(() => window.scrollTo(0, 500));
-    await page.waitForTimeout(800);
     const header = page.locator("header");
-    const classes = await header.getAttribute("class");
-    expect(classes).toContain("backdrop-blur");
+    for (let i = 0; i < 8; i++) {
+      await page.mouse.wheel(0, 400);
+    }
+    await expect(header).toHaveClass(/backdrop-blur/, { timeout: 5000 });
   });
 
   test("nav links scroll to correct sections", async ({ page }) => {

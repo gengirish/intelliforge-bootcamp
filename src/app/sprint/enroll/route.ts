@@ -19,7 +19,11 @@ function getRazorpay() {
 }
 
 export async function POST(req: Request) {
-  const { userId } = await auth();
+  const userId =
+    process.env.E2E_BYPASS_CLERK === "1"
+      ? null
+      : (await auth()).userId;
+
   if (!userId) {
     return NextResponse.json<ApiResponse<null>>(
       { success: false, error: "Unauthorized" },
@@ -36,7 +40,8 @@ export async function POST(req: Request) {
   }
 
   const { sprintSlug } = parsed.data;
-  const user = await currentUser();
+  const user =
+    process.env.E2E_BYPASS_CLERK === "1" ? null : await currentUser();
 
   const sprint = await prisma.sprint.findFirst({
     where: { slug: sprintSlug, isActive: true },

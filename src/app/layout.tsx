@@ -3,6 +3,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
+const isE2E = process.env.NEXT_PUBLIC_E2E_BYPASS === "1";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -52,15 +54,19 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <ClerkProvider>
-      <html lang="en" className="dark">
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
-        >
-          {children}
-        </body>
-      </html>
-    </ClerkProvider>
+  const body = (
+    <html lang="en" className="dark">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
+      >
+        {children}
+      </body>
+    </html>
   );
+
+  if (isE2E) {
+    return body;
+  }
+
+  return <ClerkProvider>{body}</ClerkProvider>;
 }
