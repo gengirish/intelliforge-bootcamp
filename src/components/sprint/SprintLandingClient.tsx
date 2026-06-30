@@ -21,12 +21,15 @@ import {
 import { SprintCheckoutButton } from "@/components/sprint/SprintCheckoutButton";
 import { SprintCountdown } from "@/components/sprint/SprintCountdown";
 import { SprintLiveSchedule } from "@/components/sprint/SprintLiveSchedule";
+import { SprintSeatMap } from "@/components/sprint/SprintSeatMap";
 import { formatISTDate, formatRupee } from "@/lib/sprint-format";
 import { SITE_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 interface SprintLandingClientProps {
   remaining: number;
+  seatsFilled: number;
+  seatsTotal: number;
   priceInPaise: number;
   originalPriceInPaise: number;
   startDate: string;
@@ -101,6 +104,8 @@ const BEFORE_AFTER = {
 
 export function SprintLandingClient({
   remaining,
+  seatsFilled,
+  seatsTotal,
   priceInPaise,
   originalPriceInPaise,
   startDate,
@@ -199,9 +204,9 @@ export function SprintLandingClient({
             </Link>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-6 text-sm text-muted">
+          <div className="flex flex-wrap justify-center gap-6 text-sm text-muted mb-10">
             <span className="flex items-center gap-2">
-              <Users className="w-4 h-4" /> Max 30 seats
+              <Users className="w-4 h-4" /> Max {seatsTotal} seats
             </span>
             <span className="flex items-center gap-2">
               <Clock className="w-4 h-4" /> Sat &amp; Sun · 9–11 AM &amp; 8–10 PM IST
@@ -210,6 +215,8 @@ export function SprintLandingClient({
               <Shield className="w-4 h-4" /> Zero-risk guarantee
             </span>
           </div>
+
+          <SprintSeatMap filled={seatsFilled} total={seatsTotal} />
         </div>
       </section>
 

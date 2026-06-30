@@ -34,11 +34,15 @@ export default async function SprintPage() {
     // DB unavailable at build time — use defaults
   }
 
-  const remaining = sprint ? sprint.seatsTotal - sprint.seatsFilled : 30;
+  const seatsTotal = sprint?.seatsTotal ?? 30;
+  const seatsFilled = sprint?.seatsFilled ?? 0;
+  const remaining = seatsTotal - seatsFilled;
 
   return (
     <SprintLandingClient
       remaining={remaining}
+      seatsFilled={seatsFilled}
+      seatsTotal={seatsTotal}
       priceInPaise={sprint?.priceInPaise ?? 499900}
       originalPriceInPaise={sprint?.originalPriceInPaise ?? 1299900}
       startDate={sprint?.startDate?.toISOString() ?? ""}
