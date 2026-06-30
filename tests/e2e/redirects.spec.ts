@@ -2,6 +2,8 @@ import { test, expect } from "@playwright/test";
 
 const WHATSAPP_GROUP_INVITE_URL =
   "https://chat.whatsapp.com/LwxMCJ1EqLm4oLOG0fLqmE";
+const SPRINT_COHORT_WHATSAPP_INVITE_URL =
+  "https://chat.whatsapp.com/EG5aUDfvrHbGa9tvEaleAu";
 const ZOOM_MEETING_JOIN_URL =
   "https://us06web.zoom.us/j/86071939853?pwd=VovRc9JnO1qDKxqK9L3JNJ3cp3KwCB.1";
 
@@ -18,5 +20,13 @@ test.describe("Global Redirects", () => {
     const response = await request.get("/zoom", { maxRedirects: 0 });
     expect(response.status()).toBe(302);
     expect(response.headers().location).toBe(ZOOM_MEETING_JOIN_URL);
+  });
+
+  test("GET /sprint/whatsapp redirects to sprint cohort group", async ({
+    request,
+  }) => {
+    const response = await request.get("/sprint/whatsapp", { maxRedirects: 0 });
+    expect(response.status()).toBe(302);
+    expect(response.headers().location).toBe(SPRINT_COHORT_WHATSAPP_INVITE_URL);
   });
 });

@@ -77,14 +77,14 @@ test.describe("Sprint Success Page", () => {
     await expect(page.getByText("Payment ID: pay_e2e_test")).toBeVisible();
   });
 
-  test("WhatsApp CTA points to site redirect", async ({ page }) => {
+  test("WhatsApp CTA points to sprint cohort redirect", async ({ page }) => {
     await page.goto("/sprint/success");
     const whatsappLink = page.getByRole("link", {
-      name: /Join WhatsApp Cohort Group/,
+      name: /Join UpSkill-Cohort-01 on WhatsApp/,
     });
     await expect(whatsappLink).toHaveAttribute(
       "href",
-      "https://upskill.intelliforge.tech/whatsapp"
+      "https://upskill.intelliforge.tech/sprint/whatsapp"
     );
   });
 });

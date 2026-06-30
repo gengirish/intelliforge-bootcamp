@@ -1,4 +1,13 @@
-import { SITE_CONFIG, WHATSAPP_DEMO_URL, WHATSAPP_GROUP, WHATSAPP_GROUP_URL, ZOOM_MEETING, ZOOM_URL } from "@/lib/constants";
+import {
+  SITE_CONFIG,
+  SPRINT_CONFIG,
+  SPRINT_COHORT_WHATSAPP,
+  WHATSAPP_DEMO_URL,
+  WHATSAPP_GROUP,
+  WHATSAPP_GROUP_URL,
+  ZOOM_MEETING,
+  ZOOM_URL,
+} from "@/lib/constants";
 
 const API_BASE = "https://api.agentmail.to/v0";
 const API_KEY = (process.env.AGENTMAIL_API_KEY || "").trim();
@@ -42,6 +51,37 @@ interface EnquiryPayload {
   email: string;
   phone?: string;
   message: string;
+}
+
+export async function sendSprintEnrollmentConfirmation(data: {
+  name: string;
+  email: string;
+  paymentId: string;
+}) {
+  const displayName = data.name.trim() || "there";
+
+  return agentMailSend({
+    to: data.email,
+    subject: `You're in — ${SPRINT_COHORT_WHATSAPP.name} · IntelliForge AI Sprint`,
+    html: `
+      <div style="font-family: system-ui, sans-serif; max-width: 600px; margin: 0 auto; background: #0A0F1C; color: #E2E8F0; padding: 32px; border-radius: 12px;">
+        <h2 style="color: #7C3AED; margin-top: 0;">You're in, Cohort 1!</h2>
+        <p>Hi ${displayName},</p>
+        <p>Your payment for the <strong>2-Week AI Sprint</strong> is confirmed. Your seat is reserved.</p>
+        <p><strong>Step 1 — Join the cohort WhatsApp group now:</strong></p>
+        <p style="margin: 24px 0;">
+          <a href="${SPRINT_COHORT_WHATSAPP.inviteUrl}" style="display: inline-block; background: #F59E0B; color: #0A0F1C; padding: 14px 24px; border-radius: 8px; font-weight: 600; text-decoration: none;">
+            Join ${SPRINT_COHORT_WHATSAPP.name} on WhatsApp →
+          </a>
+        </p>
+        <p>Session 1 is <strong>${SPRINT_CONFIG.session1Date}</strong> · 9:00 AM IST. Zoom link and pre-read materials will be shared in the group.</p>
+        <p style="color: #94A3B8; font-size: 13px;">Payment ID: ${data.paymentId}</p>
+        <hr style="border: none; border-top: 1px solid #1E293B; margin: 24px 0;" />
+        <p style="color: #94A3B8; font-size: 12px;">IntelliForge AI · <a href="${SITE_CONFIG.url}" style="color: #94A3B8;">upskill.intelliforge.tech</a></p>
+      </div>
+    `,
+    reply_to: INBOX_ID,
+  });
 }
 
 export async function sendEnquiryNotification(data: EnquiryPayload) {

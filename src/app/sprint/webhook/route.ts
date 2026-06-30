@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 import { prisma } from "@/lib/prisma";
+import { sendSprintEnrollmentConfirmation } from "@/lib/email";
 
 export async function POST(req: Request) {
   const body = await req.text();
@@ -43,6 +44,18 @@ export async function POST(req: Request) {
         data: { seatsFilled: { increment: 1 } },
       }),
     ]);
+
+    if (enrollment.email) {
+      try {
+        await sendSprintEnrollmentConfirmation({
+          name: enrollment.name,
+          email: enrollment.email,
+          paymentId: payment.id,
+        });
+      } catch (err) {
+        console.error("[Sprint webhook] Enrollment email failed:", err);
+      }
+    }
   }
 
   if (event.event === "payment.failed") {

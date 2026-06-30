@@ -2,7 +2,8 @@ import Link from "next/link";
 import {
   LMS_REGISTER_URL,
   SPRINT_CONFIG,
-  WHATSAPP_GROUP_URL,
+  SPRINT_COHORT_WHATSAPP,
+  SPRINT_COHORT_WHATSAPP_URL,
 } from "@/lib/constants";
 
 export default async function SprintSuccessPage({
@@ -23,7 +24,8 @@ export default async function SprintSuccessPage({
         </h1>
         <p className="mb-8 text-lg leading-relaxed text-muted">
           Payment confirmed. Your seat in the 2-Week AI Sprint is reserved.
-          Check WhatsApp — the cohort group link has been sent to your number.
+          Join <strong>{SPRINT_COHORT_WHATSAPP.name}</strong> on WhatsApp — your
+          cohort channel for session links, materials, and updates.
         </p>
 
         <div className="mb-8 rounded-xl border border-border bg-surface p-6 text-left">
@@ -31,7 +33,7 @@ export default async function SprintSuccessPage({
           <ul className="space-y-3 text-sm text-muted">
             <li className="flex gap-3">
               <span className="shrink-0 font-bold text-accent">1.</span>
-              Join the WhatsApp cohort group using the link below
+              Join {SPRINT_COHORT_WHATSAPP.name} on WhatsApp using the button below
             </li>
             <li className="flex gap-3">
               <span className="shrink-0 font-bold text-accent">2.</span>
@@ -51,12 +53,12 @@ export default async function SprintSuccessPage({
 
         <div className="flex flex-col gap-3">
           <a
-            href={WHATSAPP_GROUP_URL}
+            href={SPRINT_COHORT_WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-lg bg-cta px-8 py-4 text-lg font-semibold text-background transition-colors hover:bg-cta-hover"
           >
-            Join WhatsApp Cohort Group →
+            Join {SPRINT_COHORT_WHATSAPP.name} on WhatsApp →
           </a>
           <a
             href={LMS_REGISTER_URL}

@@ -51,6 +51,14 @@ export const WHATSAPP_GROUP = {
 
 export const WHATSAPP_GROUP_URL = `${SITE_CONFIG.url}/whatsapp`;
 
+/** Paid sprint enrollments join this WhatsApp group after checkout. */
+export const SPRINT_COHORT_WHATSAPP = {
+  name: "UpSkill-Cohort-01",
+  inviteUrl: "https://chat.whatsapp.com/EG5aUDfvrHbGa9tvEaleAu",
+};
+
+export const SPRINT_COHORT_WHATSAPP_URL = `${SITE_CONFIG.url}/sprint/whatsapp`;
+
 export const FREE_PREVIEW = {
   heading: "Not Sure Yet? Try a Free Class First.",
   subheading:
