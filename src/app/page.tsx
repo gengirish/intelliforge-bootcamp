@@ -9,6 +9,11 @@ import { DualTrack } from "@/components/sections/dual-track";
 import { Curriculum } from "@/components/sections/curriculum";
 import { WhatsAppFAB } from "@/components/whatsapp-fab-lazy";
 
+const ResearchTeaser = dynamic(() =>
+  import("@/components/sections/research-teaser").then((m) => ({
+    default: m.ResearchTeaser,
+  }))
+);
 const CapstoneProducts = dynamic(() =>
   import("@/components/sections/capstone-products").then((m) => ({
     default: m.CapstoneProducts,
@@ -73,6 +78,7 @@ export default function Home() {
         <StatsBar />
         <WhyIntelliForge />
         <DualTrack />
+        <ResearchTeaser />
         <Curriculum />
         <CapstoneProducts />
         <Instructor />

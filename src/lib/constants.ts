@@ -493,6 +493,7 @@ export const SPRINT_CONFIG = {
 
 export const NAV_LINKS = [
   { label: "Free Preview", href: "#free-preview" },
+  { label: "Research", href: "/research" },
   { label: "Why Us", href: "#why-intelliforge" },
   { label: "Curriculum", href: "#curriculum" },
   { label: "Projects", href: "#projects" },

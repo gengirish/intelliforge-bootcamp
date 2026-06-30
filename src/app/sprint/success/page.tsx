@@ -55,8 +55,10 @@ export default async function SprintSuccessPage({
             </li>
             <li className="flex gap-3">
               <span className="shrink-0 font-bold text-accent">6.</span>
-              Your research docs (IF-RES-2026-012 + 013) will be shared in the
-              group
+              Read IF-RES-2026-012 &amp; 013 on the{" "}
+              <Link href="/research" className="text-accent hover:underline">
+                research hub
+              </Link>
             </li>
           </ul>
         </div>
