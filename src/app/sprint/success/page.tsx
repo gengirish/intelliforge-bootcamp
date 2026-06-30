@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {
   LMS_SIGNIN_URL,
+  LMS_UPSKILL_ROADMAP_URL,
   SPRINT_CONFIG,
   SPRINT_COHORT_WHATSAPP,
   SPRINT_COHORT_WHATSAPP_URL,
@@ -37,8 +38,16 @@ export default async function SprintSuccessPage({
             </li>
             <li className="flex gap-3">
               <span className="shrink-0 font-bold text-accent">2.</span>
-              Sign in to the LMS — your account is auto-provisioned with the
-              email you used at checkout
+              Sign in to the LMS and open{" "}
+              <a
+                href={LMS_UPSKILL_ROADMAP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent hover:underline"
+              >
+                12-Week AI Upskill RoadMap
+              </a>
+              — auto-provisioned with your checkout email
             </li>
             <li className="flex gap-3">
               <span className="shrink-0 font-bold text-accent">3.</span>

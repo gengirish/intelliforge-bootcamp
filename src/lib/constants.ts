@@ -28,6 +28,7 @@ export const getWhatsAppUrl = (message: string) =>
 
 export const LMS_REGISTER_URL = `${SITE_CONFIG.lms}/register`;
 export const LMS_SIGNIN_URL = `${SITE_CONFIG.lms}/api/auth/signin`;
+export const LMS_UPSKILL_ROADMAP_URL = `${SITE_CONFIG.lms}/courses/ai-upskill-12-week-roadmap`;
 export const LMS_FEEDBACK_URL = `${SITE_CONFIG.lms}/feedback`;
 
 export const ZOOM_MEETING = {

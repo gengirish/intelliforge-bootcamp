@@ -1,5 +1,6 @@
 import {
   LMS_SIGNIN_URL,
+  LMS_UPSKILL_ROADMAP_URL,
   SITE_CONFIG,
   SPRINT_CONFIG,
   SPRINT_COHORT_WHATSAPP,
@@ -75,13 +76,14 @@ export async function sendSprintEnrollmentConfirmation(data: {
             Join ${SPRINT_COHORT_WHATSAPP.name} on WhatsApp →
           </a>
         </p>
-        <p><strong>Step 2 — Sign in to the LMS:</strong></p>
-        <p>Your LMS account is ready — it was auto-provisioned with <strong>${data.email}</strong>. Sign in to access sprint materials and recordings.</p>
+        <p><strong>Step 2 — Open your course on the LMS:</strong></p>
+        <p>Your LMS account is ready — it was auto-provisioned with <strong>${data.email}</strong>. Start with the <strong>12-Week AI Upskill RoadMap</strong> (IF-RES-2026-012 curriculum).</p>
         <p style="margin: 24px 0;">
-          <a href="${LMS_SIGNIN_URL}" style="display: inline-block; background: #1E293B; color: #E2E8F0; padding: 14px 24px; border-radius: 8px; font-weight: 600; text-decoration: none; border: 1px solid #334155;">
-            Sign in to LMS →
+          <a href="${LMS_UPSKILL_ROADMAP_URL}" style="display: inline-block; background: #1E293B; color: #E2E8F0; padding: 14px 24px; border-radius: 8px; font-weight: 600; text-decoration: none; border: 1px solid #334155;">
+            Open 12-Week RoadMap →
           </a>
         </p>
+        <p style="font-size: 13px; color: #94A3B8;">Or <a href="${LMS_SIGNIN_URL}" style="color: #06B6D4;">sign in to LMS</a> first if prompted.</p>
         <p>Session 1 is <strong>${SPRINT_CONFIG.session1Date}</strong>. Live classes run every <strong>Saturday &amp; Sunday</strong> — <strong>9:00–11:00 AM IST</strong> and <strong>8:00–10:00 PM IST</strong>. Zoom links and pre-read materials will be shared in the group.</p>
         <p style="color: #94A3B8; font-size: 13px;">Payment ID: ${data.paymentId}</p>
         <hr style="border: none; border-top: 1px solid #1E293B; margin: 24px 0;" />
@@ -119,13 +121,14 @@ export async function sendBootcampEnrollmentConfirmation(data: {
             Join WhatsApp Cohort Group →
           </a>
         </p>
-        <p><strong>Step 2 — Sign in to the LMS:</strong></p>
-        <p>Your LMS account is ready — it was auto-provisioned with <strong>${data.email}</strong>. Sign in to access course materials, recordings, and assignments.</p>
+        <p><strong>Step 2 — Open your course on the LMS:</strong></p>
+        <p>Your LMS account is ready — it was auto-provisioned with <strong>${data.email}</strong>. Access the <strong>12-Week AI Upskill RoadMap</strong> for course materials, recordings, and assignments.</p>
         <p style="margin: 24px 0;">
-          <a href="${LMS_SIGNIN_URL}" style="display: inline-block; background: #1E293B; color: #E2E8F0; padding: 14px 24px; border-radius: 8px; font-weight: 600; text-decoration: none; border: 1px solid #334155;">
-            Sign in to LMS →
+          <a href="${LMS_UPSKILL_ROADMAP_URL}" style="display: inline-block; background: #1E293B; color: #E2E8F0; padding: 14px 24px; border-radius: 8px; font-weight: 600; text-decoration: none; border: 1px solid #334155;">
+            Open 12-Week RoadMap →
           </a>
         </p>
+        <p style="font-size: 13px; color: #94A3B8;">Or <a href="${LMS_SIGNIN_URL}" style="color: #06B6D4;">sign in to LMS</a> first if prompted.</p>
         <p>Live sessions run every <strong>Saturday &amp; Sunday</strong> (4–5 hours per day) over 12 weeks. Schedule details will be shared in WhatsApp.</p>
         <p style="color: #94A3B8; font-size: 13px;">Payment ID: ${data.paymentId}</p>
         <hr style="border: none; border-top: 1px solid #1E293B; margin: 24px 0;" />
