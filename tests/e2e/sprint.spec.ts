@@ -23,7 +23,7 @@ test.describe("Sprint Landing Page", () => {
     await expect(page.getByText(/Cohort 1 · Starts/)).toBeVisible();
     await expect(page.getByText(/seats left|Sold out/)).toBeVisible();
     await expect(page.getByText("Max 30 seats")).toBeVisible();
-    await expect(page.getByLabel(/Cohort seat map:/)).toBeVisible();
+    await expect(page.getByLabel(/Cohort seat map:/).first()).toBeVisible();
     await expect(page.getByText("booked")).toBeVisible();
     await expect(page.getByText("available")).toBeVisible();
   });

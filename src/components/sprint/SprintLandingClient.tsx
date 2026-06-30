@@ -22,6 +22,7 @@ import { SprintCheckoutButton } from "@/components/sprint/SprintCheckoutButton";
 import { SprintCountdown } from "@/components/sprint/SprintCountdown";
 import { SprintLiveSchedule } from "@/components/sprint/SprintLiveSchedule";
 import { SprintSeatMap } from "@/components/sprint/SprintSeatMap";
+import { useSprintSeats } from "@/components/sprint/use-sprint-seats";
 import { formatISTDate, formatRupee } from "@/lib/sprint-format";
 import { SITE_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -111,10 +112,17 @@ export function SprintLandingClient({
   startDate,
   isActive,
 }: SprintLandingClientProps) {
+  const liveSeats = useSprintSeats({
+    filled: seatsFilled,
+    total: seatsTotal,
+    remaining,
+  });
+  const { filled, total, remaining: liveRemaining } = liveSeats;
+
   const price = formatRupee(priceInPaise);
   const originalPrice = formatRupee(originalPriceInPaise);
   const startLabel = formatISTDate(startDate);
-  const soldOut = !isActive || remaining <= 0;
+  const soldOut = !isActive || liveRemaining <= 0;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -133,10 +141,10 @@ export function SprintLandingClient({
             <span
               className={cn(
                 "text-sm font-medium",
-                remaining <= 5 ? "text-amber-400" : "text-green-400"
+                liveRemaining <= 5 ? "text-amber-400" : "text-green-400"
               )}
             >
-              {soldOut ? "Sold out" : `${remaining} seats left`}
+              {soldOut ? "Sold out" : `${liveRemaining} seats left`}
             </span>
             {!soldOut && (
               <SprintCheckoutButton
@@ -206,7 +214,7 @@ export function SprintLandingClient({
 
           <div className="flex flex-wrap justify-center gap-6 text-sm text-muted mb-10">
             <span className="flex items-center gap-2">
-              <Users className="w-4 h-4" /> Max {seatsTotal} seats
+              <Users className="w-4 h-4" /> Max {total} seats
             </span>
             <span className="flex items-center gap-2">
               <Clock className="w-4 h-4" /> Sat &amp; Sun · 9–11 AM &amp; 8–10 PM IST
@@ -216,7 +224,7 @@ export function SprintLandingClient({
             </span>
           </div>
 
-          <SprintSeatMap filled={seatsFilled} total={seatsTotal} />
+          <SprintSeatMap filled={filled} total={total} />
         </div>
       </section>
 
@@ -347,14 +355,15 @@ export function SprintLandingClient({
       <section className="px-6 py-16 bg-gradient-to-t from-surface to-transparent">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-foreground mb-4">
-            {remaining <= 5 && !soldOut
-              ? `Only ${remaining} seats left — act before ${startLabel}`
+            {liveRemaining <= 5 && !soldOut
+              ? `Only ${liveRemaining} seats left — act before ${startLabel}`
               : "Stop planning. Start shipping."}
           </h2>
           <p className="text-muted mb-8">
             {price} one-time · Two live products in 14 days · Live Zoom on Sat
             &amp; Sun (9–11 AM &amp; 8–10 PM IST) · Zero-risk guarantee
           </p>
+          <SprintSeatMap filled={filled} total={total} className="mb-8" />
           {!soldOut && (
             <SprintCheckoutButton
               priceInPaise={priceInPaise}

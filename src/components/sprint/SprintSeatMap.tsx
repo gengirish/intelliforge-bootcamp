@@ -116,7 +116,8 @@ function Seat({
         size === "sm" ? "h-3 w-3" : "h-5 w-5",
         filled
           ? "border-cta/50 bg-cta/80 shadow-[0_0_8px_rgba(245,158,11,0.25)]"
-          : "border-green-500/30 bg-green-500/15"
+          : "border-green-500/30 bg-green-500/15",
+        "duration-300"
       )}
     />
   );
