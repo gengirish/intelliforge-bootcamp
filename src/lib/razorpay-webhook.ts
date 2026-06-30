@@ -5,10 +5,8 @@ import {
   getLmsCourseSlugsForBootcamp,
   getLmsCourseSlugsForSprint,
 } from "@/lib/product-catalog";
-import {
-  sendBootcampEnrollmentConfirmation,
-  sendSprintEnrollmentConfirmation,
-} from "@/lib/email";
+import { sendBootcampEnrollmentConfirmation } from "@/lib/email";
+import { markSprintEnrollmentPaid } from "@/lib/sprint-payment";
 
 export function verifyRazorpaySignature(
   body: string,
@@ -50,42 +48,10 @@ async function handlePaymentCaptured(payment: RazorpayPayment) {
 
   const sprintEnrollment = await prisma.sprintEnrollment.findUnique({
     where: { razorpayOrderId: orderId },
-    include: { sprint: true },
   });
 
   if (sprintEnrollment && sprintEnrollment.status !== "PAID") {
-    await prisma.$transaction([
-      prisma.sprintEnrollment.update({
-        where: { razorpayOrderId: orderId },
-        data: {
-          status: "PAID",
-          razorpayPaymentId: payment.id,
-          paidAt: new Date(),
-        },
-      }),
-      prisma.sprint.update({
-        where: { id: sprintEnrollment.sprintId },
-        data: { seatsFilled: { increment: 1 } },
-      }),
-    ]);
-
-    await fulfillLmsAndNotify({
-      email: sprintEnrollment.email,
-      name: sprintEnrollment.name,
-      paymentId: payment.id,
-      slugs: getLmsCourseSlugsForSprint(sprintEnrollment.sprint.slug),
-      updateLms: (data) =>
-        prisma.sprintEnrollment.update({
-          where: { id: sprintEnrollment.id },
-          data,
-        }),
-      sendEmail: () =>
-        sendSprintEnrollmentConfirmation({
-          name: sprintEnrollment.name,
-          email: sprintEnrollment.email,
-          paymentId: payment.id,
-        }),
-    });
+    await markSprintEnrollmentPaid(orderId, payment.id);
     return;
   }
 

@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { getSprintSeatCounts } from "@/lib/sprint-seats";
 import { SprintLandingClient } from "@/components/sprint/SprintLandingClient";
 import type { Metadata } from "next";
 
@@ -18,25 +19,28 @@ export const revalidate = 30;
 
 export default async function SprintPage() {
   let sprint = null;
+  let seatCounts = null;
+
   try {
-    sprint = await prisma.sprint.findUnique({
-      where: { slug: "ai-sprint-jun-2026" },
-      select: {
-        seatsTotal: true,
-        seatsFilled: true,
-        priceInPaise: true,
-        originalPriceInPaise: true,
-        startDate: true,
-        isActive: true,
-      },
-    });
+    [sprint, seatCounts] = await Promise.all([
+      prisma.sprint.findUnique({
+        where: { slug: "ai-sprint-jun-2026" },
+        select: {
+          priceInPaise: true,
+          originalPriceInPaise: true,
+          startDate: true,
+          isActive: true,
+        },
+      }),
+      getSprintSeatCounts("ai-sprint-jun-2026"),
+    ]);
   } catch {
     // DB unavailable at build time — use defaults
   }
 
-  const seatsTotal = sprint?.seatsTotal ?? 30;
-  const seatsFilled = sprint?.seatsFilled ?? 0;
-  const remaining = seatsTotal - seatsFilled;
+  const seatsTotal = seatCounts?.total ?? 30;
+  const seatsFilled = seatCounts?.filled ?? 0;
+  const remaining = seatCounts?.remaining ?? 30;
 
   return (
     <SprintLandingClient
@@ -46,7 +50,7 @@ export default async function SprintPage() {
       priceInPaise={sprint?.priceInPaise ?? 499900}
       originalPriceInPaise={sprint?.originalPriceInPaise ?? 1299900}
       startDate={sprint?.startDate?.toISOString() ?? ""}
-      isActive={sprint?.isActive ?? false}
+      isActive={seatCounts?.isActive ?? sprint?.isActive ?? false}
     />
   );
 }

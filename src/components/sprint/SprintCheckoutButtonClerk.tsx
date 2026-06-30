@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
+import type { RazorpayPaymentResponse } from "@/types/razorpay";
 import { cn } from "@/lib/utils";
 
 interface SprintCheckoutButtonProps {
@@ -73,9 +74,23 @@ export function SprintCheckoutButtonClerk({
           contact: user?.phoneNumbers[0]?.phoneNumber ?? "",
         },
         theme: { color: "#F59E0B" },
-        handler: (response: { razorpay_payment_id: string }) => {
+        handler: async (response: RazorpayPaymentResponse) => {
+          try {
+            await fetch("/api/sprint/confirm-payment", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                orderId: response.razorpay_order_id,
+                paymentId: response.razorpay_payment_id,
+                signature: response.razorpay_signature,
+              }),
+            });
+          } catch (err) {
+            console.error("[Sprint checkout] Payment confirm failed:", err);
+          }
+
           router.push(
-            `/sprint/success?payment_id=${response.razorpay_payment_id}&order_id=${orderId}`
+            `/sprint/success?payment_id=${response.razorpay_payment_id}&order_id=${response.razorpay_order_id}`
           );
         },
         modal: {

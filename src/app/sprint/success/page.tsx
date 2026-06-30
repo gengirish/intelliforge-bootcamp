@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SprintPaymentConfirm } from "@/components/sprint/SprintPaymentConfirm";
 import {
   LMS_SIGNIN_URL,
   LMS_UPSKILL_ROADMAP_URL,
@@ -16,6 +17,10 @@ export default async function SprintSuccessPage({
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-background px-6">
+      <SprintPaymentConfirm
+        orderId={params.order_id}
+        paymentId={params.payment_id}
+      />
       <div className="w-full max-w-lg text-center">
         <div className="mb-6 text-6xl" aria-hidden>
           🎉

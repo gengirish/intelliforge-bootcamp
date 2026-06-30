@@ -4,6 +4,7 @@ import Razorpay from "razorpay";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import type { ApiResponse } from "@/lib/api-response";
+import { getSprintSeatCounts } from "@/lib/sprint-seats";
 
 const schema = z.object({
   sprintSlug: z.string().default("ai-sprint-jun-2026"),
@@ -58,7 +59,8 @@ export async function POST(req: Request) {
     );
   }
 
-  if (sprint.seatsFilled >= sprint.seatsTotal) {
+  const seats = await getSprintSeatCounts(sprintSlug);
+  if (!seats || seats.remaining <= 0) {
     return NextResponse.json<ApiResponse<null>>(
       { success: false, error: "No seats remaining" },
       { status: 400 }

@@ -1,17 +1,14 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 import type { ApiResponse } from "@/lib/api-response";
+import { getSprintSeatCounts } from "@/lib/sprint-seats";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const slug = searchParams.get("slug") ?? "ai-sprint-jun-2026";
 
-  const sprint = await prisma.sprint.findUnique({
-    where: { slug },
-    select: { seatsTotal: true, seatsFilled: true, isActive: true },
-  });
+  const seats = await getSprintSeatCounts(slug);
 
-  if (!sprint) {
+  if (!seats) {
     return NextResponse.json<ApiResponse<null>>(
       { success: false, error: "Sprint not found" },
       { status: 404 }
@@ -24,9 +21,9 @@ export async function GET(req: Request) {
     {
       success: true,
       data: {
-        remaining: sprint.seatsTotal - sprint.seatsFilled,
-        filled: sprint.seatsFilled,
-        total: sprint.seatsTotal,
+        remaining: seats.remaining,
+        filled: seats.filled,
+        total: seats.total,
       },
     },
     {
