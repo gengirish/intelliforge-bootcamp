@@ -113,6 +113,53 @@ export async function markSprintEnrollmentPaid(
   return { ok: true };
 }
 
+export async function markSprintEnrollmentPaidManually(
+  enrollmentId: string,
+  note = "Manual payment"
+): Promise<ConfirmResult> {
+  const enrollment = await prisma.sprintEnrollment.findUnique({
+    where: { id: enrollmentId },
+    include: { sprint: true },
+  });
+
+  if (!enrollment) {
+    return { ok: false, error: "Enrollment not found" };
+  }
+
+  if (enrollment.status === "PAID") {
+    return { ok: true, alreadyPaid: true };
+  }
+
+  const manualPaymentId = `manual_${Date.now().toString(36)}`;
+
+  await prisma.$transaction([
+    prisma.sprintEnrollment.update({
+      where: { id: enrollmentId },
+      data: {
+        status: "PAID",
+        razorpayPaymentId: manualPaymentId,
+        paidAt: new Date(),
+        notes: note,
+      },
+    }),
+    prisma.sprint.update({
+      where: { id: enrollment.sprintId },
+      data: { seatsFilled: { increment: 1 } },
+    }),
+  ]);
+
+  const updated = await prisma.sprintEnrollment.findUnique({
+    where: { id: enrollmentId },
+    include: { sprint: true },
+  });
+
+  if (updated) {
+    await fulfillSprintEnrollment(updated);
+  }
+
+  return { ok: true };
+}
+
 export async function confirmSprintPayment(
   orderId: string,
   paymentId: string,
