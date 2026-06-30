@@ -30,20 +30,22 @@ model Sprint {
 }
 
 model SprintEnrollment {
-  id                String           @id @default(cuid())
-  sprintId          String
-  userId            String
-  email             String
-  name              String
-  phone             String?
-  razorpayOrderId   String           @unique
-  razorpayPaymentId String?          @unique
-  amountInPaise     Int
-  status            EnrollmentStatus @default(PENDING)
-  enrolledAt        DateTime         @default(now())
-  paidAt            DateTime?
-  refundedAt        DateTime?
-  notes             String?
+  id                 String           @id @default(cuid())
+  sprintId           String
+  userId             String
+  email              String
+  name               String
+  phone              String?
+  razorpayOrderId    String           @unique
+  razorpayPaymentId  String?          @unique
+  amountInPaise      Int
+  status             EnrollmentStatus @default(PENDING)
+  lmsEnrolledAt      DateTime?
+  lmsEnrollmentError String?
+  enrolledAt         DateTime         @default(now())
+  paidAt             DateTime?
+  refundedAt         DateTime?
+  notes              String?
 
   sprint Sprint @relation(fields: [sprintId], references: [id])
 
@@ -53,9 +55,36 @@ model SprintEnrollment {
   @@index([razorpayOrderId])
 }
 
+model BootcampEnrollment {
+  id                 String           @id @default(cuid())
+  userId             String
+  email              String
+  name               String
+  phone              String?
+  plan               BootcampPlan
+  razorpayOrderId    String           @unique
+  razorpayPaymentId  String?          @unique
+  amountInPaise      Int
+  status             EnrollmentStatus @default(PENDING)
+  lmsEnrolledAt      DateTime?
+  lmsEnrollmentError String?
+  enrolledAt         DateTime         @default(now())
+  paidAt             DateTime?
+  notes              String?
+
+  @@index([userId])
+  @@index([status])
+  @@index([razorpayOrderId])
+}
+
 enum EnrollmentStatus {
   PENDING
   PAID
   CANCELLED
   REFUNDED
+}
+
+enum BootcampPlan {
+  earlyBird
+  regular
 }

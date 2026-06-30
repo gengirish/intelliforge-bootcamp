@@ -1,6 +1,6 @@
 import Link from "next/link";
 import {
-  LMS_REGISTER_URL,
+  LMS_SIGNIN_URL,
   SPRINT_CONFIG,
   SPRINT_COHORT_WHATSAPP,
   SPRINT_COHORT_WHATSAPP_URL,
@@ -37,19 +37,24 @@ export default async function SprintSuccessPage({
             </li>
             <li className="flex gap-3">
               <span className="shrink-0 font-bold text-accent">2.</span>
+              Sign in to the LMS — your account is auto-provisioned with the
+              email you used at checkout
+            </li>
+            <li className="flex gap-3">
+              <span className="shrink-0 font-bold text-accent">3.</span>
               Live classes every Saturday &amp; Sunday — 9–11 AM IST &amp;
               8–10 PM IST (see schedule on sprint page for PST / EST / CET)
             </li>
             <li className="flex gap-3">
-              <span className="shrink-0 font-bold text-accent">3.</span>
+              <span className="shrink-0 font-bold text-accent">4.</span>
               Session 1 is {SPRINT_CONFIG.session1Date} · Zoom link in WhatsApp
             </li>
             <li className="flex gap-3">
-              <span className="shrink-0 font-bold text-accent">4.</span>
+              <span className="shrink-0 font-bold text-accent">5.</span>
               Pre-read: Anthropic Claude API docs + The Illustrated Transformer
             </li>
             <li className="flex gap-3">
-              <span className="shrink-0 font-bold text-accent">5.</span>
+              <span className="shrink-0 font-bold text-accent">6.</span>
               Your research docs (IF-RES-2026-012 + 013) will be shared in the
               group
             </li>
@@ -66,12 +71,12 @@ export default async function SprintSuccessPage({
             Join {SPRINT_COHORT_WHATSAPP.name} on WhatsApp →
           </a>
           <a
-            href={LMS_REGISTER_URL}
+            href={LMS_SIGNIN_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-lg border border-border bg-surface px-8 py-3 text-sm font-medium text-foreground transition-colors hover:border-primary/30"
           >
-            Register on LMS →
+            Sign in to LMS →
           </a>
           <Link
             href="/sprint"

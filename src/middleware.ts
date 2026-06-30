@@ -6,5 +6,5 @@ export default process.env.E2E_BYPASS_CLERK === "1"
   : clerkMiddleware();
 
 export const config = {
-  matcher: ["/sign-in(.*)", "/sprint/enroll"],
+  matcher: ["/sign-in(.*)", "/sprint/enroll", "/bootcamp/enroll"],
 };

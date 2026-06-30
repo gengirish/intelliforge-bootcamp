@@ -1,4 +1,5 @@
 import {
+  LMS_SIGNIN_URL,
   SITE_CONFIG,
   SPRINT_CONFIG,
   SPRINT_COHORT_WHATSAPP,
@@ -74,7 +75,58 @@ export async function sendSprintEnrollmentConfirmation(data: {
             Join ${SPRINT_COHORT_WHATSAPP.name} on WhatsApp →
           </a>
         </p>
+        <p><strong>Step 2 — Sign in to the LMS:</strong></p>
+        <p>Your LMS account is ready — it was auto-provisioned with <strong>${data.email}</strong>. Sign in to access sprint materials and recordings.</p>
+        <p style="margin: 24px 0;">
+          <a href="${LMS_SIGNIN_URL}" style="display: inline-block; background: #1E293B; color: #E2E8F0; padding: 14px 24px; border-radius: 8px; font-weight: 600; text-decoration: none; border: 1px solid #334155;">
+            Sign in to LMS →
+          </a>
+        </p>
         <p>Session 1 is <strong>${SPRINT_CONFIG.session1Date}</strong>. Live classes run every <strong>Saturday &amp; Sunday</strong> — <strong>9:00–11:00 AM IST</strong> and <strong>8:00–10:00 PM IST</strong>. Zoom links and pre-read materials will be shared in the group.</p>
+        <p style="color: #94A3B8; font-size: 13px;">Payment ID: ${data.paymentId}</p>
+        <hr style="border: none; border-top: 1px solid #1E293B; margin: 24px 0;" />
+        <p style="color: #94A3B8; font-size: 12px;">IntelliForge AI · <a href="${SITE_CONFIG.url}" style="color: #94A3B8;">upskill.intelliforge.tech</a></p>
+      </div>
+    `,
+    reply_to: INBOX_ID,
+  });
+}
+
+const BOOTCAMP_PLAN_LABELS: Record<string, string> = {
+  earlyBird: "Early Bird",
+};
+
+export async function sendBootcampEnrollmentConfirmation(data: {
+  name: string;
+  email: string;
+  paymentId: string;
+  plan: "earlyBird" | "regular" | string;
+}) {
+  const displayName = data.name.trim() || "there";
+  const planLabel = BOOTCAMP_PLAN_LABELS[data.plan] ?? data.plan;
+
+  return agentMailSend({
+    to: data.email,
+    subject: `You're enrolled — IntelliForge AI Bootcamp (${planLabel})`,
+    html: `
+      <div style="font-family: system-ui, sans-serif; max-width: 600px; margin: 0 auto; background: #0A0F1C; color: #E2E8F0; padding: 32px; border-radius: 12px;">
+        <h2 style="color: #7C3AED; margin-top: 0;">You're enrolled!</h2>
+        <p>Hi ${displayName},</p>
+        <p>Your payment for the <strong>IntelliForge AI Bootcamp</strong> (${planLabel}) is confirmed. Your seat in the upcoming cohort is reserved.</p>
+        <p><strong>Step 1 — Join the WhatsApp cohort group:</strong></p>
+        <p style="margin: 24px 0;">
+          <a href="${WHATSAPP_GROUP_URL}" style="display: inline-block; background: #F59E0B; color: #0A0F1C; padding: 14px 24px; border-radius: 8px; font-weight: 600; text-decoration: none;">
+            Join WhatsApp Cohort Group →
+          </a>
+        </p>
+        <p><strong>Step 2 — Sign in to the LMS:</strong></p>
+        <p>Your LMS account is ready — it was auto-provisioned with <strong>${data.email}</strong>. Sign in to access course materials, recordings, and assignments.</p>
+        <p style="margin: 24px 0;">
+          <a href="${LMS_SIGNIN_URL}" style="display: inline-block; background: #1E293B; color: #E2E8F0; padding: 14px 24px; border-radius: 8px; font-weight: 600; text-decoration: none; border: 1px solid #334155;">
+            Sign in to LMS →
+          </a>
+        </p>
+        <p>Live sessions run every <strong>Saturday &amp; Sunday</strong> (4–5 hours per day) over 12 weeks. Schedule details will be shared in WhatsApp.</p>
         <p style="color: #94A3B8; font-size: 13px;">Payment ID: ${data.paymentId}</p>
         <hr style="border: none; border-top: 1px solid #1E293B; margin: 24px 0;" />
         <p style="color: #94A3B8; font-size: 12px;">IntelliForge AI · <a href="${SITE_CONFIG.url}" style="color: #94A3B8;">upskill.intelliforge.tech</a></p>

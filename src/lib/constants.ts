@@ -27,6 +27,7 @@ export const getWhatsAppUrl = (message: string) =>
   `https://wa.me/${SITE_CONFIG.contact.whatsapp}?text=${encodeURIComponent(message)}`;
 
 export const LMS_REGISTER_URL = `${SITE_CONFIG.lms}/register`;
+export const LMS_SIGNIN_URL = `${SITE_CONFIG.lms}/api/auth/signin`;
 export const LMS_FEEDBACK_URL = `${SITE_CONFIG.lms}/feedback`;
 
 export const ZOOM_MEETING = {

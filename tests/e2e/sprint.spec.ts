@@ -104,6 +104,15 @@ test.describe("Sprint Success Page", () => {
       "https://upskill.intelliforge.tech/sprint/whatsapp"
     );
   });
+
+  test("LMS CTA points to sign-in URL", async ({ page }) => {
+    await page.goto("/sprint/success");
+    const lmsLink = page.getByRole("link", { name: /Sign in to LMS/ });
+    await expect(lmsLink).toHaveAttribute(
+      "href",
+      "https://learning.intelliforge.tech/api/auth/signin"
+    );
+  });
 });
 
 test.describe("Sprint API", () => {

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import {
-  LMS_REGISTER_URL,
+  LMS_SIGNIN_URL,
   SITE_CONFIG,
   WHATSAPP_GROUP_URL,
 } from "@/lib/constants";
@@ -42,8 +42,8 @@ export default async function EnrollmentSuccessPage({
             </li>
             <li className="flex gap-3">
               <span className="shrink-0 font-bold text-accent">2.</span>
-              Register on the LMS to access course materials, recordings, and
-              assignments
+              Sign in to the LMS — your account is auto-provisioned with the
+              email you used at checkout
             </li>
             <li className="flex gap-3">
               <span className="shrink-0 font-bold text-accent">3.</span>
@@ -67,12 +67,12 @@ export default async function EnrollmentSuccessPage({
             Join WhatsApp Cohort Group →
           </a>
           <a
-            href={LMS_REGISTER_URL}
+            href={LMS_SIGNIN_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-lg border border-border bg-surface px-8 py-3 text-sm font-medium text-foreground transition-colors hover:border-primary/30"
           >
-            Register on LMS →
+            Sign in to LMS →
           </a>
           <Link
             href="/"

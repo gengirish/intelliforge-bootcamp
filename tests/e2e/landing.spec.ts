@@ -101,6 +101,17 @@ test.describe("Landing Page — All Sections", () => {
     await expect(page.getByText("Best Value")).toBeVisible();
   });
 
+  test("bootcamp enroll redirects unauthenticated user to sign-in", async ({
+    page,
+  }) => {
+    const section = page.locator("#pricing");
+    await section.scrollIntoViewIfNeeded();
+    await page
+      .getByRole("button", { name: /Enroll Now — Early Bird/ })
+      .click();
+    await expect(page).toHaveURL(/\/sign-in/, { timeout: 10000 });
+  });
+
   test("FAQ section renders and accordion works", async ({ page }) => {
     await page.getByText("Questions? Answered").scrollIntoViewIfNeeded();
     await expect(page.getByText("Questions? Answered")).toBeVisible();
@@ -123,5 +134,19 @@ test.describe("Landing Page — All Sections", () => {
     const footer = page.locator("footer");
     await expect(footer.getByText("© 2026 IntelliForge AI")).toBeVisible();
     await expect(footer.getByText("contact@intelliforge.tech")).toBeVisible();
+  });
+});
+
+test.describe("Bootcamp Enrollment Success Page", () => {
+  test("LMS CTA points to sign-in URL", async ({ page }) => {
+    await page.goto("/enrollment/success?payment_id=pay_e2e_test");
+    await expect(
+      page.getByRole("heading", { name: /You're enrolled!/ })
+    ).toBeVisible();
+    const lmsLink = page.getByRole("link", { name: /Sign in to LMS/ });
+    await expect(lmsLink).toHaveAttribute(
+      "href",
+      "https://learning.intelliforge.tech/api/auth/signin"
+    );
   });
 });
