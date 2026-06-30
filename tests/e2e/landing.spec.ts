@@ -25,12 +25,13 @@ test.describe("Landing Page — All Sections", () => {
     await expect(
       page.getByRole("link", { name: /Join 2-Week AI Sprint/ }).first()
     ).toBeVisible();
-    await expect(page.getByRole("link", { name: "12-Week Bootcamp" })).toBeVisible();
+    await expect(page.getByRole("link", { name: /12-Week Bootcamp/ })).toBeVisible();
   });
 
   test("trust badges are visible", async ({ page }) => {
     await expect(page.getByText("Aligned with Bharat AI Mission").first()).toBeVisible();
     await expect(page.getByText("13+ Years Fortune 500 DNA")).toBeVisible();
+    await expect(page.getByText("15-Day Money-Back Guarantee").first()).toBeVisible();
   });
 
   test("stats bar renders with numbers", async ({ page }) => {

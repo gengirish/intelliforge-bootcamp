@@ -445,6 +445,37 @@ export const FAQ_ITEMS = [
   },
 ];
 
+export const TRUST_SIGNALS = {
+  hero: [
+    { icon: "Award", label: "Aligned with Bharat AI Mission" },
+    { icon: "Building2", label: "13+ Years Fortune 500 DNA" },
+    { icon: "Shield", label: "15-Day Money-Back Guarantee" },
+  ],
+  sprint: [
+    { icon: "Users", label: "Max 30 seats" },
+    { icon: "Clock", label: "Live Sat & Sun · 9–11 AM & 8–10 PM IST" },
+    { icon: "Shield", label: "Zero-risk guarantee" },
+  ],
+  checkout: [
+    { icon: "Lock", label: "100% Secure Checkout" },
+    { icon: "Shield", label: "15-Day Money-Back Guarantee" },
+    { icon: "CreditCard", label: "0% EMI Available" },
+  ],
+  finalCta: [
+    { icon: "Shield", label: "15-day money-back guarantee" },
+    { icon: "Video", label: "Live weekend sessions on Zoom" },
+    { icon: "GraduationCap", label: "12-week bootcamp path available" },
+  ],
+} as const;
+
+export const CTA_MICRO_TRUST = {
+  sprint:
+    "Secure Razorpay checkout · UPI, cards & netbanking · Talk to a founder before you pay",
+  bootcamp:
+    "Secure checkout · 15-day money-back after first 2 weekends · 0% EMI available",
+  freeClass: "No payment · No commitment · Real curriculum preview",
+} as const;
+
 export const SPRINT_CONFIG = {
   name: "2-Week AI Sprint",
   priceDisplay: "₹4,999",

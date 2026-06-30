@@ -3,7 +3,8 @@ import { Fragment } from "react";
 import Link from "next/link";
 import { FadeIn } from "@/components/animations/fade-in";
 import { cn } from "@/lib/utils";
-import { FREE_PREVIEW, LMS_REGISTER_URL } from "@/lib/constants";
+import { CTA_MICRO_TRUST, FREE_PREVIEW, LMS_REGISTER_URL } from "@/lib/constants";
+import { CtaMicroTrust } from "@/components/ui/trust-signals";
 
 const ICON_MAP = {
   Bot,
@@ -84,10 +85,11 @@ export function FreePreview() {
               "transition-all duration-300 hover:bg-accent/90 hover:shadow-lg hover:shadow-accent/20"
             )}
           >
-            Start Free Class →
+            Start Free Class — See the Curriculum
           </Link>
-          <p className="mt-4 text-sm text-muted">
-            No signup required. No payment. Just learn.
+          <CtaMicroTrust text={CTA_MICRO_TRUST.freeClass} className="mt-4" />
+          <p className="mt-2 text-sm text-muted">
+            Join 500+ professionals who&apos;ve learned from our enterprise AI team.
           </p>
         </FadeIn>
       </div>

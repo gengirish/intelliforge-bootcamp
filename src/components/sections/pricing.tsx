@@ -4,14 +4,9 @@ import Link from "next/link";
 import { Check } from "lucide-react";
 import { FadeIn } from "@/components/animations/fade-in";
 import { BootcampCheckoutButton } from "@/components/bootcamp/BootcampCheckoutButton";
-import { LMS_REGISTER_URL, PRICING, SPRINT_CONFIG, WHATSAPP_DEMO_URL } from "@/lib/constants";
+import { CTA_MICRO_TRUST, LMS_REGISTER_URL, PRICING, SPRINT_CONFIG, TRUST_SIGNALS, WHATSAPP_DEMO_URL } from "@/lib/constants";
+import { CtaMicroTrust, TrustSignals } from "@/components/ui/trust-signals";
 import { cn } from "@/lib/utils";
-
-const TRUST_BADGES = [
-  "15-Day Money Back Guarantee",
-  "100% Secure Checkout",
-  "0% EMI Available",
-];
 
 export function Pricing() {
   return (
@@ -113,6 +108,7 @@ export function Pricing() {
               </ul>
               <div className="mt-8 flex flex-col gap-3">
                 <BootcampCheckoutButton plan="earlyBird" />
+                <CtaMicroTrust text={CTA_MICRO_TRUST.bootcamp} className="text-center" />
                 <a
                   href={WHATSAPP_DEMO_URL}
                   target="_blank"
@@ -127,18 +123,8 @@ export function Pricing() {
           </FadeIn>
         </div>
 
-        {/* Trust badges */}
         <FadeIn delay={0.3} className="mt-12">
-          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
-            {TRUST_BADGES.map((badge) => (
-              <span
-                key={badge}
-                className="rounded-full border border-border bg-surface/50 px-4 py-2 text-xs text-muted sm:text-sm"
-              >
-                {badge}
-              </span>
-            ))}
-          </div>
+          <TrustSignals signals={TRUST_SIGNALS.checkout} variant="badges" />
         </FadeIn>
 
         <FadeIn delay={0.4} className="mt-8 space-y-3">

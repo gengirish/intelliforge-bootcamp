@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { SPRINT_CONFIG, WHATSAPP_DEMO_URL } from "@/lib/constants";
+import { CTA_MICRO_TRUST, SPRINT_CONFIG, WHATSAPP_DEMO_URL } from "@/lib/constants";
 
 export function StickyMobileCta() {
   const [isHidden, setIsHidden] = useState(false);
@@ -43,21 +43,26 @@ export function StickyMobileCta() {
         "pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3 px-4"
       )}
     >
-      <div className="mx-auto flex max-w-lg gap-3">
-        <a
-          href={WHATSAPP_DEMO_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex flex-1 items-center justify-center rounded-lg border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-surface-light"
-        >
-          Free Demo
-        </a>
-        <Link
-          href={SPRINT_CONFIG.href}
-          className="glow-cta flex flex-1 items-center justify-center rounded-lg bg-cta px-4 py-2.5 text-sm font-medium text-background transition-colors hover:bg-cta-hover"
-        >
-          AI Sprint {SPRINT_CONFIG.priceDisplay}
-        </Link>
+      <div className="mx-auto max-w-lg">
+        <div className="flex gap-3">
+          <a
+            href={WHATSAPP_DEMO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex flex-1 items-center justify-center rounded-lg border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-surface-light"
+          >
+            Free Demo
+          </a>
+          <Link
+            href={SPRINT_CONFIG.href}
+            className="glow-cta flex flex-1 items-center justify-center rounded-lg bg-cta px-4 py-2.5 text-sm font-medium text-background transition-colors hover:bg-cta-hover"
+          >
+            AI Sprint {SPRINT_CONFIG.priceDisplay}
+          </Link>
+        </div>
+        <p className="mt-2 text-center text-[11px] leading-snug text-muted">
+          {CTA_MICRO_TRUST.sprint}
+        </p>
       </div>
     </div>
   );

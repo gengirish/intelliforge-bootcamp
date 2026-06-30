@@ -1,16 +1,18 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { LMS_REGISTER_URL, SPRINT_CONFIG, WHATSAPP_DEMO_URL } from "@/lib/constants";
+import {
+  CTA_MICRO_TRUST,
+  LMS_REGISTER_URL,
+  SPRINT_CONFIG,
+  TRUST_SIGNALS,
+  WHATSAPP_DEMO_URL,
+} from "@/lib/constants";
+import { CtaMicroTrust, TrustSignals } from "@/components/ui/trust-signals";
 
 const headlineLines = [
   { text: "Build ", highlight: "AI Agents." },
   { text: "Ship ", highlight: "AI Products." },
   { text: "Own Your ", highlight: "AI Future." },
-];
-
-const trustBadges = [
-  "Aligned with Bharat AI Mission",
-  "13+ Years Fortune 500 DNA",
 ];
 
 export function Hero() {
@@ -52,54 +54,61 @@ export function Hero() {
         </p>
 
         <div className="hero-animate-cta mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <Link
-            href={SPRINT_CONFIG.href}
-            className={cn(
-              "glow-cta inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-cta px-8 py-4 text-base font-semibold text-background",
-              "hover:bg-cta-hover shadow-lg transition-colors focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
-            )}
-          >
-            {SPRINT_CONFIG.ctaLabel}
-          </Link>
+          <div className="flex w-full flex-col items-center sm:w-auto">
+            <Link
+              href={SPRINT_CONFIG.href}
+              className={cn(
+                "glow-cta inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-cta px-8 py-4 text-base font-semibold text-background sm:w-auto",
+                "hover:bg-cta-hover shadow-lg transition-colors focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
+              )}
+            >
+              {SPRINT_CONFIG.ctaLabel}
+            </Link>
+            <CtaMicroTrust
+              text={CTA_MICRO_TRUST.sprint}
+              className="hero-animate-secondary mt-2 max-w-xs px-1 sm:max-w-sm"
+            />
+          </div>
           <Link
             href="#pricing"
             className={cn(
-              "inline-flex cursor-pointer items-center justify-center rounded-lg border-2 border-border px-8 py-4 text-base font-semibold text-foreground",
+              "inline-flex w-full cursor-pointer items-center justify-center rounded-lg border-2 border-border px-8 py-4 text-base font-semibold text-foreground sm:w-auto",
               "hover:bg-surface-light hover:border-surface-light transition-colors focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
             )}
           >
-            12-Week Bootcamp
+            12-Week Bootcamp — from ₹49,999
           </Link>
         </div>
-        <div className="hero-animate-secondary mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
-          <a
-            href={WHATSAPP_DEMO_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-muted underline-offset-2 hover:text-foreground hover:underline"
-          >
-            Book free demo →
-          </a>
-          <a
-            href={LMS_REGISTER_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-accent underline-offset-2 hover:underline"
-          >
-            Try a free class →
-          </a>
+
+        <div className="hero-animate-secondary mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-x-6">
+          <p className="text-sm text-muted">Not ready to enroll?</p>
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
+            <a
+              href={WHATSAPP_DEMO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 font-medium text-foreground underline-offset-2 hover:underline"
+            >
+              Book a free 1:1 demo
+              <span className="text-muted font-normal">— talk to a founder</span>
+            </a>
+            <a
+              href={LMS_REGISTER_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 font-medium text-accent underline-offset-2 hover:underline"
+            >
+              Try a free class
+              <span className="font-normal opacity-80">— no payment</span>
+            </a>
+          </div>
         </div>
 
-        <div className="hero-animate-badges mt-12 flex flex-wrap items-center justify-center gap-4">
-          {trustBadges.map((badge) => (
-            <span
-              key={badge}
-              className="rounded-full border border-border bg-surface/50 px-4 py-2 text-xs text-muted sm:text-sm"
-            >
-              {badge}
-            </span>
-          ))}
-        </div>
+        <TrustSignals
+          signals={TRUST_SIGNALS.hero}
+          variant="badges"
+          className="hero-animate-badges mt-12"
+        />
       </div>
     </section>
   );
