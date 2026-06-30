@@ -454,7 +454,9 @@ export const SPRINT_CONFIG = {
   slug: "ai-sprint-jun-2026",
   href: "/sprint",
   ctaLabel: "Join 2-Week AI Sprint — ₹4,999",
-  urgencyLine: "Cohort 1 starts August 1 · 30 seats · Live weekends",
+  urgencyLine: "Cohort 1 starts August 1 · Live Sat & Sun · 30 seats",
+  liveScheduleSummary:
+    "Live on Zoom every Saturday & Sunday — 9–11 AM & 8–10 PM IST",
 };
 
 export const NAV_LINKS = [

@@ -48,7 +48,7 @@ export function Hero() {
         <p className="hero-animate-subheading mx-auto mt-6 max-w-2xl text-lg text-muted sm:text-xl">
           Your team shipped an AI demo. You didn&apos;t — yet. Start with our
           2-week sprint: two live products deployed, then scale into the full
-          12-week bootcamp.
+          12-week bootcamp. {SPRINT_CONFIG.liveScheduleSummary}.
         </p>
 
         <div className="hero-animate-cta mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">

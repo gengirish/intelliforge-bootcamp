@@ -37,14 +37,19 @@ export default async function SprintSuccessPage({
             </li>
             <li className="flex gap-3">
               <span className="shrink-0 font-bold text-accent">2.</span>
-              Session 1 is {SPRINT_CONFIG.session1Date} · 9:00 AM IST — Zoom link in WhatsApp
+              Live classes every Saturday &amp; Sunday — 9–11 AM IST &amp;
+              8–10 PM IST (see schedule on sprint page for PST / EST / CET)
             </li>
             <li className="flex gap-3">
               <span className="shrink-0 font-bold text-accent">3.</span>
-              Pre-read: Anthropic Claude API docs + The Illustrated Transformer
+              Session 1 is {SPRINT_CONFIG.session1Date} · Zoom link in WhatsApp
             </li>
             <li className="flex gap-3">
               <span className="shrink-0 font-bold text-accent">4.</span>
+              Pre-read: Anthropic Claude API docs + The Illustrated Transformer
+            </li>
+            <li className="flex gap-3">
+              <span className="shrink-0 font-bold text-accent">5.</span>
               Your research docs (IF-RES-2026-012 + 013) will be shared in the
               group
             </li>

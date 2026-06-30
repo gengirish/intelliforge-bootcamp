@@ -64,8 +64,7 @@ test.describe("Landing Page — All Sections", () => {
   });
 
   test("capstone products section renders cards", async ({ page }) => {
-    const section = page.locator("#projects");
-    await section.scrollIntoViewIfNeeded();
+    await page.getByText("10+ Production Products").scrollIntoViewIfNeeded();
     await expect(page.getByText("10+ Production Products")).toBeVisible();
     await expect(page.getByText("AI Research Agent")).toBeVisible();
     await expect(page.getByText("AI Interview Platform")).toBeVisible();
@@ -103,8 +102,7 @@ test.describe("Landing Page — All Sections", () => {
   });
 
   test("FAQ section renders and accordion works", async ({ page }) => {
-    const section = page.locator("#faq");
-    await section.scrollIntoViewIfNeeded();
+    await page.getByText("Questions? Answered").scrollIntoViewIfNeeded();
     await expect(page.getByText("Questions? Answered")).toBeVisible();
 
     const firstQuestion = page.getByRole("button", { name: "What makes IntelliForge" });
@@ -121,8 +119,8 @@ test.describe("Landing Page — All Sections", () => {
   });
 
   test("footer renders with copyright and links", async ({ page }) => {
+    await page.getByText("© 2026 IntelliForge AI").scrollIntoViewIfNeeded();
     const footer = page.locator("footer");
-    await footer.scrollIntoViewIfNeeded();
     await expect(footer.getByText("© 2026 IntelliForge AI")).toBeVisible();
     await expect(footer.getByText("contact@intelliforge.tech")).toBeVisible();
   });

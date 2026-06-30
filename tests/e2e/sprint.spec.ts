@@ -25,6 +25,20 @@ test.describe("Sprint Landing Page", () => {
     await expect(page.getByText("Max 30 seats")).toBeVisible();
   });
 
+  test("shows countdown and multi-timezone live schedule", async ({ page }) => {
+    await expect(
+      page.getByText("Countdown to Cohort 1 kickoff")
+    ).toBeVisible();
+    await expect(page.getByText("Live class schedule")).toBeVisible();
+    await expect(page.getByText(/Every Saturday & Sunday/)).toBeVisible();
+    await expect(page.getByRole("columnheader", { name: "IST" })).toBeVisible();
+    await expect(page.getByRole("columnheader", { name: "PST" })).toBeVisible();
+    await expect(page.getByRole("columnheader", { name: "EST" })).toBeVisible();
+    await expect(page.getByRole("columnheader", { name: "CET" })).toBeVisible();
+    await expect(page.getByText("Morning live class")).toBeVisible();
+    await expect(page.getByText("Evening live class")).toBeVisible();
+  });
+
   test("renders curriculum weeks and outcomes", async ({ page }) => {
     await expect(page.getByText("What You'll Ship")).toBeVisible();
     await expect(page.getByRole("heading", { name: "Claude API Chatbot" })).toBeVisible();
@@ -74,6 +88,9 @@ test.describe("Sprint Success Page", () => {
     ).toBeVisible();
     await expect(page.getByText("What happens next")).toBeVisible();
     await expect(page.getByText(/Session 1 is Saturday, August 1, 2026/)).toBeVisible();
+    await expect(
+      page.getByText(/9–11 AM IST/)
+    ).toBeVisible();
     await expect(page.getByText("Payment ID: pay_e2e_test")).toBeVisible();
   });
 

@@ -19,6 +19,8 @@ import {
   Zap,
 } from "lucide-react";
 import { SprintCheckoutButton } from "@/components/sprint/SprintCheckoutButton";
+import { SprintCountdown } from "@/components/sprint/SprintCountdown";
+import { SprintLiveSchedule } from "@/components/sprint/SprintLiveSchedule";
 import { formatISTDate, formatRupee } from "@/lib/sprint-format";
 import { SITE_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -144,10 +146,12 @@ export function SprintLandingClient({
       <section className="relative overflow-hidden px-6 pt-16 pb-20">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-transparent to-transparent pointer-events-none" />
         <div className="max-w-4xl mx-auto text-center relative">
-          <div className="inline-flex items-center gap-2 bg-surface border border-border rounded-full px-4 py-1.5 text-sm text-accent mb-8">
+          <div className="inline-flex items-center gap-2 bg-surface border border-border rounded-full px-4 py-1.5 text-sm text-accent mb-6">
             <Sparkles className="w-4 h-4" />
-            Cohort 1 · Starts {startLabel} · 9:00 AM IST
+            Cohort 1 · Starts {startLabel} · Live Sat &amp; Sun
           </div>
+
+          <SprintCountdown startDate={startDate} className="mb-8 max-w-xl mx-auto" />
 
           <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 leading-tight">
             Your Team Shipped an AI Demo.{" "}
@@ -200,7 +204,7 @@ export function SprintLandingClient({
               <Users className="w-4 h-4" /> Max 30 seats
             </span>
             <span className="flex items-center gap-2">
-              <Clock className="w-4 h-4" /> 2 weeks · Live sessions
+              <Clock className="w-4 h-4" /> Sat &amp; Sun · 9–11 AM &amp; 8–10 PM IST
             </span>
             <span className="flex items-center gap-2">
               <Shield className="w-4 h-4" /> Zero-risk guarantee
@@ -209,7 +213,9 @@ export function SprintLandingClient({
         </div>
       </section>
 
-      <section className="px-6 py-14 border-y border-border/50 bg-surface/30">
+      <SprintLiveSchedule startDate={startDate} />
+
+      <section className="px-6 py-14 border-b border-border/50 bg-surface/30">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
             Is This You Right Now?
@@ -339,8 +345,8 @@ export function SprintLandingClient({
               : "Stop planning. Start shipping."}
           </h2>
           <p className="text-muted mb-8">
-            {price} one-time · Two live products in 14 days · Live Zoom
-            sessions every weekend · Zero-risk guarantee
+            {price} one-time · Two live products in 14 days · Live Zoom on Sat
+            &amp; Sun (9–11 AM &amp; 8–10 PM IST) · Zero-risk guarantee
           </p>
           {!soldOut && (
             <SprintCheckoutButton
