@@ -82,6 +82,14 @@ test.describe("Landing Page — All Sections", () => {
     await expect(page.getByText("Phase 3: Ship Your Product")).toBeVisible();
   });
 
+  test("live schedule section has timezone selector", async ({ page }) => {
+    const section = page.locator("#live-schedule");
+    await section.scrollIntoViewIfNeeded();
+    await expect(section.getByText("Every Saturday & Sunday")).toBeVisible();
+    await expect(section.getByLabel("Show times in")).toBeVisible();
+    await expect(section.getByText("Morning live class")).toBeVisible();
+  });
+
   test("who's behind section renders founder Girish", async ({ page }) => {
     const section = page.locator("#whos-behind");
     await section.scrollIntoViewIfNeeded();

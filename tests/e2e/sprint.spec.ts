@@ -28,18 +28,22 @@ test.describe("Sprint Landing Page", () => {
     await expect(page.getByText("available")).toBeVisible();
   });
 
-  test("shows countdown and multi-timezone live schedule", async ({ page }) => {
+  test("shows countdown and timezone-selectable live schedule", async ({ page }) => {
     await expect(
       page.getByText("Countdown to Cohort 1 kickoff")
     ).toBeVisible();
     await expect(page.getByText("Live class schedule")).toBeVisible();
     await expect(page.getByText(/Every Saturday & Sunday/)).toBeVisible();
-    await expect(page.getByRole("columnheader", { name: "IST" })).toBeVisible();
-    await expect(page.getByRole("columnheader", { name: "PST" })).toBeVisible();
-    await expect(page.getByRole("columnheader", { name: "EST" })).toBeVisible();
-    await expect(page.getByRole("columnheader", { name: "CET" })).toBeVisible();
+    await expect(page.getByLabel("Show times in")).toBeVisible();
+    await expect(page.getByRole("columnheader", { name: "IST (anchor)" })).toBeVisible();
     await expect(page.getByText("Morning live class")).toBeVisible();
     await expect(page.getByText("Evening live class")).toBeVisible();
+
+    const timezoneSelect = page.getByLabel("Show times in");
+    await timezoneSelect.selectOption("America/Los_Angeles");
+    await expect(page.getByRole("columnheader", { name: "PST" })).toBeVisible();
+    await expect(page.getByText("8:30 PM – 10:30 PM").first()).toBeVisible();
+    await expect(page.getByText("7:30 AM – 9:30 AM").first()).toBeVisible();
   });
 
   test("renders curriculum weeks and outcomes", async ({ page }) => {

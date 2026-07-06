@@ -7,6 +7,7 @@ import { BuildAlongside } from "@/components/sections/build-alongside";
 import { VerifiableCredential } from "@/components/sections/verifiable-credential";
 import { ComparisonTable } from "@/components/sections/comparison-table";
 import { Curriculum } from "@/components/sections/curriculum";
+import { SprintLiveSchedule } from "@/components/sprint/SprintLiveSchedule";
 import { WhatsAppFAB } from "@/components/whatsapp-fab-lazy";
 
 const WhosBehind = dynamic(() =>
@@ -64,6 +65,7 @@ export default function Home() {
         <VerifiableCredential />
         <ComparisonTable />
         <Curriculum />
+        <SprintLiveSchedule />
         <WhosBehind />
         <CohortOutcomes />
         <FreePreview />
