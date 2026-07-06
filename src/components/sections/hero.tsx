@@ -2,18 +2,18 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import {
   CTA_MICRO_TRUST,
-  LMS_REGISTER_URL,
-  SPRINT_CONFIG,
+  FREE_LIVE_DEMO_URL,
+  FOUNDER,
   TRUST_SIGNALS,
-  WHATSAPP_DEMO_URL,
 } from "@/lib/constants";
 import { CtaMicroTrust, TrustSignals } from "@/components/ui/trust-signals";
 
-const headlineLines = [
-  { text: "Build ", highlight: "AI Agents." },
-  { text: "Ship ", highlight: "AI Products." },
-  { text: "Own Your ", highlight: "AI Future." },
-];
+/*
+ * Headline options considered:
+ * 1. "Don't build a portfolio project. Ship a real product." ← selected (strongest moat)
+ * 2. "The only bootcamp where your credential links to what you shipped."
+ * 3. "Ship to a live repo. Get scored. Leave with proof."
+ */
 
 export function Hero() {
   return (
@@ -35,37 +35,40 @@ export function Hero() {
 
       <div className="relative z-10 mx-auto max-w-4xl text-center">
         <p className="hero-animate-headline mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-surface/60 px-4 py-1.5 text-sm text-accent">
-          🔥 {SPRINT_CONFIG.urgencyLine}
+          Cohort 1 · Build-alongside on live IntelliForge products
         </p>
 
         <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
-          {headlineLines.map((line, i) => (
-            <span key={i} className="hero-animate-headline block">
-              {line.text}
-              <span className="gradient-text">{line.highlight}</span>
-            </span>
-          ))}
+          <span className="hero-animate-headline block">
+            Don&apos;t build a portfolio project.
+          </span>
+          <span className="hero-animate-headline block">
+            <span className="gradient-text">Ship a real product.</span>
+          </span>
         </h1>
 
         <p className="hero-animate-subheading mx-auto mt-6 max-w-2xl text-lg text-muted sm:text-xl">
-          Your team shipped an AI demo. You didn&apos;t — yet. Start with our
-          2-week sprint: two live products deployed, then scale into the full
-          12-week bootcamp. {SPRINT_CONFIG.liveScheduleSummary}.
+          The only cohort where top performers ship to a live repo, get scored
+          by a mentor who watched you work, and leave with a verifiable,
+          recruiter-checkable credential.
         </p>
 
         <div className="hero-animate-cta mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <div className="flex w-full flex-col items-center sm:w-auto">
-            <Link
-              href={SPRINT_CONFIG.href}
+            <a
+              href={FREE_LIVE_DEMO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className={cn(
                 "glow-cta inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-cta px-8 py-4 text-base font-semibold text-background sm:w-auto",
-                "hover:bg-cta-hover shadow-lg transition-colors focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
+                "hover:bg-cta-hover shadow-lg transition-colors",
+                "focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
               )}
             >
-              {SPRINT_CONFIG.ctaLabel}
-            </Link>
+              Try the free demo — live, no signup
+            </a>
             <CtaMicroTrust
-              text={CTA_MICRO_TRUST.sprint}
+              text={CTA_MICRO_TRUST.freeDemo}
               className="hero-animate-secondary mt-2 max-w-xs px-1 sm:max-w-sm"
             />
           </div>
@@ -73,41 +76,23 @@ export function Hero() {
             href="#pricing"
             className={cn(
               "inline-flex w-full cursor-pointer items-center justify-center rounded-lg border-2 border-border px-8 py-4 text-base font-semibold text-foreground sm:w-auto",
-              "hover:bg-surface-light hover:border-surface-light transition-colors focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
+              "hover:bg-surface-light hover:border-surface-light transition-colors",
+              "focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
             )}
           >
-            12-Week Bootcamp — from ₹49,999
+            Enrol in Cohort 1
           </Link>
         </div>
 
-        <div className="hero-animate-secondary mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-x-6">
-          <p className="text-sm text-muted">Not ready to enroll?</p>
-          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
-            <a
-              href={WHATSAPP_DEMO_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 font-medium text-foreground underline-offset-2 hover:underline"
-            >
-              Book a free 1:1 demo
-              <span className="text-muted font-normal">— talk to a founder</span>
-            </a>
-            <a
-              href={LMS_REGISTER_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 font-medium text-accent underline-offset-2 hover:underline"
-            >
-              Try a free class
-              <span className="font-normal opacity-80">— no payment</span>
-            </a>
-          </div>
-        </div>
+        <p className="hero-animate-secondary mt-8 text-sm text-muted">
+          Founder-taught by {FOUNDER.name} · Built on IntelliForge&apos;s live
+          product studio
+        </p>
 
         <TrustSignals
           signals={TRUST_SIGNALS.hero}
           variant="badges"
-          className="hero-animate-badges mt-12"
+          className="hero-animate-badges mt-10"
         />
       </div>
     </section>

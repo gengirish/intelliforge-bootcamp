@@ -112,31 +112,25 @@ test.describe("Email Integration — Contact Form & New Sections", () => {
   });
 
   test.describe("Final CTA — Dual Path", () => {
-    test("has sprint, WhatsApp, and free class CTAs", async ({ page }) => {
+    test("has free demo and enrol CTAs", async ({ page }) => {
       const finalCtaSection = page.locator("section", {
-        has: page.getByText("Stop Learning AI"),
+        has: page.getByText("Ask any bootcamp for the repo"),
       });
 
-      const sprintCTA = finalCtaSection.getByRole("link", {
-        name: /Join 2-Week AI Sprint/,
+      const freeDemoCTA = finalCtaSection.getByRole("link", {
+        name: /Try the free demo — live, no signup/,
       });
-      await expect(sprintCTA).toBeVisible();
-      await expect(sprintCTA).toHaveAttribute("href", "/sprint");
-
-      const whatsappCTA = finalCtaSection.getByRole("link", {
-        name: /Or Book a Free Demo First/i,
-      });
-      await expect(whatsappCTA).toBeVisible();
-      await expect(whatsappCTA).toHaveAttribute("href", /wa\.me/);
-
-      const freeClassCTA = finalCtaSection.getByRole("link", {
-        name: /Try a free class on our LMS/i,
-      });
-      await expect(freeClassCTA).toBeVisible();
-      await expect(freeClassCTA).toHaveAttribute(
+      await expect(freeDemoCTA).toBeVisible();
+      await expect(freeDemoCTA).toHaveAttribute(
         "href",
         /learning\.intelliforge\.tech/
       );
+
+      const enrolCTA = finalCtaSection.getByRole("link", {
+        name: /Enrol in Cohort 1/,
+      });
+      await expect(enrolCTA).toBeVisible();
+      await expect(enrolCTA).toHaveAttribute("href", "#pricing");
     });
   });
 

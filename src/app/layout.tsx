@@ -17,27 +17,27 @@ const ogImage = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://upskill.intelliforge.tech"),
-  title: "IntelliForge AI Bootcamp — Build AI Agents. Ship AI Products.",
+  title: "IntelliForge AI Bootcamp — Ship a Real Product. Earn a Verifiable Credential.",
   description:
-    "12-week intensive bootcamp to master AI Agent Development and Vibe Coding. Build, deploy & monetize production AI systems. From the team with 13+ years of Fortune 500 enterprise experience. Based in Hyderabad, India.",
+    "The only AI cohort where top performers ship to a live IntelliForge repo, get mentor-scored, and leave with a recruiter-checkable credential. Founder-taught by Girish. Based in Hyderabad, India.",
   keywords: [
     "AI bootcamp",
     "AI agents",
     "vibe coding",
+    "verifiable credential",
+    "build alongside",
     "LangChain",
     "LangGraph",
-    "CrewAI",
     "AI engineering",
-    "multi-agent systems",
     "IntelliForge",
     "Hyderabad",
     "India",
   ],
   authors: [{ name: "IntelliForge AI" }],
   openGraph: {
-    title: "IntelliForge AI Bootcamp — Build AI Agents. Ship AI Products.",
+    title: "IntelliForge AI Bootcamp — Ship a Real Product.",
     description:
-      "12-week intensive bootcamp. Master AI Agents + Vibe Coding. 13+ years Fortune 500 enterprise DNA.",
+      "Ship to a live repo. Get mentor-scored. Leave with a verifiable credential recruiters can check.",
     url: "https://upskill.intelliforge.tech",
     siteName: "IntelliForge AI Bootcamp",
     type: "website",
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "IntelliForge AI Bootcamp",
     description:
-      "Build AI Agents. Ship AI Products. Own Your AI Future. 12-week intensive bootcamp.",
+      "Don't build a portfolio project. Ship a real product. Verifiable credential with shipped-product link.",
     images: [ogImage],
   },
 };

@@ -1,12 +1,10 @@
-import Link from "next/link";
 import { FadeIn } from "@/components/animations/fade-in";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 import {
   CTA_MICRO_TRUST,
-  LMS_REGISTER_URL,
-  SPRINT_CONFIG,
+  FREE_LIVE_DEMO_URL,
   TRUST_SIGNALS,
-  WHATSAPP_DEMO_URL,
 } from "@/lib/constants";
 import { CtaMicroTrust, TrustSignals } from "@/components/ui/trust-signals";
 
@@ -24,62 +22,44 @@ export function FinalCTA() {
       <FadeIn className="relative z-10 mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
         <h2
           id="final-cta-heading"
-          className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl"
+          className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl"
         >
-          <span className="block">Stop Learning AI.</span>
+          <span className="block">Ask any bootcamp for the repo</span>
           <span className="block">
-            Start <span className="gradient-text">Shipping It.</span>
+            you&apos;ll contribute to.{" "}
+            <span className="gradient-text">We&apos;ll show you ours.</span>
           </span>
         </h2>
         <p className="mx-auto mt-6 max-w-2xl text-lg text-muted sm:text-xl">
-          Join Cohort 1 of our 2-Week AI Sprint — two live products deployed
-          starting {SPRINT_CONFIG.cohortStartDate}. {SPRINT_CONFIG.priceDisplay}{" "}
-          · 30 seats · backed by our zero-risk guarantee.
+          Ship to a live repo. Get mentor-scored. Leave with a credential
+          recruiters can verify — or start with the free demo and decide.
         </p>
 
-        <div className="mt-10 flex flex-col items-center">
-          <Link
-            href={SPRINT_CONFIG.href}
-            className={cn(
-              "glow-cta inline-flex cursor-pointer items-center justify-center gap-3 rounded-xl bg-cta px-10 py-5 text-lg font-semibold text-background",
-              "shadow-lg transition-colors duration-200 hover:bg-cta-hover"
-            )}
-          >
-            {SPRINT_CONFIG.ctaLabel}
-          </Link>
-          <CtaMicroTrust
-            text={CTA_MICRO_TRUST.sprint}
-            className="mt-3 max-w-md"
-          />
-        </div>
-
-        <div className="mt-6 space-y-2">
-          <p className="text-sm text-muted">Want to see the fit first?</p>
+        <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
           <a
-            href={WHATSAPP_DEMO_URL}
+            href={FREE_LIVE_DEMO_URL}
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
-              "inline-flex items-center justify-center gap-2 rounded-xl border-2 border-accent/30 px-10 py-4 text-base font-semibold text-accent",
-              "hover:bg-accent/10 transition-colors"
+              "glow-cta inline-flex cursor-pointer items-center justify-center gap-3 rounded-xl bg-cta px-10 py-5 text-lg font-semibold text-background",
+              "shadow-lg transition-colors duration-200 hover:bg-cta-hover",
+              "focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
             )}
           >
-            Or Book a Free Demo First
+            Try the free demo — live, no signup
           </a>
-          <p className="text-xs text-muted">
-            15-minute call · No sales pitch · Ask anything about the sprint or bootcamp
-          </p>
+          <Link
+            href="#pricing"
+            className={cn(
+              "inline-flex cursor-pointer items-center justify-center rounded-xl border-2 border-border px-10 py-5 text-lg font-semibold text-foreground",
+              "hover:bg-surface-light transition-colors",
+              "focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
+            )}
+          >
+            Enrol in Cohort 1
+          </Link>
         </div>
-
-        <a
-          href={LMS_REGISTER_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-4 block text-sm text-muted underline-offset-2 hover:text-foreground hover:underline"
-        >
-          Try a free class on our LMS →
-        </a>
-        <CtaMicroTrust text={CTA_MICRO_TRUST.freeClass} className="mt-1" />
+        <CtaMicroTrust text={CTA_MICRO_TRUST.freeDemo} className="mt-3" />
 
         <TrustSignals
           signals={TRUST_SIGNALS.finalCta}

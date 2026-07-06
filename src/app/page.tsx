@@ -3,30 +3,20 @@ import { AnnouncementBanner } from "@/components/announcement-banner";
 import { StickyMobileCta } from "@/components/sticky-mobile-cta";
 import { Header } from "@/components/sections/header";
 import { Hero } from "@/components/sections/hero";
-import { StatsBar } from "@/components/sections/stats-bar";
-import { WhyIntelliForge } from "@/components/sections/why-intelliforge";
-import { DualTrack } from "@/components/sections/dual-track";
+import { BuildAlongside } from "@/components/sections/build-alongside";
+import { VerifiableCredential } from "@/components/sections/verifiable-credential";
+import { ComparisonTable } from "@/components/sections/comparison-table";
 import { Curriculum } from "@/components/sections/curriculum";
 import { WhatsAppFAB } from "@/components/whatsapp-fab-lazy";
 
-const ResearchTeaser = dynamic(() =>
-  import("@/components/sections/research-teaser").then((m) => ({
-    default: m.ResearchTeaser,
+const WhosBehind = dynamic(() =>
+  import("@/components/sections/whos-behind").then((m) => ({
+    default: m.WhosBehind,
   }))
 );
-const CapstoneProducts = dynamic(() =>
-  import("@/components/sections/capstone-products").then((m) => ({
-    default: m.CapstoneProducts,
-  }))
-);
-const Instructor = dynamic(() =>
-  import("@/components/sections/instructor").then((m) => ({
-    default: m.Instructor,
-  }))
-);
-const WhoIsFor = dynamic(() =>
-  import("@/components/sections/who-is-for").then((m) => ({
-    default: m.WhoIsFor,
+const CohortOutcomes = dynamic(() =>
+  import("@/components/sections/cohort-outcomes").then((m) => ({
+    default: m.CohortOutcomes,
   }))
 );
 const FreePreview = dynamic(() =>
@@ -34,14 +24,9 @@ const FreePreview = dynamic(() =>
     default: m.FreePreview,
   }))
 );
-const Outcomes = dynamic(() =>
-  import("@/components/sections/outcomes").then((m) => ({
-    default: m.Outcomes,
-  }))
-);
-const Testimonials = dynamic(() =>
-  import("@/components/sections/testimonials").then((m) => ({
-    default: m.Testimonials,
+const FunnelLoop = dynamic(() =>
+  import("@/components/sections/funnel-loop").then((m) => ({
+    default: m.FunnelLoop,
   }))
 );
 const Pricing = dynamic(() =>
@@ -75,17 +60,14 @@ export default function Home() {
       </div>
       <main id="main-content">
         <Hero />
-        <StatsBar />
-        <WhyIntelliForge />
-        <DualTrack />
-        <ResearchTeaser />
+        <BuildAlongside />
+        <VerifiableCredential />
+        <ComparisonTable />
         <Curriculum />
-        <CapstoneProducts />
-        <Instructor />
-        <WhoIsFor />
+        <WhosBehind />
+        <CohortOutcomes />
         <FreePreview />
-        <Outcomes />
-        <Testimonials />
+        <FunnelLoop />
         <Pricing />
         <FAQ />
         <FinalCTA />

@@ -1,9 +1,8 @@
 import { Bot, Database, Sparkles } from "lucide-react";
 import { Fragment } from "react";
-import Link from "next/link";
 import { FadeIn } from "@/components/animations/fade-in";
 import { cn } from "@/lib/utils";
-import { CTA_MICRO_TRUST, FREE_PREVIEW, LMS_REGISTER_URL } from "@/lib/constants";
+import { CTA_MICRO_TRUST, FREE_LIVE_DEMO_URL, FREE_PREVIEW } from "@/lib/constants";
 import { CtaMicroTrust } from "@/components/ui/trust-signals";
 
 const ICON_MAP = {
@@ -25,11 +24,11 @@ export function FreePreview() {
             id="free-preview-heading"
             className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl"
           >
-            {FREE_PREVIEW.heading.split("Free Class").map((part, i) => (
+            {FREE_PREVIEW.heading.split("Free Live Demo").map((part, i) => (
               <Fragment key={i}>
                 {part}
                 {i === 0 && (
-                  <span className="gradient-text">Free Class</span>
+                  <span className="gradient-text">Free Live Demo</span>
                 )}
               </Fragment>
             ))}
@@ -76,21 +75,19 @@ export function FreePreview() {
         </div>
 
         <FadeIn delay={0.3} className="mt-12 text-center">
-          <Link
-            href={LMS_REGISTER_URL}
+          <a
+            href={FREE_LIVE_DEMO_URL}
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
               "inline-flex items-center gap-2 rounded-lg bg-accent px-8 py-4 font-semibold text-background",
-              "transition-all duration-300 hover:bg-accent/90 hover:shadow-lg hover:shadow-accent/20"
+              "transition-all duration-300 hover:bg-accent/90 hover:shadow-lg hover:shadow-accent/20",
+              "focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
             )}
           >
-            Start Free Class — See the Curriculum
-          </Link>
-          <CtaMicroTrust text={CTA_MICRO_TRUST.freeClass} className="mt-4" />
-          <p className="mt-2 text-sm text-muted">
-            Join 500+ professionals who&apos;ve learned from our enterprise AI team.
-          </p>
+            Try the free demo — live, no signup
+          </a>
+          <CtaMicroTrust text={CTA_MICRO_TRUST.freeDemo} className="mt-4" />
         </FadeIn>
       </div>
     </section>

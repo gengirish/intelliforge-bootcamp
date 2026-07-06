@@ -1,8 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUp } from "lucide-react";
-import { NAV_LINKS, SITE_CONFIG, WHATSAPP_GROUP_URL, ZOOM_URL } from "@/lib/constants";
+import { ArrowUp, ExternalLink } from "lucide-react";
+import {
+  FREE_LIVE_DEMO_URL,
+  NAV_LINKS,
+  SITE_CONFIG,
+  WHATSAPP_GROUP_URL,
+  ZOOM_URL,
+} from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 function scrollToTop() {
@@ -18,26 +24,45 @@ export function Footer() {
     >
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
         <div className="grid gap-10 lg:grid-cols-4 lg:gap-12">
-          {/* Brand & tagline */}
           <div className="lg:col-span-2">
             <Link
               href="/"
-              className="text-xl font-bold tracking-tight text-foreground sm:text-2xl"
+              className="text-xl font-bold tracking-tight text-foreground sm:text-2xl focus:outline-none focus:ring-2 focus:ring-accent rounded"
             >
               {SITE_CONFIG.name}
             </Link>
             <p className="mt-3 max-w-md text-sm text-muted">
-              Enabling the next generation of AI builders — enterprise-grade
-              bootcamps from Hyderabad, India.
+              Ship to a live repo. Get mentor-scored. Leave with a verifiable
+              credential — from Hyderabad, India.
             </p>
-            <div className="mt-4">
-              <span className="inline-flex items-center rounded-full border border-border bg-surface-light px-3 py-1.5 text-xs text-muted">
-                Aligned with Bharat AI Mission
-              </span>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <a
+                href={FREE_LIVE_DEMO_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 rounded-full border border-border bg-surface-light px-3 py-1.5 text-xs text-accent hover:border-accent/30 focus:outline-none focus:ring-2 focus:ring-accent"
+              >
+                Free demo
+                <ExternalLink className="h-3 w-3" aria-hidden />
+              </a>
+              <Link
+                href="#pricing"
+                className="inline-flex items-center rounded-full border border-border bg-surface-light px-3 py-1.5 text-xs text-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+              >
+                Enrol
+              </Link>
+              <a
+                href={SITE_CONFIG.share}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 rounded-full border border-border bg-surface-light px-3 py-1.5 text-xs text-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+              >
+                Graduate wins
+                <ExternalLink className="h-3 w-3" aria-hidden />
+              </a>
             </div>
           </div>
 
-          {/* Navigation */}
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
               Quick Links
@@ -48,7 +73,7 @@ export function Footer() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="inline-block text-sm text-muted transition-all duration-200 hover:translate-x-0.5 hover:text-foreground"
+                      className="inline-block text-sm text-muted transition-all duration-200 hover:translate-x-0.5 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-accent rounded"
                     >
                       {link.label}
                     </Link>
@@ -58,7 +83,6 @@ export function Footer() {
             </nav>
           </div>
 
-          {/* Contact */}
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
               Contact
@@ -67,7 +91,7 @@ export function Footer() {
               <li>
                 <a
                   href={`mailto:${SITE_CONFIG.contact.email}`}
-                  className="inline-block transition-all duration-200 hover:translate-x-0.5 hover:text-foreground"
+                  className="inline-block transition-all duration-200 hover:translate-x-0.5 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-accent rounded"
                 >
                   {SITE_CONFIG.contact.email}
                 </a>
@@ -77,7 +101,7 @@ export function Footer() {
                   href={`https://wa.me/${SITE_CONFIG.contact.whatsapp}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block transition-all duration-200 hover:translate-x-0.5 hover:text-foreground"
+                  className="inline-block transition-all duration-200 hover:translate-x-0.5 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-accent rounded"
                 >
                   {SITE_CONFIG.contact.phone}
                 </a>
@@ -88,7 +112,7 @@ export function Footer() {
                   href={WHATSAPP_GROUP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block transition-all duration-200 hover:translate-x-0.5 hover:text-foreground"
+                  className="inline-block transition-all duration-200 hover:translate-x-0.5 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-accent rounded"
                 >
                   Join WhatsApp Group
                 </a>
@@ -98,7 +122,7 @@ export function Footer() {
                   href={ZOOM_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block transition-all duration-200 hover:translate-x-0.5 hover:text-foreground"
+                  className="inline-block transition-all duration-200 hover:translate-x-0.5 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-accent rounded"
                 >
                   Live Zoom Session
                 </a>
@@ -108,9 +132,20 @@ export function Footer() {
                   href={SITE_CONFIG.lms}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block transition-all duration-200 hover:translate-x-0.5 hover:text-foreground"
+                  className="inline-block transition-all duration-200 hover:translate-x-0.5 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-accent rounded"
                 >
                   Learning Platform
+                </a>
+              </li>
+              <li>
+                <a
+                  href={SITE_CONFIG.certs}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 transition-all duration-200 hover:translate-x-0.5 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-accent rounded"
+                >
+                  Verify Credentials
+                  <ExternalLink className="h-3 w-3" aria-hidden />
                 </a>
               </li>
               <li>
@@ -118,7 +153,7 @@ export function Footer() {
                   href={SITE_CONFIG.mainSite}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block transition-all duration-200 hover:translate-x-0.5 hover:text-foreground"
+                  className="inline-block transition-all duration-200 hover:translate-x-0.5 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-accent rounded"
                 >
                   IntelliForge AI (Main)
                 </a>
@@ -127,7 +162,6 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom bar */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
           <p className="text-sm text-muted">
             © 2026 IntelliForge AI. All rights reserved.
@@ -135,13 +169,13 @@ export function Footer() {
           <div className="flex items-center gap-6 text-sm">
             <Link
               href="/terms"
-              className="inline-block text-muted transition-all duration-200 hover:translate-x-0.5 hover:text-foreground"
+              className="inline-block text-muted transition-all duration-200 hover:translate-x-0.5 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-accent rounded"
             >
               Terms
             </Link>
             <Link
               href="/privacy"
-              className="inline-block text-muted transition-all duration-200 hover:translate-x-0.5 hover:text-foreground"
+              className="inline-block text-muted transition-all duration-200 hover:translate-x-0.5 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-accent rounded"
             >
               Privacy
             </Link>
@@ -149,7 +183,7 @@ export function Footer() {
               type="button"
               onClick={scrollToTop}
               className={cn(
-                "inline-flex cursor-pointer items-center gap-1.5 text-muted transition-all duration-200 hover:translate-x-0.5 hover:text-foreground"
+                "inline-flex cursor-pointer items-center gap-1.5 text-muted transition-all duration-200 hover:translate-x-0.5 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-accent rounded"
               )}
               aria-label="Scroll to top"
             >

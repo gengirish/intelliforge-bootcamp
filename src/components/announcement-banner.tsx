@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { X } from "lucide-react";
-import { SPRINT_CONFIG } from "@/lib/constants";
+import { FREE_LIVE_DEMO_URL } from "@/lib/constants";
 
 export function AnnouncementBanner() {
   const [isVisible, setIsVisible] = useState(true);
@@ -19,20 +19,27 @@ export function AnnouncementBanner() {
       }}
     >
       <span className="shrink-0">
-        🔥 2-Week AI Sprint — starts {SPRINT_CONFIG.cohortStartDate} ·{" "}
-        {SPRINT_CONFIG.priceDisplay}
+        Cohort 1 open — ship to a live repo, earn a verifiable credential
       </span>
-      <Link
-        href={SPRINT_CONFIG.href}
-        className="shrink-0 font-medium underline underline-offset-2 hover:no-underline"
+      <a
+        href={FREE_LIVE_DEMO_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="shrink-0 font-medium underline underline-offset-2 hover:no-underline focus:outline-none focus:ring-2 focus:ring-white rounded"
       >
-        Enroll now →
+        Try free demo →
+      </a>
+      <Link
+        href="#pricing"
+        className="hidden shrink-0 font-medium underline underline-offset-2 hover:no-underline sm:inline focus:outline-none focus:ring-2 focus:ring-white rounded"
+      >
+        Enrol →
       </Link>
       <button
         type="button"
         aria-label="Dismiss announcement"
         onClick={() => setIsVisible(false)}
-        className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1 text-foreground/80 hover:bg-white/20 hover:text-foreground transition-colors"
+        className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1 text-foreground/80 hover:bg-white/20 hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-white"
       >
         <X size={18} />
       </button>

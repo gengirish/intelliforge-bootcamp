@@ -1,11 +1,13 @@
 export const SITE_CONFIG = {
   name: "IntelliForge AI Bootcamp",
-  tagline: "Build AI Agents. Ship AI Products. Own Your AI Future.",
+  tagline: "Ship a real product. Earn a verifiable credential.",
   description:
-    "12-week intensive bootcamp to master AI Agent Development and Vibe Coding. Build, deploy & monetize production AI systems. From the team with 13+ years of Fortune 500 enterprise experience.",
+    "The only AI cohort where top performers ship to a live IntelliForge repo, get mentor-scored, and leave with a recruiter-checkable credential. Founder-taught by Girish. Based in Hyderabad, India.",
   url: "https://upskill.intelliforge.tech",
   mainSite: "https://www.intelliforge.tech",
   lms: "https://learning.intelliforge.tech",
+  certs: "https://certs.intelliforge.tech",
+  share: "https://share.intelliforge.tech",
   contact: {
     email: "contact@intelliforge.tech",
     phone: "+91 85559 60837",
@@ -16,6 +18,10 @@ export const SITE_CONFIG = {
     linkedin: "https://www.linkedin.com/company/intelliforge-ai",
   },
 };
+
+/** Top-of-funnel: free live demo on the learning platform — no signup required. */
+// TODO(girish): confirm exact demo URL path on learning.intelliforge.tech
+export const FREE_LIVE_DEMO_URL = `${SITE_CONFIG.lms}/demo`;
 
 const WHATSAPP_MESSAGE = encodeURIComponent(
   "Hi! I'm interested in the IntelliForge AI Bootcamp. I'd like to book a free demo class."
@@ -33,9 +39,8 @@ export const LMS_FEEDBACK_URL = `${SITE_CONFIG.lms}/feedback`;
 
 export const ZOOM_MEETING = {
   topic: "Why Upskill and How?",
-  // Update `time` when the next live session is confirmed
   time: "Jun 28, 2026 09:00 AM Mumbai, Kolkata, New Delhi",
-  displayShort: "Jun 28, 9:00 AM IST",
+  displayShort: "28/06/2026, 9:00 AM IST",
   displayDate: "Next session — check WhatsApp for schedule",
   joinUrl:
     "https://us06web.zoom.us/j/86071939853?pwd=VovRc9JnO1qDKxqK9L3JNJ3cp3KwCB.1",
@@ -53,7 +58,6 @@ export const WHATSAPP_GROUP = {
 
 export const WHATSAPP_GROUP_URL = `${SITE_CONFIG.url}/whatsapp`;
 
-/** Paid sprint enrollments join this WhatsApp group after checkout. */
 export const SPRINT_COHORT_WHATSAPP = {
   name: "UpSkill-Cohort-01",
   inviteUrl: "https://chat.whatsapp.com/EG5aUDfvrHbGa9tvEaleAu",
@@ -62,27 +66,30 @@ export const SPRINT_COHORT_WHATSAPP = {
 export const SPRINT_COHORT_WHATSAPP_URL = `${SITE_CONFIG.url}/sprint/whatsapp`;
 
 export const FREE_PREVIEW = {
-  heading: "Not Sure Yet? Try a Free Class First.",
+  heading: "Try the Free Live Demo First.",
   subheading:
-    "Access free AI Agent sessions on our learning platform. No payment, no commitment — just real content.",
+    "Watch a real session on our learning platform. No payment, no signup — see how we teach before you enrol.",
   sessions: [
     {
       title: "Build Your First AI Agent",
-      description: "60-minute hands-on session. Go from zero to a working AI agent with tool calling.",
+      description:
+        "60-minute hands-on session. Go from zero to a working AI agent with tool calling.",
       duration: "60 min",
       level: "Beginner",
       icon: "Bot",
     },
     {
       title: "RAG Pipeline Crash Course",
-      description: "Build a document Q&A system with vector search. Real retrieval-augmented generation.",
+      description:
+        "Build a document Q&A system with vector search. Real retrieval-augmented generation.",
       duration: "45 min",
       level: "Intermediate",
       icon: "Database",
     },
     {
       title: "Vibe Coding Live Demo",
-      description: "Watch an AI app get built in real-time using Cursor. From idea to deployed product.",
+      description:
+        "Watch an AI app get built in real-time using Cursor. From idea to deployed product.",
       duration: "30 min",
       level: "All Levels",
       icon: "Sparkles",
@@ -90,50 +97,138 @@ export const FREE_PREVIEW = {
   ],
 };
 
-export const STATS = [
-  { value: 13, suffix: "+", label: "Years Enterprise Experience" },
-  { value: 500, suffix: "", label: "Fortune 500 Clients Served" },
-  { value: 20, suffix: "+", label: "AI Frameworks Covered" },
-  { value: 10, suffix: "+", label: "Shippable AI Products" },
-  { value: 12, suffix: "", label: "Weeks to Mastery" },
+export const FOUNDER = {
+  name: "Girish",
+  fullName: "Girish Hiremath",
+  title: "Founder & Principal Engineer",
+  company: "IntelliForge Digital Services",
+  location: "Hyderabad, India",
+  yearsExperience: 14,
+  bio: "14 years of enterprise engineering across banking, pharma, telecom, and IoT. Runs IntelliForge's live product studio — 25+ deployed products and counting. M.Tech in Data Science & AI. Teaches from production systems he ships, not slide decks.",
+  skillBadges: [
+    "LangChain · LangGraph",
+    "AWS Bedrock",
+    "Multi-Agent Systems",
+    "RAG Architecture",
+    "Docker · CI/CD",
+    "Enterprise Consulting",
+    "Vibe Coding",
+  ],
+};
+
+/** Live IntelliForge product surfaces learners may contribute to during build-alongside. */
+export const BUILD_ALONGSIDE_PRODUCTS = [
+  {
+    name: "PDFforge",
+    description: "AI-powered PDF processing and document workflows.",
+    // TODO(girish): confirm exact production URL
+    href: "https://pdfforge.intelliforge.tech",
+    icon: "FileText",
+  },
+  {
+    name: "LocalFlash",
+    description: "Local-first flash storage and sync for edge deployments.",
+    // TODO(girish): confirm exact production URL
+    href: "https://localflash.intelliforge.tech",
+    icon: "Zap",
+  },
+  {
+    name: "RemoteForge",
+    description: "Remote development and pair-programming infrastructure.",
+    // TODO(girish): confirm exact production URL
+    href: "https://remoteforge.intelliforge.tech",
+    icon: "Monitor",
+  },
+  {
+    name: "IELTSForge",
+    description: "AI-assisted IELTS preparation and scoring platform.",
+    // TODO(girish): confirm exact production URL
+    href: "https://ieltsforge.intelliforge.tech",
+    icon: "GraduationCap",
+  },
+  {
+    name: "Maidaan",
+    description: "Sports venue booking and community engagement platform.",
+    // TODO(girish): confirm exact production URL
+    href: "https://maidaan.intelliforge.tech",
+    icon: "Trophy",
+  },
 ];
 
-export const WHY_CARDS = [
+export const BUILD_ALONGSIDE = {
+  killLine:
+    "Ask any bootcamp for the repo you'll contribute to. We'll show you ours.",
+  capacityNote:
+    "Build-alongside slots are limited by studio staffing — not marketing fiction. When we can't staff you on a live product, you're still in the cohort with full curriculum access.",
+  // TODO(girish): set real build-alongside slot count when studio capacity is confirmed
+  slotsDisplay: null as string | null,
+};
+
+export const VERIFIABLE_CREDENTIAL = {
+  issuerUrl: SITE_CONFIG.certs,
+  fields: [
+    "Learner name",
+    "Cohort & completion date",
+    "Shipped-product link (live URL)",
+    "Mentor score",
+    "Public verification URL",
+  ],
+  contrastAttended:
+    '"Attended" is a badge. Anyone can claim they were in a room.',
+  contrastShipped:
+    '"Shipped [live URL], scored by a mentor, verify here" is a credential. Recruiters can click to confirm.',
+};
+
+export const COMPARISON_ROWS = [
   {
-    title: "Build to Ship, Not Just to Learn",
-    description:
-      "Other bootcamps hand you portfolio projects. We hand you production-ready AI products you can deploy, sell, and monetize from day one.",
-    icon: "Rocket",
+    feature: "Delivery",
+    intelliforge: "Live cohort with founder",
+    recorded: "Pre-recorded videos",
+    university: "Recorded lectures + exams",
   },
   {
-    title: "Dual-Track: Agents + Vibe Coding",
-    description:
-      "Master AI Agent Development (Level 4) AND AI App Development through Vibe Coding (Level 5). Graduate with the complete AI builder toolkit.",
-    icon: "Layers",
+    feature: "Ship to a real repo",
+    intelliforge: true,
+    recorded: false,
+    university: false,
   },
   {
-    title: "Enterprise DNA from Fortune 500",
-    description:
-      "Learn real patterns from 13+ years of Banking, Pharma, Telecom, and IoT enterprise engagements. Not academic theory — battle-tested systems.",
-    icon: "Building2",
+    feature: "Verifiable credential with shipped-product link",
+    intelliforge: true,
+    recorded: false,
+    university: false,
   },
   {
-    title: "3 Career Paths, Not Just 1",
-    description:
-      "Get hired as an AI Engineer, freelance as an AI consultant, or launch your own AI micro-SaaS. We prepare you for all three.",
-    icon: "GitBranch",
+    feature: "Mentor score on your work",
+    intelliforge: true,
+    recorded: false,
+    university: false,
+  },
+  {
+    feature: "Founder-taught by a practicing engineer",
+    intelliforge: true,
+    recorded: false,
+    university: false,
+  },
+  {
+    feature: "Scarcity model",
+    intelliforge: "Real studio capacity limits build-alongside slots",
+    recorded: "Unlimited enrolment",
+    university: "Semester intake dates",
   },
 ];
 
 export const CURRICULUM = [
   {
-    phase: "Phase 1: AI Agent Foundations",
+    phase: "Phase 1: Ship Your First Agent",
     weeks: "Weeks 1–4",
+    outcome: "You deploy a working AI agent with tool calling to a live endpoint.",
     color: "violet",
     modules: [
       {
         week: "Week 1",
         title: "LLM Fundamentals & Prompt Engineering",
+        shipOutcome: "Structured-output API you can demo in an interview.",
         topics: [
           "LLM architecture & tokenization",
           "Advanced prompt engineering patterns",
@@ -144,6 +239,7 @@ export const CURRICULUM = [
       {
         week: "Week 2",
         title: "RAG Pipelines & Vector Databases",
+        shipOutcome: "Document Q&A system with vector search — deployed.",
         topics: [
           "Embedding models & vector stores (Pinecone, ChromaDB)",
           "Chunking strategies & retrieval optimization",
@@ -154,6 +250,7 @@ export const CURRICULUM = [
       {
         week: "Week 3",
         title: "Tool Calling & Single Agent Systems",
+        shipOutcome: "Single agent with tools, memory, and error handling.",
         topics: [
           "Function/tool calling patterns",
           "Building your first AI agent",
@@ -164,6 +261,7 @@ export const CURRICULUM = [
       {
         week: "Week 4",
         title: "LangGraph & Agent Workflows",
+        shipOutcome: "Graph-based agent workflow with human-in-the-loop.",
         topics: [
           "Graph-based agent orchestration",
           "State machines for AI workflows",
@@ -174,13 +272,15 @@ export const CURRICULUM = [
     ],
   },
   {
-    phase: "Phase 2: Multi-Agent Systems & Enterprise Patterns",
+    phase: "Phase 2: Ship Multi-Agent Systems",
     weeks: "Weeks 5–8",
+    outcome: "You ship a multi-agent system with enterprise integration patterns.",
     color: "cyan",
     modules: [
       {
         week: "Week 5",
         title: "Multi-Agent Architecture",
+        shipOutcome: "Crew of specialized agents collaborating on a task.",
         topics: [
           "Role specialization & hierarchical agents",
           "CrewAI & multi-agent frameworks",
@@ -191,6 +291,7 @@ export const CURRICULUM = [
       {
         week: "Week 6",
         title: "Enterprise Integration Patterns",
+        shipOutcome: "Agent integrated with real business APIs and RBAC.",
         topics: [
           "Banking & Fintech AI use cases",
           "Healthcare & Pharma compliance patterns",
@@ -201,6 +302,7 @@ export const CURRICULUM = [
       {
         week: "Week 7",
         title: "Production Deployment & DevOps",
+        shipOutcome: "Containerized agent on CI/CD with monitoring.",
         topics: [
           "Docker containerization for AI agents",
           "CI/CD pipelines (GitHub Actions)",
@@ -211,6 +313,7 @@ export const CURRICULUM = [
       {
         week: "Week 8",
         title: "AI Workflow Automation",
+        shipOutcome: "Webhook-driven automation connecting agents to Slack/email.",
         topics: [
           "n8n & automation platforms",
           "Webhook-driven agent triggers",
@@ -221,13 +324,15 @@ export const CURRICULUM = [
     ],
   },
   {
-    phase: "Phase 3: Vibe Coding & Ship Your Product",
+    phase: "Phase 3: Ship Your Product",
     weeks: "Weeks 9–12",
+    outcome: "You launch an AI product — or contribute to a live IntelliForge repo.",
     color: "amber",
     modules: [
       {
         week: "Week 9",
         title: "Vibe Coding — AI-Assisted Development",
+        shipOutcome: "Full-stack app scaffolded and deployed with AI assistants.",
         topics: [
           "Cursor, Windsurf & AI coding assistants",
           "Prompt-to-product workflows",
@@ -238,6 +343,7 @@ export const CURRICULUM = [
       {
         week: "Week 10",
         title: "Building Your AI Micro-SaaS",
+        shipOutcome: "Landing page, auth, and payment integration live.",
         topics: [
           "Idea validation & market research with AI",
           "Landing page & payment integration",
@@ -248,6 +354,7 @@ export const CURRICULUM = [
       {
         week: "Week 11",
         title: "Launch & Growth",
+        shipOutcome: "Product live with analytics and support automation.",
         topics: [
           "Product launch playbook",
           "SEO & content marketing with AI",
@@ -257,91 +364,21 @@ export const CURRICULUM = [
       },
       {
         week: "Week 12",
-        title: "Capstone Demo Day & Career Prep",
+        title: "Demo Day & Credential Issuance",
+        shipOutcome: "Verifiable credential issued with your shipped-product link.",
         topics: [
-          "Product demo & pitch presentation",
-          "Portfolio & GitHub optimization",
-          "AI engineering interview prep",
-          "Freelance profile & proposal writing",
+          "Product demo & shipped-product review",
+          "Mentor scoring session",
+          "Credential issuance via certs.intelliforge.tech",
+          "Share your win on share.intelliforge.tech",
         ],
       },
     ],
   },
 ];
 
-export const CAPSTONE_PRODUCTS = [
-  {
-    title: "AI Research Agent",
-    description:
-      "Multi-agent system that researches any topic in parallel, synthesizes findings, and generates comprehensive reports with citations.",
-    tags: ["Multi-Agent", "RAG", "LangGraph", "Python"],
-    icon: "Search",
-  },
-  {
-    title: "AI Interview Platform",
-    description:
-      "Full-stack AI-powered interview platform with role-based authentication, real-time evaluation, and automated feedback generation.",
-    tags: ["Full Stack", "AI Agent", "Auth", "SaaS"],
-    icon: "MessageSquare",
-  },
-  {
-    title: "AI Digital Profile",
-    description:
-      "Interactive portfolio with a 'Talk to My Resume' AI chatbot. Neural-themed design with career visualizations and skill maps.",
-    tags: ["RAG", "Chatbot", "Next.js", "Vercel"],
-    icon: "User",
-  },
-  {
-    title: "Workflow Automation Engine",
-    description:
-      "YouTube transcript extraction, content processing, and report generation — fully automated with AI agents and webhook triggers.",
-    tags: ["n8n", "API", "Automation", "FastAPI"],
-    icon: "Workflow",
-  },
-  {
-    title: "AI Content Studio",
-    description:
-      "Generate marketing copy, social media posts, blog articles, and email campaigns using specialized AI agents working in tandem.",
-    tags: ["CrewAI", "Multi-Agent", "Marketing", "SaaS"],
-    icon: "PenTool",
-  },
-  {
-    title: "Enterprise RAG System",
-    description:
-      "Production-grade document Q&A system with vector search, access control, and compliance-ready audit trails for enterprise clients.",
-    tags: ["RAG", "Enterprise", "Security", "Docker"],
-    icon: "Database",
-  },
-];
-
-export const OUTCOMES = [
-  {
-    title: "Build Multi-Agent Systems",
-    description: "Design, develop, and deploy autonomous multi-agent AI systems using LangGraph, CrewAI, and custom orchestration.",
-  },
-  {
-    title: "Ship Production AI Apps",
-    description: "Go from idea to deployed product using vibe coding — full-stack AI applications with auth, payments, and dashboards.",
-  },
-  {
-    title: "Architect RAG Pipelines",
-    description: "Build enterprise-grade retrieval-augmented generation systems with vector databases, chunking strategies, and evaluation.",
-  },
-  {
-    title: "Deploy with Confidence",
-    description: "Containerize, CI/CD, monitor, and scale AI systems on AWS, Vercel, and cloud platforms with production best practices.",
-  },
-  {
-    title: "Monetize Your Skills",
-    description: "Launch your own AI micro-SaaS, freelance as an AI consultant, or ace AI engineering interviews at top companies.",
-  },
-  {
-    title: "Automate Everything",
-    description: "Connect AI agents to business workflows — email, Slack, CRM, webhooks — and sell automation as a service.",
-  },
-];
-
-export const TESTIMONIALS = [
+/** B2B client quotes — prove IntelliForge ships, not learner outcomes. */
+export const CLIENT_QUOTES = [
   {
     quote:
       "IntelliForge built our AI workflow automation in just 3 weeks. What used to take our team 20 hours a week is now fully automated. The ROI was visible from month one.",
@@ -373,32 +410,43 @@ export const TESTIMONIALS = [
 ];
 
 export const PRICING = {
+  sprint: {
+    name: "2-Week Sprint",
+    price: "₹4,999",
+    originalPrice: "₹12,999",
+    href: "/sprint",
+    features: [
+      "2 weeks live weekend sessions",
+      "Two AI products deployed to production",
+      "Gateway to the 12-week bootcamp",
+      "Live on Zoom — Sat & Sun, IST",
+    ],
+  },
   earlyBird: {
+    name: "12-Week Bootcamp",
     price: "₹49,999",
     originalPrice: "₹74,999",
     savings: "₹25,000",
     features: [
       "12 weeks live weekend sessions (Sat & Sun)",
-      "20+ AI frameworks hands-on",
-      "10+ shippable AI products",
+      "Build-alongside eligibility on live IntelliForge products",
+      "Verifiable credential with shipped-product link",
+      "Mentor score on your shipped work",
       "Lifetime LMS access (learning.intelliforge.tech)",
       "Lifetime community membership",
-      "Portfolio & GitHub optimization",
-      "Mock interviews & career prep",
-      "Direct founder mentorship",
-      "Certificate of completion",
+      "Direct founder mentorship from Girish",
     ],
   },
   regular: {
+    name: "12-Week Bootcamp",
     price: "₹74,999",
     features: [
       "12 weeks live weekend sessions (Sat & Sun)",
-      "20+ AI frameworks hands-on",
-      "10+ shippable AI products",
+      "Build-alongside eligibility on live IntelliForge products",
+      "Verifiable credential with shipped-product link",
+      "Mentor score on your shipped work",
       "Lifetime LMS access",
       "Community membership",
-      "Portfolio review",
-      "Certificate of completion",
     ],
   },
 };
@@ -407,12 +455,17 @@ export const FAQ_ITEMS = [
   {
     question: "What makes IntelliForge different from other AI bootcamps?",
     answer:
-      "Most bootcamps teach you to build AI agents for someone else's company. We teach you to build, ship, and monetize your own AI-powered products. Our dual-track curriculum covers both Agent Development (Level 4) and Vibe Coding (Level 5), backed by 13+ years of Fortune 500 enterprise experience. You graduate with deployable products, not just GitHub projects.",
+      "Most bootcamps hand you a portfolio project and a certificate of attendance. We staff top performers on real IntelliForge products — you ship to a live repo, get scored by a mentor who watched you work, and receive a verifiable credential at certs.intelliforge.tech with your shipped-product link. Ask any bootcamp for the repo you'll contribute to. We'll show you ours.",
   },
   {
-    question: "What is Vibe Coding?",
+    question: "What is build-alongside?",
     answer:
-      "Vibe Coding is the practice of using AI coding assistants (like Cursor, Windsurf) to build full applications rapidly. Instead of writing every line manually, you describe what you want and the AI helps you build it. Our Level 5 track teaches you to go from idea to deployed product in days, not weeks — the skill that's redefining software development.",
+      "Top performers in the cohort get staffed on a real IntelliForge product and ship contributions to a live repo — tracked on the same system our intern cohort runs. Slots are limited by studio capacity, not marketing. Everyone gets the full curriculum; build-alongside is the premium path for those who earn it.",
+  },
+  {
+    question: "What is the verifiable credential?",
+    answer:
+      "A public URL issued via certs.intelliforge.tech containing your name, cohort, completion date, the live URL of what you shipped, and your mentor score. Recruiters can click to verify — it's not an 'attended' badge.",
   },
   {
     question: "Do I need prior AI/ML experience?",
@@ -422,40 +475,30 @@ export const FAQ_ITEMS = [
   {
     question: "What's the time commitment?",
     answer:
-      "Live sessions are on Saturdays and Sundays (4-5 hours per day). You should plan for an additional 5-8 hours of self-paced project work during the week. Total commitment: approximately 15-18 hours per week for 12 weeks.",
+      "Live sessions are on Saturdays and Sundays (4–5 hours per day IST). Plan for an additional 5–8 hours of project work during the week. Total: approximately 15–18 hours per week for 12 weeks.",
   },
   {
-    question: "What frameworks and tools will I learn?",
+    question: "What's the difference between the 2-Week Sprint and 12-Week Bootcamp?",
     answer:
-      "LangChain, LangGraph, CrewAI, OpenAI API, Anthropic Claude, AWS Bedrock, Pinecone, ChromaDB, Docker, GitHub Actions, n8n, FastAPI, Next.js, Cursor, Vercel — and more. We cover 20+ frameworks so you can adapt to any enterprise tech stack.",
-  },
-  {
-    question: "Will I get a job after this bootcamp?",
-    answer:
-      "We prepare you for three paths: (1) AI Engineer roles at companies, (2) Freelancing as an AI consultant, (3) Launching your own AI micro-SaaS. We provide mock interviews, portfolio reviews, and career mentorship. However, we don't guarantee placement — we guarantee you'll have the skills and portfolio to compete.",
+      "The 2-Week Sprint (₹4,999) is a focused gateway — two products deployed in 14 days. The 12-Week Bootcamp (₹49,999 early bird) is the full path with build-alongside eligibility, mentor scoring, and a verifiable credential. Start with the free live demo to see which fits.",
   },
   {
     question: "Is there a money-back guarantee?",
     answer:
-      "Yes, we offer a 15-day money-back guarantee. If you attend the first two weekends and feel the bootcamp isn't right for you, we'll refund your full payment — no questions asked.",
+      "Yes — 15-day money-back guarantee. If you attend the first two weekends and feel the bootcamp isn't right for you, we'll refund your full payment.",
   },
   {
     question: "How is content delivered after the bootcamp?",
     answer:
-      "All recordings, materials, and project resources are available on our dedicated LMS at learning.intelliforge.tech. You get lifetime access, including any future updates to the curriculum.",
+      "All recordings, materials, and project resources are on learning.intelliforge.tech. You get lifetime access, including future curriculum updates.",
   },
 ];
 
 export const TRUST_SIGNALS = {
   hero: [
-    { icon: "Award", label: "Aligned with Bharat AI Mission" },
-    { icon: "Building2", label: "13+ Years Fortune 500 DNA" },
-    { icon: "Shield", label: "15-Day Money-Back Guarantee" },
-  ],
-  sprint: [
-    { icon: "Users", label: "Max 30 seats" },
-    { icon: "Clock", label: "Live Sat & Sun · 9–11 AM & 8–10 PM IST" },
-    { icon: "Shield", label: "Zero-risk guarantee" },
+    { icon: "User", label: "Founder-taught by Girish" },
+    { icon: "GitBranch", label: "Ship to a live repo" },
+    { icon: "ShieldCheck", label: "Verifiable credential" },
   ],
   checkout: [
     { icon: "Lock", label: "100% Secure Checkout" },
@@ -465,13 +508,12 @@ export const TRUST_SIGNALS = {
   finalCta: [
     { icon: "Shield", label: "15-day money-back guarantee" },
     { icon: "Video", label: "Live weekend sessions on Zoom" },
-    { icon: "GraduationCap", label: "12-week bootcamp path available" },
+    { icon: "Award", label: "Verifiable shipped-product credential" },
   ],
 } as const;
 
 export const CTA_MICRO_TRUST = {
-  sprint:
-    "Secure Razorpay checkout · UPI, cards & netbanking · Talk to a founder before you pay",
+  freeDemo: "Live demo · No signup · See the curriculum before you pay",
   bootcamp:
     "Secure checkout · 15-day money-back after first 2 weekends · 0% EMI available",
   freeClass: "No payment · No commitment · Real curriculum preview",
@@ -481,25 +523,46 @@ export const SPRINT_CONFIG = {
   name: "2-Week AI Sprint",
   priceDisplay: "₹4,999",
   originalPriceDisplay: "₹12,999",
-  session1Date: "Saturday, August 1, 2026",
-  cohortStartDate: "August 1, 2026",
-  cohortEndDate: "August 15, 2026",
+  session1Date: "Saturday, 01/08/2026",
+  cohortStartDate: "01/08/2026",
+  cohortEndDate: "15/08/2026",
   slug: "ai-sprint-jun-2026",
   href: "/sprint",
   ctaLabel: "Join 2-Week AI Sprint — ₹4,999",
-  urgencyLine: "Cohort 1 starts August 1 · Live Sat & Sun · 30 seats",
   liveScheduleSummary:
     "Live on Zoom every Saturday & Sunday — 9–11 AM & 8–10 PM IST",
 };
 
 export const NAV_LINKS = [
-  { label: "Free Preview", href: "#free-preview" },
-  { label: "Research", href: "/research" },
-  { label: "Why Us", href: "#why-intelliforge" },
+  { label: "Build-Alongside", href: "#build-alongside" },
+  { label: "Credential", href: "#credential" },
   { label: "Curriculum", href: "#curriculum" },
-  { label: "Projects", href: "#projects" },
+  { label: "Free Demo", href: "#free-preview" },
   { label: "Pricing", href: "#pricing" },
   { label: "FAQ", href: "#faq" },
-  { label: "AI Sprint", href: "/sprint" },
   { label: "Contact", href: "#contact" },
+];
+
+export const FUNNEL_STEPS = [
+  {
+    step: 1,
+    label: "Try the free demo",
+    description: "Watch a live session — no signup",
+    href: FREE_LIVE_DEMO_URL,
+    external: true,
+  },
+  {
+    step: 2,
+    label: "Enrol in Cohort 1",
+    description: "12-week bootcamp or 2-week sprint",
+    href: "#pricing",
+    external: false,
+  },
+  {
+    step: 3,
+    label: "Share your verified win",
+    description: "Graduates post shipped-product links",
+    href: SITE_CONFIG.share,
+    external: true,
+  },
 ];
