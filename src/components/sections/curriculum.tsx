@@ -74,8 +74,8 @@ export function Curriculum() {
         {/* Two tracks */}
         <FadeIn delay={0.05} className="mb-12">
           <div className="grid gap-6 md:grid-cols-2">
-            <article className="rounded-xl border border-border bg-surface-light p-6">
-              <p className="text-sm font-medium uppercase tracking-wider text-muted">
+            <article className="rounded-xl border border-cta/30 bg-cta/5 p-6">
+              <p className="text-sm font-medium uppercase tracking-wider text-cta">
                 {SPRINT_CONFIG.name}
               </p>
               <p className="mt-2 text-3xl font-bold text-foreground">
@@ -86,13 +86,17 @@ export function Curriculum() {
               </p>
               <Link
                 href={SPRINT_CONFIG.href}
-                className="mt-4 inline-flex text-sm font-medium text-accent hover:underline focus:outline-none focus:ring-2 focus:ring-accent rounded"
+                className={cn(
+                  "mt-4 inline-flex items-center justify-center rounded-lg bg-cta px-4 py-2.5 text-sm font-semibold text-background",
+                  "hover:bg-cta-hover transition-colors",
+                  "focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
+                )}
               >
-                Learn about the sprint →
+                {SPRINT_CONFIG.ctaLabelShort}
               </Link>
             </article>
-            <article className="rounded-xl border border-accent/30 bg-accent/5 p-6">
-              <p className="text-sm font-medium uppercase tracking-wider text-accent">
+            <article className="rounded-xl border border-border bg-surface-light p-6">
+              <p className="text-sm font-medium uppercase tracking-wider text-muted">
                 {PRICING.earlyBird.name}
               </p>
               <p className="mt-2 text-3xl font-bold text-foreground">

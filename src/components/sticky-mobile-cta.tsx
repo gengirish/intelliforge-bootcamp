@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { CTA_MICRO_TRUST, FREE_LIVE_DEMO_URL } from "@/lib/constants";
+import { CTA_MICRO_TRUST, FREE_LIVE_DEMO_URL, SPRINT_CONFIG } from "@/lib/constants";
 
 export function StickyMobileCta() {
   const [isHidden, setIsHidden] = useState(false);
@@ -46,23 +46,23 @@ export function StickyMobileCta() {
     >
       <div className="mx-auto max-w-lg">
         <div className="flex gap-3">
-          <Link
-            href="#pricing"
-            className="flex flex-1 items-center justify-center rounded-lg border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-surface-light focus:outline-none focus:ring-2 focus:ring-accent"
-          >
-            Enrol
-          </Link>
           <a
             href={FREE_LIVE_DEMO_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="glow-cta flex flex-1 items-center justify-center rounded-lg bg-cta px-4 py-2.5 text-sm font-medium text-background transition-colors hover:bg-cta-hover focus:outline-none focus:ring-2 focus:ring-accent"
+            className="flex flex-1 items-center justify-center rounded-lg border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-surface-light focus:outline-none focus:ring-2 focus:ring-accent"
           >
             Free Demo
           </a>
+          <Link
+            href={SPRINT_CONFIG.href}
+            className="glow-cta flex flex-1 items-center justify-center rounded-lg bg-cta px-4 py-2.5 text-sm font-medium text-background transition-colors hover:bg-cta-hover focus:outline-none focus:ring-2 focus:ring-accent"
+          >
+            Sprint {SPRINT_CONFIG.priceDisplay}
+          </Link>
         </div>
         <p className="mt-2 text-center text-[11px] leading-snug text-muted">
-          {CTA_MICRO_TRUST.freeDemo}
+          {CTA_MICRO_TRUST.sprint}
         </p>
       </div>
     </div>

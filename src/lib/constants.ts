@@ -514,6 +514,8 @@ export const TRUST_SIGNALS = {
 
 export const CTA_MICRO_TRUST = {
   freeDemo: "Live demo · No signup · See the curriculum before you pay",
+  sprint:
+    "Secure Razorpay checkout · UPI, cards & netbanking · Two products shipped in 14 days",
   bootcamp:
     "Secure checkout · 15-day money-back after first 2 weekends · 0% EMI available",
   freeClass: "No payment · No commitment · Real curriculum preview",
@@ -529,6 +531,7 @@ export const SPRINT_CONFIG = {
   slug: "ai-sprint-jun-2026",
   href: "/sprint",
   ctaLabel: "Join 2-Week AI Sprint — ₹4,999",
+  ctaLabelShort: "Join Sprint — ₹4,999",
   liveScheduleSummary:
     "Live on Zoom every Saturday & Sunday — 9–11 AM & 8–10 PM IST",
 };
@@ -553,9 +556,9 @@ export const FUNNEL_STEPS = [
   },
   {
     step: 2,
-    label: "Enrol in Cohort 1",
-    description: "12-week bootcamp or 2-week sprint",
-    href: "#pricing",
+    label: "Join the 2-Week Sprint",
+    description: "₹4,999 · two products shipped in 14 days",
+    href: SPRINT_CONFIG.href,
     external: false,
   },
   {

@@ -36,9 +36,11 @@ test.describe("Landing Page — All Sections", () => {
     await expect(page.getByText("Don't build a portfolio project.")).toBeVisible();
     await expect(page.getByText("Ship a real product.")).toBeVisible();
     await expect(
+      page.getByRole("link", { name: /Join 2-Week AI Sprint — ₹4,999/ }).first()
+    ).toBeVisible();
+    await expect(
       page.getByRole("link", { name: /Try the free demo — live, no signup/ }).first()
     ).toBeVisible();
-    await expect(page.getByRole("link", { name: /Enrol in Cohort 1/ }).first()).toBeVisible();
   });
 
   test("trust badges are visible", async ({ page }) => {
@@ -107,10 +109,13 @@ test.describe("Landing Page — All Sections", () => {
   test("pricing section renders all three tracks", async ({ page }) => {
     const section = page.locator("#pricing");
     await section.scrollIntoViewIfNeeded();
-    await expect(section.getByText("Two Tracks. One Outcome: You Shipped.")).toBeVisible();
+    await expect(section.getByText("Start with the 2-Week Sprint")).toBeVisible();
     await expect(section.getByText("₹4,999", { exact: true })).toBeVisible();
     await expect(section.getByText("₹49,999", { exact: true })).toBeVisible();
     await expect(section.getByText("₹74,999").first()).toBeVisible();
+    await expect(
+      section.getByRole("link", { name: /Join 2-Week AI Sprint — ₹4,999/ })
+    ).toBeVisible();
   });
 
   test("bootcamp enroll redirects unauthenticated user to sign-in", async ({
@@ -119,7 +124,7 @@ test.describe("Landing Page — All Sections", () => {
     const section = page.locator("#pricing");
     await section.scrollIntoViewIfNeeded();
     await page
-      .getByRole("button", { name: /Enrol in Cohort 1/ })
+      .getByRole("button", { name: /Enrol — ₹49,999/ })
       .click();
     await expect(page).toHaveURL(/\/sign-in/, { timeout: 10000 });
   });
@@ -137,12 +142,14 @@ test.describe("Landing Page — All Sections", () => {
     await expect(faqSection.getByText(/Ask any bootcamp for the repo you'll contribute to/)).toBeVisible();
   });
 
-  test("final CTA section renders with free demo primary", async ({ page }) => {
+  test("final CTA section renders with sprint as primary", async ({ page }) => {
     const finalCta = page.locator("section", {
       has: page.getByRole("heading", { name: /Ask any bootcamp for the repo/ }),
     });
     await finalCta.scrollIntoViewIfNeeded();
-    await expect(finalCta.getByRole("heading", { name: /Ask any bootcamp for the repo/ })).toBeVisible();
+    await expect(
+      finalCta.getByRole("link", { name: /Join 2-Week AI Sprint — ₹4,999/ })
+    ).toBeVisible();
     await expect(
       finalCta.getByRole("link", { name: /Try the free demo — live, no signup/ })
     ).toBeVisible();

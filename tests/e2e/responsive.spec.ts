@@ -31,7 +31,7 @@ test.describe("Responsive — Mobile (375x812)", () => {
   test("hero stacks vertically on mobile", async ({ page }) => {
     await expect(page.getByText("Ship a real product.")).toBeVisible();
     await expect(
-      page.getByRole("link", { name: /Try the free demo — live, no signup/ }).first()
+      page.getByRole("link", { name: /Join 2-Week AI Sprint — ₹4,999/ }).first()
     ).toBeVisible();
   });
 
@@ -52,7 +52,7 @@ test.describe("Responsive — Tablet (768x1024)", () => {
 
     await expect(page.getByText("Ship a real product.")).toBeVisible();
     await expect(page.getByText("12 Weeks. Four Phases. One Shipped Product.")).toBeVisible();
-    await expect(page.getByText("Two Tracks. One Outcome: You Shipped.")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Start with the 2-Week Sprint" })).toBeVisible();
   });
 });
 

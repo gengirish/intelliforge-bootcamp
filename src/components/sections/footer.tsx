@@ -6,6 +6,7 @@ import {
   FREE_LIVE_DEMO_URL,
   NAV_LINKS,
   SITE_CONFIG,
+  SPRINT_CONFIG,
   WHATSAPP_GROUP_URL,
   ZOOM_URL,
 } from "@/lib/constants";
@@ -46,10 +47,10 @@ export function Footer() {
                 <ExternalLink className="h-3 w-3" aria-hidden />
               </a>
               <Link
-                href="#pricing"
-                className="inline-flex items-center rounded-full border border-border bg-surface-light px-3 py-1.5 text-xs text-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+                href={SPRINT_CONFIG.href}
+                className="inline-flex items-center rounded-full border border-cta/30 bg-cta/10 px-3 py-1.5 text-xs font-medium text-cta hover:border-cta/50 focus:outline-none focus:ring-2 focus:ring-accent"
               >
-                Enrol
+                {SPRINT_CONFIG.ctaLabelShort}
               </Link>
               <a
                 href={SITE_CONFIG.share}

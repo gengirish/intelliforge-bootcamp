@@ -9,6 +9,7 @@ import {
   FREE_LIVE_DEMO_URL,
   NAV_LINKS,
   SITE_CONFIG,
+  SPRINT_CONFIG,
 } from "@/lib/constants";
 
 const HASH_SECTION_IDS = NAV_LINKS.filter((link) => link.href.startsWith("#")).map(
@@ -115,14 +116,12 @@ export function Header() {
         </nav>
 
         <div className="hidden md:block">
-          <a
-            href={FREE_LIVE_DEMO_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href={SPRINT_CONFIG.href}
             className="glow-cta inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-cta px-4 py-2 text-sm font-medium text-background transition-transform duration-200 hover:scale-105 hover:bg-cta-hover focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
           >
-            Free Demo
-          </a>
+            {SPRINT_CONFIG.ctaLabelShort}
+          </Link>
         </div>
 
         <button
@@ -153,22 +152,22 @@ export function Header() {
               {link.label}
             </Link>
           ))}
+          <Link
+            href={SPRINT_CONFIG.href}
+            className="mt-2 inline-flex items-center justify-center gap-2 rounded-lg bg-cta px-4 py-3 text-sm font-medium text-background hover:bg-cta-hover transition-colors focus:outline-none focus:ring-2 focus:ring-accent"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            {SPRINT_CONFIG.ctaLabel}
+          </Link>
           <a
             href={FREE_LIVE_DEMO_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-2 inline-flex items-center justify-center gap-2 rounded-lg bg-cta px-4 py-3 text-sm font-medium text-background hover:bg-cta-hover transition-colors focus:outline-none focus:ring-2 focus:ring-accent"
+            className="mt-2 inline-flex items-center justify-center gap-2 rounded-lg border border-border px-4 py-3 text-sm font-medium text-foreground hover:bg-surface-light transition-colors focus:outline-none focus:ring-2 focus:ring-accent"
             onClick={() => setIsMobileMenuOpen(false)}
           >
             Try Free Demo — Live, No Signup
           </a>
-          <Link
-            href="#pricing"
-            className="mt-2 inline-flex items-center justify-center gap-2 rounded-lg border border-border px-4 py-3 text-sm font-medium text-foreground hover:bg-surface-light transition-colors focus:outline-none focus:ring-2 focus:ring-accent"
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            Enrol in Cohort 1
-          </Link>
         </nav>
       </div>
     </header>

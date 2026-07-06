@@ -4,6 +4,7 @@ import {
   CTA_MICRO_TRUST,
   FREE_LIVE_DEMO_URL,
   FOUNDER,
+  SPRINT_CONFIG,
   TRUST_SIGNALS,
 } from "@/lib/constants";
 import { CtaMicroTrust, TrustSignals } from "@/components/ui/trust-signals";
@@ -35,7 +36,7 @@ export function Hero() {
 
       <div className="relative z-10 mx-auto max-w-4xl text-center">
         <p className="hero-animate-headline mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-surface/60 px-4 py-1.5 text-sm text-accent">
-          Cohort 1 · Build-alongside on live IntelliForge products
+          {SPRINT_CONFIG.name} · {SPRINT_CONFIG.priceDisplay} · Cohort 1
         </p>
 
         <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
@@ -55,33 +56,33 @@ export function Hero() {
 
         <div className="hero-animate-cta mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <div className="flex w-full flex-col items-center sm:w-auto">
-            <a
-              href={FREE_LIVE_DEMO_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href={SPRINT_CONFIG.href}
               className={cn(
                 "glow-cta inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-cta px-8 py-4 text-base font-semibold text-background sm:w-auto",
                 "hover:bg-cta-hover shadow-lg transition-colors",
                 "focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
               )}
             >
-              Try the free demo — live, no signup
-            </a>
+              {SPRINT_CONFIG.ctaLabel}
+            </Link>
             <CtaMicroTrust
-              text={CTA_MICRO_TRUST.freeDemo}
+              text={CTA_MICRO_TRUST.sprint}
               className="hero-animate-secondary mt-2 max-w-xs px-1 sm:max-w-sm"
             />
           </div>
-          <Link
-            href="#pricing"
+          <a
+            href={FREE_LIVE_DEMO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className={cn(
               "inline-flex w-full cursor-pointer items-center justify-center rounded-lg border-2 border-border px-8 py-4 text-base font-semibold text-foreground sm:w-auto",
               "hover:bg-surface-light hover:border-surface-light transition-colors",
               "focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
             )}
           >
-            Enrol in Cohort 1
-          </Link>
+            Try the free demo — live, no signup
+          </a>
         </div>
 
         <p className="hero-animate-secondary mt-8 text-sm text-muted">

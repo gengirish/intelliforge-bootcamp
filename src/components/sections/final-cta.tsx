@@ -4,6 +4,7 @@ import Link from "next/link";
 import {
   CTA_MICRO_TRUST,
   FREE_LIVE_DEMO_URL,
+  SPRINT_CONFIG,
   TRUST_SIGNALS,
 } from "@/lib/constants";
 import { CtaMicroTrust, TrustSignals } from "@/components/ui/trust-signals";
@@ -31,35 +32,35 @@ export function FinalCTA() {
           </span>
         </h2>
         <p className="mx-auto mt-6 max-w-2xl text-lg text-muted sm:text-xl">
-          Ship to a live repo. Get mentor-scored. Leave with a credential
-          recruiters can verify — or start with the free demo and decide.
+          Start with the 2-week sprint — two products shipped in 14 days for{" "}
+          {SPRINT_CONFIG.priceDisplay}. Or try the free demo first.
         </p>
 
         <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-          <a
-            href={FREE_LIVE_DEMO_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href={SPRINT_CONFIG.href}
             className={cn(
               "glow-cta inline-flex cursor-pointer items-center justify-center gap-3 rounded-xl bg-cta px-10 py-5 text-lg font-semibold text-background",
               "shadow-lg transition-colors duration-200 hover:bg-cta-hover",
               "focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
             )}
           >
-            Try the free demo — live, no signup
-          </a>
-          <Link
-            href="#pricing"
+            {SPRINT_CONFIG.ctaLabel}
+          </Link>
+          <a
+            href={FREE_LIVE_DEMO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className={cn(
               "inline-flex cursor-pointer items-center justify-center rounded-xl border-2 border-border px-10 py-5 text-lg font-semibold text-foreground",
               "hover:bg-surface-light transition-colors",
               "focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
             )}
           >
-            Enrol in Cohort 1
-          </Link>
+            Try the free demo — live, no signup
+          </a>
         </div>
-        <CtaMicroTrust text={CTA_MICRO_TRUST.freeDemo} className="mt-3" />
+        <CtaMicroTrust text={CTA_MICRO_TRUST.sprint} className="mt-3" />
 
         <TrustSignals
           signals={TRUST_SIGNALS.finalCta}

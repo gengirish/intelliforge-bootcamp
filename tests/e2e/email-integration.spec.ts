@@ -12,7 +12,7 @@ test.describe("Email Integration — Contact Form & New Sections", () => {
       await expect(banner).toBeVisible();
       await expect(banner.getByText(/2-Week AI Sprint/)).toBeVisible();
 
-      const sprintLink = banner.getByRole("link", { name: "Enroll now →" });
+      const sprintLink = banner.getByRole("link", { name: "Join sprint →" });
       await expect(sprintLink).toBeVisible();
       await expect(sprintLink).toHaveAttribute("href", "/sprint");
     });
@@ -112,10 +112,16 @@ test.describe("Email Integration — Contact Form & New Sections", () => {
   });
 
   test.describe("Final CTA — Dual Path", () => {
-    test("has free demo and enrol CTAs", async ({ page }) => {
+    test("has sprint and free demo CTAs", async ({ page }) => {
       const finalCtaSection = page.locator("section", {
         has: page.getByText("Ask any bootcamp for the repo"),
       });
+
+      const sprintCTA = finalCtaSection.getByRole("link", {
+        name: /Join 2-Week AI Sprint — ₹4,999/,
+      });
+      await expect(sprintCTA).toBeVisible();
+      await expect(sprintCTA).toHaveAttribute("href", "/sprint");
 
       const freeDemoCTA = finalCtaSection.getByRole("link", {
         name: /Try the free demo — live, no signup/,
@@ -125,12 +131,6 @@ test.describe("Email Integration — Contact Form & New Sections", () => {
         "href",
         /learning\.intelliforge\.tech/
       );
-
-      const enrolCTA = finalCtaSection.getByRole("link", {
-        name: /Enrol in Cohort 1/,
-      });
-      await expect(enrolCTA).toBeVisible();
-      await expect(enrolCTA).toHaveAttribute("href", "#pricing");
     });
   });
 
