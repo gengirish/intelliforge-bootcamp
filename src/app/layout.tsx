@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Geist } from "next/font/google";
 import "./globals.css";
 
@@ -64,6 +65,11 @@ export default function RootLayout({
         className={`${geistSans.variable} antialiased bg-background text-foreground`}
       >
         {children}
+        <Script
+          src="https://masterclass-first-agent.vercel.app/embed.js"
+          strategy="afterInteractive"
+          data-position="bottom-right"
+        />
       </body>
     </html>
   );
