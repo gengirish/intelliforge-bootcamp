@@ -25,11 +25,11 @@ export function WhatsAppFAB() {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+    <div className="fixed bottom-24 left-4 z-50 flex flex-col items-start gap-3 md:bottom-6 md:left-6">
       {showTooltip && !dismissed && (
         <div
           className={cn(
-            "relative mr-1 rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground shadow-xl",
+            "relative ml-1 rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground shadow-xl",
             "animate-in fade-in slide-in-from-bottom-2 duration-300",
             "max-w-[240px]"
           )}
@@ -47,7 +47,7 @@ export function WhatsAppFAB() {
           </button>
           <p className="font-medium">Have questions?</p>
           <p className="mt-0.5 text-muted">Chat with us on WhatsApp</p>
-          <div className="absolute -bottom-1.5 right-6 h-3 w-3 rotate-45 border-b border-r border-border bg-surface" />
+          <div className="absolute -bottom-1.5 left-6 h-3 w-3 rotate-45 border-b border-r border-border bg-surface" />
         </div>
       )}
 
