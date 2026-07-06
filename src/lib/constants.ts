@@ -119,39 +119,35 @@ export const FOUNDER = {
 /** Live IntelliForge product surfaces learners may contribute to during build-alongside. */
 export const BUILD_ALONGSIDE_PRODUCTS = [
   {
-    name: "PDFforge",
-    description: "AI-powered PDF processing and document workflows.",
-    // TODO(girish): confirm exact production URL
-    href: "https://pdfforge.intelliforge.tech",
-    icon: "FileText",
-  },
-  {
     name: "LocalFlash",
     description: "Local-first flash storage and sync for edge deployments.",
-    // TODO(girish): confirm exact production URL
-    href: "https://localflash.intelliforge.tech",
+    href: "https://localflash.shop",
     icon: "Zap",
   },
   {
-    name: "RemoteForge",
-    description: "Remote development and pair-programming infrastructure.",
-    // TODO(girish): confirm exact production URL
-    href: "https://remoteforge.intelliforge.tech",
-    icon: "Monitor",
-  },
-  {
-    name: "IELTSForge",
-    description: "AI-assisted IELTS preparation and scoring platform.",
-    // TODO(girish): confirm exact production URL
-    href: "https://ieltsforge.intelliforge.tech",
+    name: "Maidaan",
+    description: "Sports venue booking and academy engagement platform.",
+    href: "https://maidaan.academy",
     icon: "GraduationCap",
   },
   {
-    name: "Maidaan",
-    description: "Sports venue booking and community engagement platform.",
-    // TODO(girish): confirm exact production URL
-    href: "https://maidaan.intelliforge.tech",
-    icon: "Trophy",
+    name: "InkDown",
+    description: "AI-assisted writing and markdown publishing workflows.",
+    href: "https://inkdown.intelliforge.tech",
+    icon: "FileText",
+  },
+  {
+    name: "Vettd",
+    description: "Vetting and verification workflows for hiring and compliance.",
+    href: "https://vettd-app.com",
+    icon: "ShieldCheck",
+  },
+  {
+    name: "ForgeAhead",
+    description:
+      "The AI operating system for your job search — strategy through placement.",
+    href: "https://forgeahead.intelliforge.tech",
+    icon: "Briefcase",
   },
 ];
 

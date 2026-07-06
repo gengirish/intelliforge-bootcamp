@@ -71,7 +71,7 @@ test.describe("Responsive — Desktop (1440x900)", () => {
     await page.goto("/");
     const section = page.locator("#build-alongside");
     await section.scrollIntoViewIfNeeded();
-    await expect(section.getByRole("link", { name: /PDFforge/ })).toBeVisible();
-    await expect(section.getByRole("link", { name: /RemoteForge/ })).toBeVisible();
+    await expect(section.getByRole("link", { name: /LocalFlash/ })).toBeVisible();
+    await expect(section.getByRole("link", { name: /ForgeAhead/ })).toBeVisible();
   });
 });

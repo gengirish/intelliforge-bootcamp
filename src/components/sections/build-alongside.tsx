@@ -1,9 +1,9 @@
 import {
+  Briefcase,
   ExternalLink,
   FileText,
   GraduationCap,
-  Monitor,
-  Trophy,
+  ShieldCheck,
   Zap,
   type LucideIcon,
 } from "lucide-react";
@@ -15,11 +15,11 @@ import {
 import { cn } from "@/lib/utils";
 
 const ICON_MAP: Record<string, LucideIcon> = {
-  FileText,
   Zap,
-  Monitor,
   GraduationCap,
-  Trophy,
+  FileText,
+  ShieldCheck,
+  Briefcase,
 };
 
 export function BuildAlongside() {

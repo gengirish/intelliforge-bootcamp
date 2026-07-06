@@ -54,8 +54,9 @@ test.describe("Landing Page — All Sections", () => {
     await section.scrollIntoViewIfNeeded();
     await expect(section.getByText("Build-Alongside: Ship on a")).toBeVisible();
     await expect(section.getByText(/Ask any bootcamp for the repo/)).toBeVisible();
-    await expect(section.getByRole("link", { name: /PDFforge/ })).toBeVisible();
+    await expect(section.getByRole("link", { name: /LocalFlash/ })).toBeVisible();
     await expect(section.getByRole("link", { name: /Maidaan/ })).toBeVisible();
+    await expect(section.getByRole("link", { name: /ForgeAhead/ })).toBeVisible();
   });
 
   test("verifiable credential section renders", async ({ page }) => {
