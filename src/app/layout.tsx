@@ -17,6 +17,7 @@ const ogImage = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://upskill.intelliforge.tech"),
+  manifest: "/site.webmanifest",
   title: "IntelliForge AI Bootcamp — Ship a Real Product. Earn a Verifiable Credential.",
   description:
     "The only AI cohort where top performers ship to a live IntelliForge repo, get mentor-scored, and leave with a recruiter-checkable credential. Founder-taught by Girish. Based in Hyderabad, India.",

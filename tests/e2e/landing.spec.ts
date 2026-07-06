@@ -10,6 +10,20 @@ test.describe("Landing Page — All Sections", () => {
     await expect(page).toHaveTitle(/IntelliForge/);
   });
 
+  test("serves IntelliForge bootcamp favicon", async ({ page }) => {
+    const iconLink = page.locator('link[rel="icon"]').first();
+    await expect(iconLink).toHaveAttribute("href", /favicon\.ico/);
+
+    const faviconHref = await iconLink.getAttribute("href");
+    expect(faviconHref).toBeTruthy();
+    const faviconResponse = await page.request.get(faviconHref!);
+    expect(faviconResponse.status()).toBe(200);
+    expect(faviconResponse.headers()["content-type"]).toContain("image");
+    const body = await faviconResponse.body();
+    expect(body.byteLength).toBeGreaterThan(100);
+    expect(body.byteLength).toBeLessThan(10_000);
+  });
+
   test("header renders with logo and nav links", async ({ page }) => {
     const header = page.locator("header");
     await expect(header).toBeVisible();

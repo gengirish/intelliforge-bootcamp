@@ -12,6 +12,7 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:migrate": "dotenv -e .env.local -- prisma migrate dev",
     "db:deploy": "dotenv -e .env.local -- prisma migrate deploy",
+    "generate:favicon": "node scripts/generate-favicon.mjs",
     "postinstall": "prisma generate"
   },
   "dependencies": {
