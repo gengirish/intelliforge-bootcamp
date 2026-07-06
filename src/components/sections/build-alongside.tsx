@@ -1,4 +1,5 @@
 import {
+  BarChart3,
   Briefcase,
   ExternalLink,
   FileText,
@@ -20,6 +21,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
   FileText,
   ShieldCheck,
   Briefcase,
+  BarChart3,
 };
 
 export function BuildAlongside() {

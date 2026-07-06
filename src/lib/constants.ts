@@ -149,6 +149,13 @@ export const BUILD_ALONGSIDE_PRODUCTS = [
     href: "https://forgeahead.intelliforge.tech",
     icon: "Briefcase",
   },
+  {
+    name: "Chronicle",
+    description:
+      "Multi-agent market sizing with cited TAM/SAM/SOM reports founders can defend.",
+    href: "https://deep-research.intelliforge.tech",
+    icon: "BarChart3",
+  },
 ];
 
 export const BUILD_ALONGSIDE = {

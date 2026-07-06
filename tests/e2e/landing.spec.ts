@@ -57,6 +57,7 @@ test.describe("Landing Page — All Sections", () => {
     await expect(section.getByRole("link", { name: /LocalFlash/ })).toBeVisible();
     await expect(section.getByRole("link", { name: /Maidaan/ })).toBeVisible();
     await expect(section.getByRole("link", { name: /ForgeAhead/ })).toBeVisible();
+    await expect(section.getByRole("link", { name: /Chronicle/ })).toBeVisible();
   });
 
   test("verifiable credential section renders", async ({ page }) => {
