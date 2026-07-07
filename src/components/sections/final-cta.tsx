@@ -32,7 +32,7 @@ export function FinalCTA() {
           </span>
         </h2>
         <p className="mx-auto mt-6 max-w-2xl text-lg text-muted sm:text-xl">
-          Start with the 2-week sprint — two products shipped in 14 days for{" "}
+          Interview in weeks, not months? Ship two live products in 14 days for{" "}
           {SPRINT_CONFIG.priceDisplay}. Or try the free demo first.
         </p>
 

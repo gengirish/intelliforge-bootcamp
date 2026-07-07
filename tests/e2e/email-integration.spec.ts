@@ -118,7 +118,7 @@ test.describe("Email Integration — Contact Form & New Sections", () => {
       });
 
       const sprintCTA = finalCtaSection.getByRole("link", {
-        name: /Join 2-Week AI Sprint — ₹4,999/,
+        name: /Ship Proof in 14 Days — ₹4,999/,
       });
       await expect(sprintCTA).toBeVisible();
       await expect(sprintCTA).toHaveAttribute("href", "/sprint");

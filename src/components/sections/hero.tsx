@@ -9,13 +9,6 @@ import {
 } from "@/lib/constants";
 import { CtaMicroTrust, TrustSignals } from "@/components/ui/trust-signals";
 
-/*
- * Headline options considered:
- * 1. "Don't build a portfolio project. Ship a real product." ← selected (strongest moat)
- * 2. "The only bootcamp where your credential links to what you shipped."
- * 3. "Ship to a live repo. Get scored. Leave with proof."
- */
-
 export function Hero() {
   return (
     <section className="animated-gradient-bg relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 py-24 sm:px-6 lg:px-8">
@@ -36,22 +29,27 @@ export function Hero() {
 
       <div className="relative z-10 mx-auto max-w-4xl text-center">
         <p className="hero-animate-headline mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-surface/60 px-4 py-1.5 text-sm text-accent">
-          {SPRINT_CONFIG.name} · {SPRINT_CONFIG.priceDisplay} · Cohort 1
+          Interview in 3 weeks? · {SPRINT_CONFIG.name} · {SPRINT_CONFIG.priceDisplay}
         </p>
 
         <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
           <span className="hero-animate-headline block">
-            Don&apos;t build a portfolio project.
+            Ship proof they can click.
           </span>
           <span className="hero-animate-headline block">
-            <span className="gradient-text">Ship a real product.</span>
+            <span className="gradient-text">Not another portfolio toy.</span>
           </span>
         </h1>
 
         <p className="hero-animate-subheading mx-auto mt-6 max-w-2xl text-lg text-muted sm:text-xl">
-          The only cohort where top performers ship to a live repo, get scored
-          by a mentor who watched you work, and leave with a verifiable,
-          recruiter-checkable credential.
+          Two live AI products deployed in 14 days — plus a verifiable credential
+          at certs.intelliforge.tech with the URLs recruiters can verify. Top
+          bootcamp performers ship to a live IntelliForge repo and get
+          mentor-scored.
+        </p>
+
+        <p className="hero-animate-secondary mx-auto mt-4 max-w-xl text-sm font-medium text-amber-400/90 sm:text-base">
+          {SPRINT_CONFIG.urgencyLine}
         </p>
 
         <div className="hero-animate-cta mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">

@@ -33,10 +33,10 @@ test.describe("Landing Page — All Sections", () => {
   });
 
   test("hero section renders headline and CTAs", async ({ page }) => {
-    await expect(page.getByText("Don't build a portfolio project.")).toBeVisible();
-    await expect(page.getByText("Ship a real product.")).toBeVisible();
+    await expect(page.getByText("Ship proof they can click.")).toBeVisible();
+    await expect(page.getByText("Not another portfolio toy.")).toBeVisible();
     await expect(
-      page.getByRole("link", { name: /Join 2-Week AI Sprint — ₹4,999/ }).first()
+      page.getByRole("link", { name: /Ship Proof in 14 Days — ₹4,999/ }).first()
     ).toBeVisible();
     await expect(
       page.getByRole("link", { name: /Try the free demo — live, no signup/ }).first()
@@ -45,8 +45,8 @@ test.describe("Landing Page — All Sections", () => {
 
   test("trust badges are visible", async ({ page }) => {
     await expect(page.getByText("Founder-taught by Girish").first()).toBeVisible();
-    await expect(page.getByText("Ship to a live repo", { exact: true }).first()).toBeVisible();
-    await expect(page.getByText("Verifiable credential").first()).toBeVisible();
+    await expect(page.getByText("2 live URLs in 14 days", { exact: true }).first()).toBeVisible();
+    await expect(page.getByText("Recruiter-checkable credential").first()).toBeVisible();
   });
 
   test("build-alongside section renders with kill line", async ({ page }) => {
@@ -127,7 +127,7 @@ test.describe("Landing Page — All Sections", () => {
     await expect(section.getByText("₹49,999", { exact: true })).toBeVisible();
     await expect(section.getByText("₹74,999").first()).toBeVisible();
     await expect(
-      section.getByRole("link", { name: /Join 2-Week AI Sprint — ₹4,999/ })
+      section.getByRole("link", { name: /Ship Proof in 14 Days — ₹4,999/ })
     ).toBeVisible();
   });
 
@@ -161,7 +161,7 @@ test.describe("Landing Page — All Sections", () => {
     });
     await finalCta.scrollIntoViewIfNeeded();
     await expect(
-      finalCta.getByRole("link", { name: /Join 2-Week AI Sprint — ₹4,999/ })
+      finalCta.getByRole("link", { name: /Ship Proof in 14 Days — ₹4,999/ })
     ).toBeVisible();
     await expect(
       finalCta.getByRole("link", { name: /Try the free demo — live, no signup/ })

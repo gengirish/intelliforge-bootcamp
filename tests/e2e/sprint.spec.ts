@@ -8,8 +8,10 @@ test.describe("Sprint Landing Page", () => {
 
   test("loads with correct title and hero", async ({ page }) => {
     await expect(page).toHaveTitle(/2-Week AI Sprint/);
-    await expect(page.getByText("Your Team Shipped an AI Demo.")).toBeVisible();
-    await expect(page.getByText("You Didn't.")).toBeVisible();
+    await expect(page.getByText("Interview in 3 weeks?")).toBeVisible();
+    await expect(
+      page.getByText("Ship two live AI products in 14 days.")
+    ).toBeVisible();
     await expect(page.getByRole("heading", { name: "Is This You Right Now?" })).toBeVisible();
   });
 

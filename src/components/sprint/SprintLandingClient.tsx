@@ -9,7 +9,6 @@ import {
   Clock,
   Code2,
   Database,
-  Flame,
   Rocket,
   Shield,
   Sparkles,
@@ -72,34 +71,34 @@ const OUTCOMES = [
 const PAIN_SIGNALS = [
   {
     icon: Briefcase,
-    text: "Your manager asked for an AI demo — and you have nothing live to show.",
+    text: "Recruiter or hiring manager asked for shipped AI work — your GitHub has tutorials, not live deploys.",
   },
   {
-    icon: Target,
-    text: "Juniors on your team are shipping Claude apps while you're still watching tutorials.",
+    icon: Clock,
+    text: "Interview loop starts in 2–4 weeks and you're still planning to 'build something soon.'",
   },
   {
     icon: AlertTriangle,
-    text: "Clients, interviews, or reviews are coming up — and your GitHub has zero AI projects.",
+    text: "Layoff, role change, or performance review — you need proof you ship, not another course certificate.",
   },
   {
-    icon: Flame,
-    text: "You know AI is reshaping your role. Waiting another quarter isn't an option.",
+    icon: Target,
+    text: "Client or internal demo is on the calendar — you have slides, not a URL you can send today.",
   },
 ];
 
 const BEFORE_AFTER = {
   before: [
-    "Completed courses — no deployed product",
-    "Can explain RAG in theory — can't build it",
-    "LinkedIn says \"AI enthusiast\" — no live URL to prove it",
-    "Watching others ship while you plan to \"start soon\"",
+    "Completed courses — no live URL to send in an application",
+    "Can explain RAG in theory — can't demo it in an interview",
+    "LinkedIn says \"AI enthusiast\" — recruiter can't click to verify",
+    "Interview in weeks — portfolio still 'in progress'",
   ],
   after: [
-    "Live Claude chatbot on Vercel — Week 1",
-    "Production RAG system with real documents — Week 2",
-    "Two portfolio URLs for interviews & client pitches",
-    "Proof you ship — not just learn",
+    "Live Claude chatbot on Vercel — share the URL in Week 1",
+    "Production RAG system with real documents — demo in Week 2",
+    "Two deploy links for interviews, client pitches, and reviews",
+    "Proof you ship — recruiters click, not just read claims",
   ],
 };
 
@@ -167,18 +166,19 @@ export function SprintLandingClient({
           <SprintCountdown startDate={startDate} className="mb-8 max-w-xl mx-auto" />
 
           <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 leading-tight">
-            Your Team Shipped an AI Demo.{" "}
-            <span className="gradient-text">You Didn&apos;t.</span>
+            Interview in 3 weeks?{" "}
+            <span className="gradient-text">Ship two live AI products in 14 days.</span>
           </h1>
 
           <p className="text-xl text-muted mb-4 max-w-2xl mx-auto leading-relaxed">
-            Fix that in 14 days. Two live AI products — Claude chatbot + RAG
-            system — deployed to Vercel. Not certificates. Not slide decks.
+            Claude chatbot + RAG system — deployed to Vercel. URLs you paste into
+            your application, send to recruiters, or demo in the room. Not
+            certificates. Not slide decks.
           </p>
 
           <p className="text-base text-amber-400/90 mb-8 max-w-xl mx-auto font-medium">
             Cohort 1 starts {startLabel}. Every week you wait, someone else
-            gets the interview, the client, or the promotion.
+            shows up with live deploys — and you show up with plans.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4 mb-10">
@@ -236,8 +236,9 @@ export function SprintLandingClient({
             Is This You Right Now?
           </h2>
           <p className="text-muted mb-10">
-            This sprint is built for people with a deadline — not people
-            &quot;thinking about learning AI someday.&quot;
+            This sprint is for people with an interview, client pitch, or review
+            on the calendar — not people &quot;thinking about learning AI
+            someday.&quot;
           </p>
           <ul className="grid sm:grid-cols-2 gap-4 text-left">
             {PAIN_SIGNALS.map((item) => (

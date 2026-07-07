@@ -1,8 +1,8 @@
 export const SITE_CONFIG = {
   name: "IntelliForge AI Bootcamp",
-  tagline: "Ship a real product. Earn a verifiable credential.",
+  tagline: "Ship proof before your interview.",
   description:
-    "The only AI cohort where top performers ship to a live IntelliForge repo, get mentor-scored, and leave with a recruiter-checkable credential. Founder-taught by Girish. Based in Hyderabad, India.",
+    "Interview in weeks, not months? Ship two live AI products in 14 days and earn a recruiter-checkable credential — founder-taught by Girish. Based in Hyderabad, India.",
   url: "https://upskill.intelliforge.tech",
   mainSite: "https://www.intelliforge.tech",
   lms: "https://learning.intelliforge.tech",
@@ -511,9 +511,9 @@ export const FAQ_ITEMS = [
 
 export const TRUST_SIGNALS = {
   hero: [
+    { icon: "Clock", label: "2 live URLs in 14 days" },
+    { icon: "ShieldCheck", label: "Recruiter-checkable credential" },
     { icon: "User", label: "Founder-taught by Girish" },
-    { icon: "GitBranch", label: "Ship to a live repo" },
-    { icon: "ShieldCheck", label: "Verifiable credential" },
   ],
   checkout: [
     { icon: "Lock", label: "100% Secure Checkout" },
@@ -530,7 +530,7 @@ export const TRUST_SIGNALS = {
 export const CTA_MICRO_TRUST = {
   freeDemo: "Live demo · No signup · See the curriculum before you pay",
   sprint:
-    "Secure Razorpay checkout · UPI, cards & netbanking · Two products shipped in 14 days",
+    "Two live deploy URLs in 14 days · Razorpay checkout · Built for interview deadlines",
   bootcamp:
     "Secure checkout · 15-day money-back after first 2 weekends · 0% EMI available",
   freeClass: "No payment · No commitment · Real curriculum preview",
@@ -545,8 +545,10 @@ export const SPRINT_CONFIG = {
   cohortEndDate: "15/08/2026",
   slug: "ai-sprint-jun-2026",
   href: "/sprint",
-  ctaLabel: "Join 2-Week AI Sprint — ₹4,999",
-  ctaLabelShort: "Join Sprint — ₹4,999",
+  ctaLabel: "Ship Proof in 14 Days — ₹4,999",
+  ctaLabelShort: "Ship in 14 Days — ₹4,999",
+  urgencyLine:
+    "Built for interviews, client pitches, and performance reviews with a deadline — not 'someday' learners.",
   liveScheduleSummary:
     "Live on Zoom every Saturday & Sunday — 9–11 AM & 8–10 PM IST",
 };
@@ -572,7 +574,7 @@ export const FUNNEL_STEPS = [
   {
     step: 2,
     label: "Join the 2-Week Sprint",
-    description: "₹4,999 · two products shipped in 14 days",
+    description: "₹4,999 · two live URLs before your interview",
     href: SPRINT_CONFIG.href,
     external: false,
   },

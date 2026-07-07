@@ -19,8 +19,8 @@ export function AnnouncementBanner() {
       }}
     >
       <span className="shrink-0">
-        {SPRINT_CONFIG.name} — {SPRINT_CONFIG.priceDisplay} · Cohort 1 starts{" "}
-        {SPRINT_CONFIG.cohortStartDate}
+        Interview soon? Ship 2 live products — {SPRINT_CONFIG.priceDisplay} ·
+        Cohort 1 starts {SPRINT_CONFIG.cohortStartDate}
       </span>
       <Link
         href={SPRINT_CONFIG.href}

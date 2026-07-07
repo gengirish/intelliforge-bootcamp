@@ -30,9 +30,9 @@ export function Pricing() {
             Start with the 2-Week Sprint
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted">
-            Ship two products in 14 days for {SPRINT_CONFIG.priceDisplay}. Scale
-            into the 12-week bootcamp when you&apos;re ready. All prices in ₹
-            (INR).
+            Need proof before your next interview? Ship two live products in 14
+            days for {SPRINT_CONFIG.priceDisplay}. Scale into the 12-week
+            bootcamp when you&apos;re ready. All prices in ₹ (INR).
           </p>
         </FadeIn>
 
