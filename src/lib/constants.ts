@@ -380,35 +380,47 @@ export const CURRICULUM = [
   },
 ];
 
-/** B2B client quotes — prove IntelliForge ships, not learner outcomes. */
-export const CLIENT_QUOTES = [
+/** Learner testimonials — LinkedIn-verified participants. */
+export const LEARNER_TESTIMONIALS = [
   {
+    name: "Harish Hooli",
+    role: "Director of Engineering, Tiger Analytics",
+    initials: "HH",
+    linkedin: "https://www.linkedin.com/in/harish-hooli/",
     quote:
-      "IntelliForge built our AI workflow automation in just 3 weeks. What used to take our team 20 hours a week is now fully automated. The ROI was visible from month one.",
-    name: "Rahul M.",
-    role: "CTO, SaaS Startup",
-    initials: "RM",
+      "The sessions cut through AI hype. You work on patterns Girish uses in production — agents, RAG, and deployment — not toy notebooks.",
   },
   {
+    name: "Prasad Kancharla",
+    role: "Technology & Security Professional",
+    initials: "PK",
+    linkedin: "https://www.linkedin.com/in/prasad-kancharla/",
     quote:
-      "Their multi-agent research system transformed how we operate. Research that took days now takes minutes — and the quality is consistently better than manual work.",
-    name: "Priya S.",
-    role: "Head of Research, Analytics Firm",
-    initials: "PS",
+      "Clear structure from fundamentals to shipping. The live format made it easy to ask questions and stay accountable week over week.",
   },
   {
+    name: "Rohini Devan",
+    role: "Senior Cloud Application Administrator, Ellucian",
+    initials: "RD",
+    linkedin: "https://www.linkedin.com/in/rohini-devan-1b068590/",
     quote:
-      "We needed someone who understood both enterprise engineering and modern AI. IntelliForge delivered exactly that — no buzzwords, just working solutions.",
-    name: "Vikram K.",
-    role: "Founder, Fintech Company",
-    initials: "VK",
+      "As someone in cloud operations, I wanted practical AI skills I could apply at work. This was hands-on from day one.",
   },
   {
+    name: "Reshma Jabeen",
+    role: "Technology Professional",
+    initials: "RJ",
+    linkedin: "https://www.linkedin.com/in/reshma-jabeen-b8aa7a103/",
     quote:
-      "From prompt engineering training to deploying our first AI agent — IntelliForge guided us through every level. Our team now thinks AI-first for every problem.",
-    name: "Suresh P.",
-    role: "VP Engineering, Enterprise SaaS",
-    initials: "SP",
+      "Founder-led teaching makes a difference. You see real repos, real trade-offs, and what it takes to ship.",
+  },
+  {
+    name: "Shreya Rajasekar",
+    role: "Technology Professional",
+    initials: "SR",
+    linkedin: "https://www.linkedin.com/in/shreya-rajasekar-5344b897/",
+    quote:
+      "The sprint format pushed me to deploy — not just watch. Leaving with working projects changed how I approach AI at work.",
   },
 ];
 

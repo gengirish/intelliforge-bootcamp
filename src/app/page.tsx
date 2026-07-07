@@ -15,9 +15,9 @@ const WhosBehind = dynamic(() =>
     default: m.WhosBehind,
   }))
 );
-const CohortOutcomes = dynamic(() =>
-  import("@/components/sections/cohort-outcomes").then((m) => ({
-    default: m.CohortOutcomes,
+const Testimonials = dynamic(() =>
+  import("@/components/sections/testimonials").then((m) => ({
+    default: m.Testimonials,
   }))
 );
 const FreePreview = dynamic(() =>
@@ -67,7 +67,7 @@ export default function Home() {
         <Curriculum />
         <SprintLiveSchedule />
         <WhosBehind />
-        <CohortOutcomes />
+        <Testimonials />
         <FreePreview />
         <FunnelLoop />
         <Pricing />

@@ -99,21 +99,24 @@ test.describe("Landing Page — All Sections", () => {
     await expect(page.getByText("Girish").first()).toBeVisible();
     await expect(page.getByText("Founder & Principal Engineer")).toBeVisible();
     await expect(page.getByText("14 years")).toBeVisible();
+    await expect(
+      page.getByText("IntelliForge Ships Real Products for Real Clients")
+    ).toHaveCount(0);
+    await expect(page.getByText("Rahul M.")).toHaveCount(0);
   });
 
-  test("client quotes appear in who's behind section", async ({ page }) => {
-    const section = page.locator("#whos-behind");
+  test("learner testimonials with LinkedIn links render", async ({ page }) => {
+    const section = page.locator("#testimonials");
     await section.scrollIntoViewIfNeeded();
-    await expect(page.getByText("IntelliForge Ships Real Products for Real Clients")).toBeVisible();
-    await expect(page.getByText("Rahul M.")).toBeVisible();
-  });
-
-  test("cohort outcomes placeholder is honest", async ({ page }) => {
-    const section = page.locator("#cohort-outcomes");
-    await section.scrollIntoViewIfNeeded();
-    await expect(page.getByText("Cohort 1 Outcomes")).toBeVisible();
-    await expect(page.getByText("Coming as our first cohort ships.")).toBeVisible();
-    await expect(page.getByText("We don't fabricate learner testimonials")).toBeVisible();
+    await expect(section.getByText("What Learners Say")).toBeVisible();
+    await expect(section.getByText("Harish Hooli")).toBeVisible();
+    await expect(section.getByText("Shreya Rajasekar")).toBeVisible();
+    const linkedInLinks = section.getByRole("link", { name: /View on LinkedIn/ });
+    await expect(linkedInLinks).toHaveCount(5);
+    await expect(linkedInLinks.first()).toHaveAttribute(
+      "href",
+      "https://www.linkedin.com/in/harish-hooli/"
+    );
   });
 
   test("pricing section renders all three tracks", async ({ page }) => {

@@ -1,7 +1,7 @@
 import { Linkedin } from "lucide-react";
 import Link from "next/link";
 import { FadeIn } from "@/components/animations/fade-in";
-import { CLIENT_QUOTES, FOUNDER, SITE_CONFIG } from "@/lib/constants";
+import { FOUNDER, SITE_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 export function WhosBehind() {
@@ -113,48 +113,6 @@ export function WhosBehind() {
                 Connect on LinkedIn
               </a>
             </div>
-          </div>
-        </FadeIn>
-
-        {/* B2B client quotes — studio credibility */}
-        <FadeIn delay={0.2} className="mt-16">
-          <h3 className="mb-8 text-center text-xl font-semibold text-foreground sm:text-2xl">
-            IntelliForge Ships Real Products for Real Clients
-          </h3>
-          <div className="grid gap-6 sm:grid-cols-2 lg:gap-8">
-            {CLIENT_QUOTES.map((quote, index) => (
-              <FadeIn key={quote.initials} delay={0.1 + index * 0.05}>
-                <article
-                  className={cn(
-                    "relative rounded-xl border border-border bg-surface-light p-6 sm:p-8"
-                  )}
-                >
-                  <span
-                    className="absolute -top-2 left-6 text-6xl font-serif text-primary-light/40"
-                    aria-hidden
-                  >
-                    &ldquo;
-                  </span>
-                  <p className="relative z-10 text-foreground/90">
-                    {quote.quote}
-                  </p>
-                  <div className="mt-6 flex items-center gap-4">
-                    <div
-                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/20 text-sm font-semibold text-primary-light"
-                      aria-hidden
-                    >
-                      {quote.initials}
-                    </div>
-                    <div>
-                      <p className="font-semibold text-foreground">
-                        {quote.name}
-                      </p>
-                      <p className="text-sm text-muted">{quote.role}</p>
-                    </div>
-                  </div>
-                </article>
-              </FadeIn>
-            ))}
           </div>
         </FadeIn>
       </div>
