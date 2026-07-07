@@ -9,7 +9,7 @@ export const SITE_CONFIG = {
   certs: "https://certs.intelliforge.tech",
   share: "https://share.intelliforge.tech",
   contact: {
-    email: "contact@intelliforge.tech",
+    email: "alerts@intelliforge.tech",
     phone: "+91 85559 60837",
     whatsapp: "918555960837",
     location: "Hyderabad, Telangana, India",

@@ -172,7 +172,7 @@ test.describe("Landing Page — All Sections", () => {
     await page.getByText("© 2026 IntelliForge AI").scrollIntoViewIfNeeded();
     const footer = page.locator("footer");
     await expect(footer.getByText("© 2026 IntelliForge AI")).toBeVisible();
-    await expect(footer.getByText("contact@intelliforge.tech")).toBeVisible();
+    await expect(footer.getByText("alerts@intelliforge.tech")).toBeVisible();
     await expect(footer.getByText("Graduate wins")).toBeVisible();
   });
 

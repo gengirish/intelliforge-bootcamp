@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Send, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import { FadeIn } from "@/components/animations/fade-in";
+import { SITE_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
@@ -78,8 +79,11 @@ export function ContactForm() {
                 </div>
                 <div>
                   <p className="font-medium text-foreground">Email</p>
-                  <a href="mailto:contact@intelliforge.tech" className="text-accent hover:underline">
-                    contact@intelliforge.tech
+                  <a
+                    href={`mailto:${SITE_CONFIG.contact.email}`}
+                    className="text-accent hover:underline"
+                  >
+                    {SITE_CONFIG.contact.email}
                   </a>
                 </div>
               </div>

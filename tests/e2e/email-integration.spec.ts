@@ -158,7 +158,7 @@ test.describe("Email Integration — Contact Form & New Sections", () => {
       await section.scrollIntoViewIfNeeded();
       await page.waitForTimeout(500);
 
-      await expect(section.getByText("contact@intelliforge.tech")).toBeVisible();
+      await expect(section.getByText("alerts@intelliforge.tech")).toBeVisible();
       await expect(section.getByText("+91 85559 60837")).toBeVisible();
       await expect(section.getByText("Hyderabad, Telangana, India")).toBeVisible();
     });
