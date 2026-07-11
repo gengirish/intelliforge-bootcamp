@@ -116,7 +116,9 @@ export function SprintLandingClient({
     total: seatsTotal,
     remaining,
   });
-  const { filled, total, remaining: liveRemaining } = liveSeats;
+  const { total, remaining: liveRemaining } = liveSeats;
+  const bookedCount = SPRINT_CONFIG.bookedSeatNames.length;
+  const displayRemaining = Math.max(liveRemaining, total - bookedCount);
 
   const price = formatRupee(priceInPaise);
   const originalPrice = formatRupee(originalPriceInPaise);
@@ -140,10 +142,10 @@ export function SprintLandingClient({
             <span
               className={cn(
                 "text-sm font-medium",
-                liveRemaining <= 5 ? "text-amber-400" : "text-green-400"
+                displayRemaining <= 5 ? "text-amber-400" : "text-green-400"
               )}
             >
-              {soldOut ? "Sold out" : `${liveRemaining} seats left`}
+              {soldOut ? "Sold out" : `${displayRemaining} seats left`}
             </span>
             {!soldOut && (
               <SprintCheckoutButton
@@ -225,7 +227,7 @@ export function SprintLandingClient({
           </div>
 
           <SprintSeatMap
-            filled={filled}
+            filled={bookedCount}
             total={total}
             bookedNames={SPRINT_CONFIG.bookedSeatNames}
           />
@@ -361,7 +363,7 @@ export function SprintLandingClient({
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-foreground mb-4">
             {liveRemaining <= 5 && !soldOut
-              ? `Only ${liveRemaining} seats left — act before ${startLabel}`
+              ? `Only ${displayRemaining} seats left — act before ${startLabel}`
               : "Stop planning. Start shipping."}
           </h2>
           <p className="text-muted mb-8">
@@ -369,7 +371,7 @@ export function SprintLandingClient({
             &amp; Sun (9–11 AM &amp; 8–10 PM IST) · Zero-risk guarantee
           </p>
           <SprintSeatMap
-            filled={filled}
+            filled={bookedCount}
             total={total}
             bookedNames={SPRINT_CONFIG.bookedSeatNames}
             className="mb-8"

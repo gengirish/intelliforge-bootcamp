@@ -25,8 +25,12 @@ test.describe("Sprint Landing Page", () => {
     await expect(page.getByText(/Cohort 1 · Starts/)).toBeVisible();
     await expect(page.getByText(/seats left|Sold out/)).toBeVisible();
     await expect(page.getByText("Max 30 seats")).toBeVisible();
-    await expect(page.getByLabel(/Cohort seat map:/).first()).toBeVisible();
-    await expect(page.getByText("booked")).toBeVisible();
+    const seatMap = page.getByLabel(/Cohort seat map:/).first();
+    await expect(seatMap).toBeVisible();
+    await expect(seatMap.getByText("8", { exact: true }).first()).toBeVisible();
+    await expect(seatMap.getByText("booked")).toBeVisible();
+    await expect(seatMap.getByText("22", { exact: true })).toBeVisible();
+    await expect(seatMap.getByText("available")).toBeVisible();
     await expect(page.getByText("Hover a booked seat for name")).toBeVisible();
   });
 

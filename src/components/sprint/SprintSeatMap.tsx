@@ -31,19 +31,18 @@ export function SprintSeatMap({
   bookedNames = [],
   className,
 }: SprintSeatMapProps) {
-  const effectiveFilled = Math.max(filled, bookedNames.length);
-  const available = Math.max(0, total - effectiveFilled);
+  const available = Math.max(0, total - filled);
   const soldOut = available <= 0;
 
   return (
     <div
       className={cn("w-full max-w-md mx-auto", className)}
       role="img"
-      aria-label={`Cohort seat map: ${effectiveFilled} of ${total} seats booked, ${available} available`}
+      aria-label={`Cohort seat map: ${filled} of ${total} seats booked, ${available} available`}
     >
       <div className="mb-3 flex items-center justify-between text-xs text-muted">
         <span>
-          <span className="font-semibold text-foreground">{effectiveFilled}</span> booked
+          <span className="font-semibold text-foreground">{filled}</span> booked
         </span>
         <span>
           <span
@@ -81,14 +80,16 @@ export function SprintSeatMap({
                 {Array.from({ length: SEATS_PER_SIDE }, (_, col) => {
                   const index = seatIndex(row, "left", col);
                   if (index >= total) return null;
-                  const isFilled = index < effectiveFilled;
+                  const isFilled = index < filled;
                   return (
                     <Seat
                       key={`${rowLabel}-L-${col}`}
                       filled={isFilled}
                       code={seatLabel(row, "left", col)}
                       occupantName={
-                        isFilled ? bookedNames[index] : undefined
+                        isFilled && index < bookedNames.length
+                          ? bookedNames[index]
+                          : undefined
                       }
                     />
                   );
@@ -97,14 +98,16 @@ export function SprintSeatMap({
                 {Array.from({ length: SEATS_PER_SIDE }, (_, col) => {
                   const index = seatIndex(row, "right", col);
                   if (index >= total) return null;
-                  const isFilled = index < effectiveFilled;
+                  const isFilled = index < filled;
                   return (
                     <Seat
                       key={`${rowLabel}-R-${col}`}
                       filled={isFilled}
                       code={seatLabel(row, "right", col)}
                       occupantName={
-                        isFilled ? bookedNames[index] : undefined
+                        isFilled && index < bookedNames.length
+                          ? bookedNames[index]
+                          : undefined
                       }
                     />
                   );
