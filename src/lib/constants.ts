@@ -551,6 +551,17 @@ export const SPRINT_CONFIG = {
     "Built for interviews, client pitches, and performance reviews with a deadline — not 'someday' learners.",
   liveScheduleSummary:
     "Live on Zoom every Saturday & Sunday — 9–11 AM & 8–10 PM IST",
+  /** First N booked seats — shown on hover in the cohort seat map (index order). */
+  bookedSeatNames: [
+    "Prasad K",
+    "Harish H",
+    "Shreya R",
+    "Rohini D",
+    "Naresh T",
+    "Lokamma B",
+    "Reshma J",
+    "Prasad I",
+  ],
 };
 
 export const NAV_LINKS = [

@@ -23,7 +23,7 @@ import { SprintLiveSchedule } from "@/components/sprint/SprintLiveSchedule";
 import { SprintSeatMap } from "@/components/sprint/SprintSeatMap";
 import { useSprintSeats } from "@/components/sprint/use-sprint-seats";
 import { formatISTDate, formatRupee } from "@/lib/sprint-format";
-import { SITE_CONFIG } from "@/lib/constants";
+import { SITE_CONFIG, SPRINT_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 interface SprintLandingClientProps {
@@ -224,7 +224,11 @@ export function SprintLandingClient({
             </span>
           </div>
 
-          <SprintSeatMap filled={filled} total={total} />
+          <SprintSeatMap
+            filled={filled}
+            total={total}
+            bookedNames={SPRINT_CONFIG.bookedSeatNames}
+          />
         </div>
       </section>
 
@@ -364,7 +368,12 @@ export function SprintLandingClient({
             {price} one-time · Two live products in 14 days · Live Zoom on Sat
             &amp; Sun (9–11 AM &amp; 8–10 PM IST) · Zero-risk guarantee
           </p>
-          <SprintSeatMap filled={filled} total={total} className="mb-8" />
+          <SprintSeatMap
+            filled={filled}
+            total={total}
+            bookedNames={SPRINT_CONFIG.bookedSeatNames}
+            className="mb-8"
+          />
           {!soldOut && (
             <SprintCheckoutButton
               priceInPaise={priceInPaise}

@@ -27,7 +27,16 @@ test.describe("Sprint Landing Page", () => {
     await expect(page.getByText("Max 30 seats")).toBeVisible();
     await expect(page.getByLabel(/Cohort seat map:/).first()).toBeVisible();
     await expect(page.getByText("booked")).toBeVisible();
-    await expect(page.getByText("available")).toBeVisible();
+    await expect(page.getByText("Hover a booked seat for name")).toBeVisible();
+  });
+
+  test("booked seats show occupant name on hover", async ({ page }) => {
+    const seatMap = page.getByLabel(/Cohort seat map:/).first();
+    await expect(seatMap).toBeVisible();
+    const firstBooked = seatMap.getByLabel("Seat A1, booked by Prasad K");
+    await expect(firstBooked).toBeVisible();
+    await firstBooked.hover();
+    await expect(page.getByRole("tooltip", { name: "Prasad K" })).toBeVisible();
   });
 
   test("shows countdown and timezone-selectable live schedule", async ({ page }) => {
