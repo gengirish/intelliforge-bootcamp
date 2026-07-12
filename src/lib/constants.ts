@@ -544,6 +544,7 @@ export const SPRINT_CONFIG = {
   cohortStartDate: "01/08/2026",
   cohortEndDate: "15/08/2026",
   slug: "ai-sprint-jun-2026",
+  seatsTotal: 30,
   href: "/sprint",
   ctaLabel: "Ship Proof in 14 Days — ₹4,999",
   ctaLabelShort: "Ship in 14 Days — ₹4,999",

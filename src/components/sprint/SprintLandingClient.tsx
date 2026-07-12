@@ -115,15 +115,14 @@ export function SprintLandingClient({
     filled: seatsFilled,
     total: seatsTotal,
     remaining,
+    isActive,
   });
-  const { total, remaining: liveRemaining } = liveSeats;
-  const bookedCount = SPRINT_CONFIG.bookedSeatNames.length;
-  const displayRemaining = Math.max(liveRemaining, total - bookedCount);
+  const { total, filled, remaining: displayRemaining } = liveSeats;
 
   const price = formatRupee(priceInPaise);
   const originalPrice = formatRupee(originalPriceInPaise);
   const startLabel = formatISTDate(startDate);
-  const soldOut = !isActive || liveRemaining <= 0;
+  const soldOut = !isActive || displayRemaining <= 0;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -227,7 +226,7 @@ export function SprintLandingClient({
           </div>
 
           <SprintSeatMap
-            filled={bookedCount}
+            filled={filled}
             total={total}
             bookedNames={SPRINT_CONFIG.bookedSeatNames}
           />
@@ -362,7 +361,7 @@ export function SprintLandingClient({
       <section className="px-6 py-16 bg-gradient-to-t from-surface to-transparent">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-foreground mb-4">
-            {liveRemaining <= 5 && !soldOut
+            {displayRemaining <= 5 && !soldOut
               ? `Only ${displayRemaining} seats left — act before ${startLabel}`
               : "Stop planning. Start shipping."}
           </h2>
@@ -371,7 +370,7 @@ export function SprintLandingClient({
             &amp; Sun (9–11 AM &amp; 8–10 PM IST) · Zero-risk guarantee
           </p>
           <SprintSeatMap
-            filled={bookedCount}
+            filled={filled}
             total={total}
             bookedNames={SPRINT_CONFIG.bookedSeatNames}
             className="mb-8"

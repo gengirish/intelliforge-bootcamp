@@ -150,7 +150,9 @@ test.describe("Sprint API", () => {
       total: expect.any(Number),
     });
     expect(body.data.remaining).toBe(body.data.total - body.data.filled);
-    expect(body.data.total).toBeGreaterThan(0);
+    expect(body.data.filled).toBe(8);
+    expect(body.data.remaining).toBe(22);
+    expect(body.data.total).toBe(30);
   });
 
   test("GET /api/sprint/seats accepts slug query param", async ({ request }) => {

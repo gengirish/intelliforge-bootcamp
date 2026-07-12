@@ -1,10 +1,21 @@
 import { prisma } from "@/lib/prisma";
+import { SPRINT_CONFIG } from "@/lib/constants";
 
 export interface SprintSeatCounts {
   total: number;
   filled: number;
   remaining: number;
   isActive: boolean;
+}
+
+/** UI seat counts — uses bookedSeatNames as the display source of truth. */
+export function resolveSprintDisplaySeats(
+  seats: Pick<SprintSeatCounts, "total" | "filled" | "remaining" | "isActive">
+): SprintSeatCounts {
+  const total = seats.total;
+  const filled = SPRINT_CONFIG.bookedSeatNames.length;
+  const remaining = Math.max(0, total - filled);
+  return { total, filled, remaining, isActive: seats.isActive };
 }
 
 export async function getSprintSeatCounts(

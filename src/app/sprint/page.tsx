@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { getSprintSeatCounts } from "@/lib/sprint-seats";
+import { getSprintSeatCounts, resolveSprintDisplaySeats } from "@/lib/sprint-seats";
 import { SprintLandingClient } from "@/components/sprint/SprintLandingClient";
 import type { Metadata } from "next";
 
@@ -38,15 +38,19 @@ export default async function SprintPage() {
     // DB unavailable at build time — use defaults
   }
 
-  const seatsTotal = seatCounts?.total ?? 30;
-  const seatsFilled = seatCounts?.filled ?? 0;
-  const remaining = seatCounts?.remaining ?? 30;
+  const rawSeats = seatCounts ?? {
+    total: 30,
+    filled: 0,
+    remaining: 30,
+    isActive: sprint?.isActive ?? false,
+  };
+  const displaySeats = resolveSprintDisplaySeats(rawSeats);
 
   return (
     <SprintLandingClient
-      remaining={remaining}
-      seatsFilled={seatsFilled}
-      seatsTotal={seatsTotal}
+      remaining={displaySeats.remaining}
+      seatsFilled={displaySeats.filled}
+      seatsTotal={displaySeats.total}
       priceInPaise={sprint?.priceInPaise ?? 499900}
       originalPriceInPaise={sprint?.originalPriceInPaise ?? 1299900}
       startDate={sprint?.startDate?.toISOString() ?? ""}

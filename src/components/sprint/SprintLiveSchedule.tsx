@@ -11,7 +11,9 @@ import {
   resolveSprintStartIso,
 } from "@/lib/sprint-schedule";
 import { formatISTDate } from "@/lib/sprint-format";
+import { SPRINT_CONFIG } from "@/lib/constants";
 import { Calendar, Globe } from "lucide-react";
+import { SprintSeatMap } from "@/components/sprint/SprintSeatMap";
 import { cn } from "@/lib/utils";
 
 interface SprintLiveScheduleProps {
@@ -162,6 +164,13 @@ export function SprintLiveSchedule({
             </tbody>
           </table>
         </div>
+
+        <SprintSeatMap
+          filled={SPRINT_CONFIG.bookedSeatNames.length}
+          total={SPRINT_CONFIG.seatsTotal}
+          bookedNames={SPRINT_CONFIG.bookedSeatNames}
+          className="mt-8"
+        />
 
         <p className="mt-4 text-center text-xs text-muted">
           PST / EST / CET reflect daylight saving for August 2026. Zoom links are
