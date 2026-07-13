@@ -92,8 +92,8 @@ test.describe("Landing Page — All Sections", () => {
     await expect(section.getByText("Morning live class")).toBeVisible();
     const seatMap = section.getByLabel(/Cohort seat map:/);
     await expect(seatMap).toBeVisible();
-    await expect(seatMap.getByText("8", { exact: true }).first()).toBeVisible();
-    await expect(seatMap.getByText("22", { exact: true })).toBeVisible();
+    await expect(seatMap.getByText("9", { exact: true }).first()).toBeVisible();
+    await expect(seatMap.getByText("21", { exact: true })).toBeVisible();
   });
 
   test("who's behind section renders founder Girish", async ({ page }) => {

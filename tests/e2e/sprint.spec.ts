@@ -27,9 +27,9 @@ test.describe("Sprint Landing Page", () => {
     await expect(page.getByText("Max 30 seats")).toBeVisible();
     const seatMap = page.getByLabel(/Cohort seat map:/).first();
     await expect(seatMap).toBeVisible();
-    await expect(seatMap.getByText("8", { exact: true }).first()).toBeVisible();
+    await expect(seatMap.getByText("9", { exact: true }).first()).toBeVisible();
     await expect(seatMap.getByText("booked")).toBeVisible();
-    await expect(seatMap.getByText("22", { exact: true })).toBeVisible();
+    await expect(seatMap.getByText("21", { exact: true })).toBeVisible();
     await expect(seatMap.getByText("available")).toBeVisible();
     await expect(page.getByText("Hover a booked seat for name")).toBeVisible();
   });
@@ -150,8 +150,8 @@ test.describe("Sprint API", () => {
       total: expect.any(Number),
     });
     expect(body.data.remaining).toBe(body.data.total - body.data.filled);
-    expect(body.data.filled).toBe(8);
-    expect(body.data.remaining).toBe(22);
+    expect(body.data.filled).toBe(9);
+    expect(body.data.remaining).toBe(21);
     expect(body.data.total).toBe(30);
   });
 
