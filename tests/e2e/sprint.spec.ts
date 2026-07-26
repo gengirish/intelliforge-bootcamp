@@ -109,7 +109,9 @@ test.describe("Sprint Success Page", () => {
       page.getByRole("heading", { name: /You're in, Cohort 1!/ })
     ).toBeVisible();
     await expect(page.getByText("What happens next")).toBeVisible();
-    await expect(page.getByText(/Session 1 is Saturday, August 1, 2026/)).toBeVisible();
+    await expect(
+      page.getByText(/Session 1 is Saturday, 08\/08\/2026/)
+    ).toBeVisible();
     await expect(
       page.getByText(/9–11 AM IST/)
     ).toBeVisible();
