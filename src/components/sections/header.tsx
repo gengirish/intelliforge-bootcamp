@@ -115,7 +115,13 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="hidden md:block">
+        <div className="hidden md:flex items-center gap-4 lg:gap-6">
+          <Link
+            href="/login"
+            className="cursor-pointer text-sm text-muted transition-colors duration-200 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-accent rounded"
+          >
+            Sign in
+          </Link>
           <Link
             href={SPRINT_CONFIG.href}
             className="glow-cta inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-cta px-4 py-2 text-sm font-medium text-background transition-transform duration-200 hover:scale-105 hover:bg-cta-hover focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
@@ -168,6 +174,13 @@ export function Header() {
           >
             Try Free Demo — Live, No Signup
           </a>
+          <Link
+            href="/login"
+            className="mt-2 inline-flex items-center justify-center gap-2 rounded-lg border border-border px-4 py-3 text-sm font-medium text-foreground hover:bg-surface-light transition-colors focus:outline-none focus:ring-2 focus:ring-accent"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Sign in
+          </Link>
         </nav>
       </div>
     </header>
