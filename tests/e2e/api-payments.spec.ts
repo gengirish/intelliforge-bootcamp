@@ -51,3 +51,83 @@ test.describe("Bootcamp Razorpay API", () => {
     expect(body.currency).toBe("INR");
   });
 });
+
+test.describe("Bootcamp enrollment route", () => {
+  test("POST /bootcamp/enroll without auth returns 401", async ({ request }) => {
+    const response = await request.post("/bootcamp/enroll", {
+      data: { plan: "earlyBird" },
+    });
+
+    expect(response.status()).toBe(401);
+    const body = await response.json();
+    expect(body.success).toBe(false);
+    expect(body.error).toBe("Unauthorized");
+  });
+
+  test("POST /bootcamp/enroll checks auth before validating the plan", async ({
+    request,
+  }) => {
+    const response = await request.post("/bootcamp/enroll", {
+      data: { plan: "not-a-real-plan" },
+    });
+
+    expect(response.status()).toBe(401);
+  });
+});
+
+test.describe("Sprint payment confirmation", () => {
+  // The client-side fallback path to markSprintEnrollmentPaid(); the webhook is
+  // the other. Both must refuse to mark an enrollment paid on an unverified
+  // signature, so these assert the rejection, not the fulfilment.
+  test("rejects a body with no paymentId", async ({ request }) => {
+    const response = await request.post("/api/sprint/confirm-payment", {
+      data: { orderId: "order_e2e_test" },
+    });
+
+    expect(response.status()).toBe(400);
+    const body = await response.json();
+    expect(body.success).toBe(false);
+    expect(body.error).toBe("Invalid input");
+  });
+
+  test("rejects empty identifiers", async ({ request }) => {
+    const response = await request.post("/api/sprint/confirm-payment", {
+      data: { orderId: "", paymentId: "" },
+    });
+
+    expect(response.status()).toBe(400);
+    expect((await response.json()).error).toBe("Invalid input");
+  });
+
+  test("rejects a forged signature", async ({ request }) => {
+    const response = await request.post("/api/sprint/confirm-payment", {
+      data: {
+        orderId: "order_e2e_test",
+        paymentId: "pay_e2e_test",
+        signature: "0".repeat(64),
+      },
+    });
+
+    expect(response.status()).toBe(400);
+    const body = await response.json();
+    expect(body.success).toBe(false);
+    expect(body.error).toBe("Invalid payment signature");
+  });
+
+  test("refuses an unsigned confirmation it cannot verify with Razorpay", async ({
+    request,
+  }) => {
+    // With no signature the route must fall back to fetching the payment from
+    // Razorpay; an unknown payment id can never come back captured.
+    const response = await request.post("/api/sprint/confirm-payment", {
+      data: { orderId: "order_e2e_test", paymentId: "pay_e2e_test" },
+    });
+
+    expect(response.status()).toBe(400);
+    const body = await response.json();
+    expect(body.success).toBe(false);
+    expect(body.error).toMatch(
+      /Payment provider not configured|Could not verify payment|Payment does not match order|Payment not captured/
+    );
+  });
+});
