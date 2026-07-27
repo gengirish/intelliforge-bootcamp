@@ -1,4 +1,14 @@
 import { test, expect } from "@playwright/test";
+import { envLocal } from "./helpers/env-local";
+import { signWebhook } from "./helpers/razorpay";
+
+/**
+ * The sprint page reads isActive from the DB and falls back to false when it is
+ * unreachable, which renders the whole page sold out — no enroll CTAs, no seat
+ * map. Anything asserting the live-cohort UI therefore needs a seeded database.
+ */
+const HAS_DB = envLocal("DATABASE_URL", "") !== "";
+const NEEDS_DB = "needs a seeded DATABASE_URL — page renders sold out without one";
 
 test.describe("Sprint Landing Page", () => {
   test.beforeEach(async ({ page }) => {
@@ -22,6 +32,7 @@ test.describe("Sprint Landing Page", () => {
   });
 
   test("shows cohort start date and seat count", async ({ page }) => {
+    test.skip(!HAS_DB, NEEDS_DB);
     await expect(page.getByText(/Cohort 1 · Starts/)).toBeVisible();
     await expect(page.getByText(/seats left|Sold out/)).toBeVisible();
     await expect(page.getByText("Max 30 seats")).toBeVisible();
@@ -35,6 +46,7 @@ test.describe("Sprint Landing Page", () => {
   });
 
   test("booked seats show occupant name on hover", async ({ page }) => {
+    test.skip(!HAS_DB, NEEDS_DB);
     const seatMap = page.getByLabel(/Cohort seat map:/).first();
     await expect(seatMap).toBeVisible();
     const firstBooked = seatMap.getByLabel("Seat A1, booked by Prasad K");
@@ -74,6 +86,7 @@ test.describe("Sprint Landing Page", () => {
   });
 
   test("has enroll CTAs and bootcamp cross-link", async ({ page }) => {
+    test.skip(!HAS_DB, NEEDS_DB);
     await expect(
       page.getByRole("button", { name: /Enroll Now — ₹4,999/ })
     ).toBeVisible();
@@ -93,6 +106,7 @@ test.describe("Sprint Landing Page", () => {
   test("redirects unauthenticated user to sign-in on enroll click", async ({
     page,
   }) => {
+    test.skip(!HAS_DB, NEEDS_DB);
     await page
       .getByRole("button", { name: /Enroll Now — ₹4,999/ })
       .click();
@@ -141,6 +155,7 @@ test.describe("Sprint Success Page", () => {
 
 test.describe("Sprint API", () => {
   test("GET /api/sprint/seats returns seat counts", async ({ request }) => {
+    test.skip(!HAS_DB, NEEDS_DB);
     const response = await request.get("/api/sprint/seats");
     expect(response.status()).toBe(200);
 
@@ -158,6 +173,7 @@ test.describe("Sprint API", () => {
   });
 
   test("GET /api/sprint/seats accepts slug query param", async ({ request }) => {
+    test.skip(!HAS_DB, NEEDS_DB);
     const response = await request.get(
       "/api/sprint/seats?slug=ai-sprint-jun-2026"
     );
@@ -169,6 +185,7 @@ test.describe("Sprint API", () => {
   test("GET /api/sprint/seats returns 404 for unknown slug", async ({
     request,
   }) => {
+    test.skip(!HAS_DB, NEEDS_DB);
     const response = await request.get(
       "/api/sprint/seats?slug=nonexistent-sprint"
     );
@@ -186,6 +203,34 @@ test.describe("Sprint API", () => {
     const body = await response.json();
     expect(body.success).toBe(false);
     expect(body.error).toBe("Unauthorized");
+  });
+
+  test("POST /sprint/webhook accepts a correctly signed event", async ({
+    request,
+  }) => {
+    test.skip(!HAS_DB, "handler looks the order up in the DB before dispatching");
+
+    // An order that does not exist: the handler should verify the signature,
+    // find nothing to mark paid, and still acknowledge so Razorpay stops retrying.
+    const body = JSON.stringify({
+      event: "payment.captured",
+      payload: {
+        payment: {
+          entity: { id: "pay_e2e_unknown", order_id: "order_e2e_unknown" },
+        },
+      },
+    });
+
+    const response = await request.post("/sprint/webhook", {
+      headers: {
+        "x-razorpay-signature": signWebhook(body),
+        "Content-Type": "application/json",
+      },
+      data: body,
+    });
+
+    expect(response.status()).toBe(200);
+    expect((await response.json()).ok).toBe(true);
   });
 
   test("POST /sprint/webhook rejects invalid signature", async ({ request }) => {
@@ -210,7 +255,17 @@ test.describe("Sprint — Mobile", () => {
 
   test("landing page is usable on mobile", async ({ page }) => {
     await page.goto("/sprint");
-    await expect(page.getByText("Your Team Shipped an AI Demo.")).toBeVisible();
+    // "Your Team Shipped an AI Demo." is the og:title only — it is never in the
+    // body, so assert the copy the hero actually renders.
+    await expect(page.getByText("Interview in 3 weeks?")).toBeVisible();
+    await expect(
+      page.getByText("Ship two live AI products in 14 days.")
+    ).toBeVisible();
+  });
+
+  test("shows the enroll CTA on mobile", async ({ page }) => {
+    test.skip(!HAS_DB, NEEDS_DB);
+    await page.goto("/sprint");
     await expect(
       page.getByRole("button", { name: /Enroll Now — ₹4,999/ })
     ).toBeVisible();

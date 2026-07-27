@@ -21,7 +21,9 @@ npm run db:seed          # seeds the active Sprint row (prisma/seed.ts)
 
 Env vars live in `.env.local` (not `.env`) — every `db:*` script and the Playwright config read that file explicitly. `.env.example` only documents the WhatsApp/OTP block; the full set also includes `DATABASE_URL`, `DIRECT_URL`, Clerk keys, `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET` / `NEXT_PUBLIC_RAZORPAY_KEY_ID` / `RAZORPAY_WEBHOOK_SECRET`, `LMS_API_URL` / `LMS_API_KEY`, `AGENTMAIL_API_KEY` / `AGENTMAIL_INBOX` / `ADMIN_NOTIFY_EMAIL`, `ADMIN_SECRET`, `CRON_SECRET`.
 
-Deployed on **Vercel** at `https://upskill.intelliforge.tech` (Mumbai region). There is no `vercel.json`/`.vercel` in the repo — the project is linked on Vercel's side, so deploy config changes happen in the dashboard, not here.
+Deployed on **Vercel** at `https://upskill.intelliforge.tech`, from the project named **`learning-bootcamp`** (not `intelliforge-bootcamp`). There is no `vercel.json`/`.vercel` in the repo — the project is linked on Vercel's side, so deploy config and env vars change in the dashboard, not here. Pushing to `master` deploys production.
+
+Tests that need a real dependency are skipped rather than failed when it is absent — `DATABASE_URL` for anything asserting the live-cohort sprint UI or the seats API, `AGENTMAIL_API_KEY` for the email round-trips. With no `.env.local` the suite is 98 passed / 11 skipped; a seeded DB turns the skips into real coverage. `tests/e2e/helpers/env-local.ts` reads `.env.local` the way `playwright.config.ts` does, because test workers do not inherit the webServer env.
 
 ## Architecture
 

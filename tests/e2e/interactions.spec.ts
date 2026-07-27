@@ -15,10 +15,15 @@ test.describe("Interactions & Navigation", () => {
   });
 
   test("nav links scroll to correct sections", async ({ page }) => {
+    // Sections below the fold are dynamic() imports. If they hydrate after the
+    // smooth scroll starts, the layout shifts under it and #curriculum lands off
+    // screen — so let the page settle before clicking rather than racing it.
+    await page.waitForLoadState("networkidle");
+
     await page.getByRole("link", { name: "Curriculum" }).first().click();
-    await page.waitForTimeout(800);
+
     const section = page.locator("#curriculum");
-    await expect(section).toBeInViewport();
+    await expect(section).toBeInViewport({ timeout: 15000 });
   });
 
   test("curriculum accordion expands and collapses", async ({ page }) => {
@@ -40,10 +45,12 @@ test.describe("Interactions & Navigation", () => {
     await section.scrollIntoViewIfNeeded();
     await page.waitForTimeout(300);
 
-    const vibeCodingQ = page.getByText("What is Vibe Coding?");
-    await vibeCodingQ.click();
+    const buildAlongsideQ = page.getByText("What is build-alongside?");
+    await buildAlongsideQ.click();
     await page.waitForTimeout(400);
-    await expect(page.getByText("Vibe Coding is the practice of using AI coding assistants")).toBeVisible();
+    await expect(
+      page.getByText("Top performers in the cohort get staffed")
+    ).toBeVisible();
 
     const anotherQ = page.getByText("Do I need prior AI/ML experience?");
     await anotherQ.click();
@@ -57,9 +64,11 @@ test.describe("Interactions & Navigation", () => {
     await page.waitForTimeout(300);
 
     await page.getByRole("button", { name: /scroll to top/i }).click();
-    await page.waitForTimeout(1500);
 
-    const scrollTop = await page.evaluate(() => window.scrollY);
-    expect(scrollTop).toBeLessThan(200);
+    // Smooth scrolling from the footer can take well over a fixed 1.5s wait;
+    // poll until it settles instead of sampling once and hoping.
+    await expect
+      .poll(() => page.evaluate(() => window.scrollY), { timeout: 15000 })
+      .toBeLessThan(200);
   });
 });

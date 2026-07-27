@@ -79,6 +79,19 @@ test.describe("Sprint payment confirmation", () => {
   // The client-side fallback path to markSprintEnrollmentPaid(); the webhook is
   // the other. Both must refuse to mark an enrollment paid on an unverified
   // signature, so these assert the rejection, not the fulfilment.
+  test("rejects a malformed body with a 400, not a 500", async ({ baseURL }) => {
+    const response = await fetch(`${baseURL}/api/sprint/confirm-payment`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: "not-json",
+    });
+
+    expect(response.status).toBe(400);
+    const body = await response.json();
+    expect(body.success).toBe(false);
+    expect(body.error).toBe("Invalid input");
+  });
+
   test("rejects a body with no paymentId", async ({ request }) => {
     const response = await request.post("/api/sprint/confirm-payment", {
       data: { orderId: "order_e2e_test" },

@@ -1,10 +1,50 @@
 import { test, expect } from "@playwright/test";
+import { envLocal } from "./helpers/env-local";
 
 /**
  * Only the validation paths are covered. A well-formed phone number makes the
  * route call the hosted OTP API for real, which sends a WhatsApp message and
  * burns rate limit — do not add a happy-path test here.
  */
+
+const HAS_OTP_KEY =
+  envLocal("OTP_API_KEY", "") !== "" || envLocal("WHATSAPP_HUB_API_KEY", "") !== "";
+
+test.describe("OTP routes with no API key configured", () => {
+  // Production shipped without OTP_API_KEY set and the missing-key throw escaped
+  // as a bodyless 500, so the login UI showed "Network error". These pin the
+  // contract that a config gap is reported as a clean, parseable 503.
+  test("request returns a structured 503 rather than a bare 500", async ({
+    request,
+  }) => {
+    test.skip(HAS_OTP_KEY, "only meaningful when the OTP API is unconfigured");
+
+    // Safe to send a valid number: unconfigured means it never reaches the API.
+    const response = await request.post("/api/auth/otp/request", {
+      data: { phone: "+919999999999" },
+    });
+
+    expect(response.status()).toBe(503);
+    const body = await response.json();
+    expect(body.error).toBe("otp_not_configured");
+    expect(body.message).toBeTruthy();
+  });
+
+  test("verify returns a structured 503 rather than a bare 500", async ({
+    request,
+  }) => {
+    test.skip(HAS_OTP_KEY, "only meaningful when the OTP API is unconfigured");
+
+    const response = await request.post("/api/auth/otp/verify", {
+      data: { phone: "+919999999999", code: "123456" },
+    });
+
+    expect(response.status()).toBe(503);
+    const body = await response.json();
+    expect(body.error).toBe("otp_not_configured");
+    expect(body.clerkSignInToken).toBeUndefined();
+  });
+});
 
 test.describe("POST /api/auth/otp/request", () => {
   test("rejects a missing phone", async ({ request }) => {

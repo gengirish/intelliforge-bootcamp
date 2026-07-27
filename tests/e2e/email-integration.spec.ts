@@ -1,4 +1,8 @@
 import { test, expect } from "@playwright/test";
+import { envLocal } from "./helpers/env-local";
+
+/** These two round-trip through AgentMail, so they need a real key to mean anything. */
+const HAS_AGENTMAIL = envLocal("AGENTMAIL_API_KEY", "") !== "";
 
 test.describe("Email Integration — Contact Form & New Sections", () => {
   test.beforeEach(async ({ page }) => {
@@ -10,7 +14,7 @@ test.describe("Email Integration — Contact Form & New Sections", () => {
     test("renders with sprint enroll link and dismiss button", async ({ page }) => {
       const banner = page.locator('[class*="z-[60]"]');
       await expect(banner).toBeVisible();
-      await expect(banner.getByText(/2-Week AI Sprint/)).toBeVisible();
+      await expect(banner.getByText(/Ship 2 live products/)).toBeVisible();
 
       const sprintLink = banner.getByRole("link", { name: "Join sprint →" });
       await expect(sprintLink).toBeVisible();
@@ -29,11 +33,11 @@ test.describe("Email Integration — Contact Form & New Sections", () => {
   });
 
   test.describe("Hero — Free Class CTA", () => {
-    test("shows 'try a free class' link pointing to LMS", async ({ page }) => {
-      const freeClassLink = page.getByRole("link", {
-        name: "Try a free class →",
-        exact: true,
-      });
+    test("shows the free demo link pointing to LMS", async ({ page }) => {
+      // Same label is reused by the free-preview and final CTAs; the hero's is first.
+      const freeClassLink = page
+        .getByRole("link", { name: "Try the free demo — live, no signup" })
+        .first();
       await expect(freeClassLink).toBeVisible();
       await expect(freeClassLink).toHaveAttribute(
         "href",
@@ -49,10 +53,9 @@ test.describe("Email Integration — Contact Form & New Sections", () => {
       await section.scrollIntoViewIfNeeded();
       await page.waitForTimeout(500);
 
-      await expect(
-        page.getByText("Not Sure Yet? Try a")
-      ).toBeVisible();
-      await expect(page.getByText("Free Class", { exact: true }).first()).toBeVisible();
+      await expect(page.locator("#free-preview-heading")).toContainText(
+        "Try the Free Live Demo First."
+      );
 
       await expect(page.getByText("Build Your First AI Agent")).toBeVisible();
       await expect(page.getByText("RAG Pipeline Crash Course")).toBeVisible();
@@ -72,12 +75,12 @@ test.describe("Email Integration — Contact Form & New Sections", () => {
       await expect(page.getByText("All Levels")).toBeVisible();
     });
 
-    test("has Start Free Class CTA linking to LMS", async ({ page }) => {
+    test("has a free demo CTA linking to LMS", async ({ page }) => {
       const section = page.locator("#free-preview");
       await section.scrollIntoViewIfNeeded();
       await page.waitForTimeout(500);
 
-      const cta = section.getByRole("link", { name: /Start Free Class/i });
+      const cta = section.getByRole("link", { name: /Try the free demo/i });
       await expect(cta).toBeVisible();
       await expect(cta).toHaveAttribute("href", /learning\.intelliforge\.tech/);
     });
@@ -88,7 +91,7 @@ test.describe("Email Integration — Contact Form & New Sections", () => {
       await page.waitForTimeout(500);
 
       await expect(
-        page.getByText("No signup required. No payment. Just learn.")
+        section.getByText("Live demo · No signup · See the curriculum before you pay")
       ).toBeVisible();
     });
   });
@@ -99,12 +102,8 @@ test.describe("Email Integration — Contact Form & New Sections", () => {
       await section.scrollIntoViewIfNeeded();
       await page.waitForTimeout(500);
 
-      await expect(
-        page.getByText("Not ready to commit?")
-      ).toBeVisible();
-
       const lmsLink = section.getByRole("link", {
-        name: /Try a free class on our learning platform/i,
+        name: /Not ready to pay\? Try the free live demo first/i,
       });
       await expect(lmsLink).toBeVisible();
       await expect(lmsLink).toHaveAttribute("href", /learning\.intelliforge\.tech/);
@@ -179,6 +178,10 @@ test.describe("Email Integration — Contact Form & New Sections", () => {
     });
 
     test("submits form and shows success message", async ({ page }) => {
+      test.skip(
+        !HAS_AGENTMAIL,
+        "sends a real email — needs AGENTMAIL_API_KEY in .env.local"
+      );
       const section = page.locator("#contact");
       await section.scrollIntoViewIfNeeded();
       await page.waitForTimeout(500);
@@ -247,6 +250,10 @@ test.describe("Email Integration — Contact Form & New Sections", () => {
 
   test.describe("Email Test API", () => {
     test("GET /api/email-test verifies connection", async ({ request }) => {
+      test.skip(
+        !HAS_AGENTMAIL,
+        "verifies a live AgentMail connection — needs AGENTMAIL_API_KEY in .env.local"
+      );
       const response = await request.get("/api/email-test");
       const body = await response.json();
 
