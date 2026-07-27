@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { normalizePhoneE164, verifyLoginOtp } from "@/lib/otp";
+import { isOtpConfigured, normalizePhoneE164, verifyLoginOtp } from "@/lib/otp";
 import { mintClerkSignInToken } from "@/lib/otp-clerk";
 
 export const dynamic = "force-dynamic";
@@ -20,7 +20,34 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { status, body } = await verifyLoginOtp(phone, input.code);
+  if (!isOtpConfigured()) {
+    console.error(
+      "[otp/verify] OTP API is not configured — set OTP_API_KEY (or WHATSAPP_HUB_API_KEY)"
+    );
+    return NextResponse.json(
+      {
+        error: "otp_not_configured",
+        message: "WhatsApp login is unavailable right now. Please try again later.",
+      },
+      { status: 503 }
+    );
+  }
+
+  let status: number;
+  let body: Awaited<ReturnType<typeof verifyLoginOtp>>["body"];
+  try {
+    ({ status, body } = await verifyLoginOtp(phone, input.code));
+  } catch (err) {
+    console.error("[otp/verify] OTP API call failed:", err);
+    return NextResponse.json(
+      {
+        error: "otp_upstream_failed",
+        message: "Couldn't verify the code right now. Please try again.",
+      },
+      { status: 502 }
+    );
+  }
+
   if (body.verified !== true) {
     // Pass through the OTP API's failure (401 incorrect / 410 expired / 429 …).
     return NextResponse.json(body, { status });

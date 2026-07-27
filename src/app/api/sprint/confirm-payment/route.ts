@@ -10,7 +10,9 @@ const schema = z.object({
 });
 
 export async function POST(req: Request) {
-  const parsed = schema.safeParse(await req.json());
+  // A malformed body is the caller's mistake, not a 500 on our side.
+  const raw = await req.json().catch(() => null);
+  const parsed = schema.safeParse(raw);
   if (!parsed.success) {
     return NextResponse.json<ApiResponse<null>>(
       { success: false, error: "Invalid input" },

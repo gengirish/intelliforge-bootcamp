@@ -22,18 +22,9 @@ function getRazorpay() {
 
 export async function POST(req: NextRequest) {
   try {
-    const rzp = getRazorpay();
-
-    if (!rzp) {
-      return NextResponse.json(
-        {
-          error: "Razorpay credentials not configured",
-          code: "CONFIG_ERROR",
-        },
-        { status: 500 }
-      );
-    }
-
+    // Validate the request before looking at server config: a caller sending a
+    // bad plan deserves a 400 whether or not Razorpay keys happen to be set,
+    // and a missing key is our problem to report, not a reason to mask theirs.
     let body: CreateOrderBody;
     try {
       body = await req.json();
@@ -56,6 +47,18 @@ export async function POST(req: NextRequest) {
           code: "INVALID_PLAN",
         },
         { status: 400 }
+      );
+    }
+
+    const rzp = getRazorpay();
+
+    if (!rzp) {
+      return NextResponse.json(
+        {
+          error: "Razorpay credentials not configured",
+          code: "CONFIG_ERROR",
+        },
+        { status: 500 }
       );
     }
 
