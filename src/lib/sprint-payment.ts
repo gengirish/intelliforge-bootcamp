@@ -4,6 +4,11 @@ import { prisma } from "@/lib/prisma";
 import { getLmsCourseSlugsForSprint } from "@/lib/product-catalog";
 import { enrollLearnerOnAllCourses } from "@/lib/lms-client";
 import { sendSprintEnrollmentConfirmation } from "@/lib/email";
+import {
+  isWhatsAppHubConfigured,
+  normalizePhoneE164,
+  optInWhatsApp,
+} from "@/lib/whatsapp-hub";
 
 type ConfirmResult =
   | { ok: true; alreadyPaid?: boolean }
@@ -36,6 +41,7 @@ async function fulfillSprintEnrollment(enrollment: {
   id: string;
   email: string;
   name: string;
+  phone?: string | null;
   sprint: { slug: string };
   razorpayPaymentId: string | null;
 }) {
@@ -63,6 +69,18 @@ async function fulfillSprintEnrollment(enrollment: {
     } catch (err) {
       console.error(
         `[Sprint payment] Confirmation email failed for ${enrollment.name} (${paymentId}):`,
+        err
+      );
+    }
+  }
+
+  const phoneE164 = normalizePhoneE164(enrollment.phone);
+  if (phoneE164 && isWhatsAppHubConfigured()) {
+    try {
+      await optInWhatsApp(phoneE164);
+    } catch (err) {
+      console.error(
+        `[Sprint payment] WhatsApp opt-in failed for ${enrollment.name} (${phoneE164}):`,
         err
       );
     }
