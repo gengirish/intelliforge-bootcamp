@@ -36,13 +36,15 @@ test.describe("Sprint Landing Page", () => {
     await expect(page.getByText(/Cohort 1 · Starts/)).toBeVisible();
     await expect(page.getByText(/seats left|Sold out/)).toBeVisible();
     await expect(page.getByText("Max 30 seats")).toBeVisible();
-    const seatMap = page.getByLabel(/Cohort seat map:/).first();
-    await expect(seatMap).toBeVisible();
-    await expect(seatMap.getByText("9", { exact: true }).first()).toBeVisible();
-    await expect(seatMap.getByText("booked")).toBeVisible();
-    await expect(seatMap.getByText("21", { exact: true })).toBeVisible();
-    await expect(seatMap.getByText("available")).toBeVisible();
-    await expect(page.getByText("Hover a booked seat for name")).toBeVisible();
+    // The counts are already spelled out in the map's own aria-label, which is
+    // unambiguous — getByText("booked") matches both the legend and the
+    // "Hover a booked seat for name" hint below it.
+    await expect(
+      page.getByLabel("Cohort seat map: 9 of 30 seats booked, 21 available").first()
+    ).toBeVisible();
+    await expect(
+      page.getByText("Hover a booked seat for name").first()
+    ).toBeVisible();
   });
 
   test("booked seats show occupant name on hover", async ({ page }) => {
@@ -52,7 +54,11 @@ test.describe("Sprint Landing Page", () => {
     const firstBooked = seatMap.getByLabel("Seat A1, booked by Prasad K");
     await expect(firstBooked).toBeVisible();
     await firstBooked.hover();
-    await expect(page.getByRole("tooltip", { name: "Prasad K" })).toBeVisible();
+    // SprintLandingClient renders the seat map more than once, so scope the
+    // tooltip to the map actually hovered rather than matching all of them.
+    await expect(
+      seatMap.getByRole("tooltip", { name: "Prasad K" })
+    ).toBeVisible();
   });
 
   test("shows countdown and timezone-selectable live schedule", async ({ page }) => {
@@ -107,10 +113,13 @@ test.describe("Sprint Landing Page", () => {
     page,
   }) => {
     test.skip(!HAS_DB, NEEDS_DB);
+    // The button is server-rendered before React attaches its onClick, so a
+    // click that lands too early is silently dropped and the URL never changes.
+    await page.waitForLoadState("networkidle");
     await page
       .getByRole("button", { name: /Enroll Now — ₹4,999/ })
       .click();
-    await expect(page).toHaveURL(/\/sign-in/, { timeout: 10000 });
+    await expect(page).toHaveURL(/\/sign-in/, { timeout: 15000 });
   });
 });
 

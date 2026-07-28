@@ -56,9 +56,23 @@ export async function POST(req: NextRequest) {
   try {
     const { token } = await mintClerkSignInToken(body.phone ?? phone);
     return NextResponse.json({ verified: true, clerkSignInToken: token }, { status: 200 });
-  } catch (e) {
+  } catch (err) {
+    // Clerk throws ClerkAPIResponseError, whose top-level message is only the
+    // HTTP status ("Bad Request"). The actionable reason — e.g. phone_number
+    // not enabled as an attribute on the instance — is in errors[].
+    const clerkErrors = (
+      err as { errors?: { code?: string; longMessage?: string; message?: string }[] }
+    ).errors;
+    const detail =
+      clerkErrors
+        ?.map((e) => e.longMessage ?? e.message ?? e.code)
+        .filter(Boolean)
+        .join("; ") || (err as Error).message;
+
+    console.error("[otp/verify] Clerk sign-in token mint failed:", detail, clerkErrors ?? err);
+
     return NextResponse.json(
-      { verified: true, error: "clerk_mint_failed", message: (e as Error).message },
+      { verified: true, error: "clerk_mint_failed", message: detail },
       { status: 500 }
     );
   }

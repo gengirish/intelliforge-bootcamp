@@ -140,10 +140,13 @@ test.describe("Landing Page — All Sections", () => {
   }) => {
     const section = page.locator("#pricing");
     await section.scrollIntoViewIfNeeded();
+    // The button is server-rendered before React attaches its onClick, so a
+    // click that lands too early is silently dropped and the URL never changes.
+    await page.waitForLoadState("networkidle");
     await page
       .getByRole("button", { name: /Enrol — ₹49,999/ })
       .click();
-    await expect(page).toHaveURL(/\/sign-in/, { timeout: 10000 });
+    await expect(page).toHaveURL(/\/sign-in/, { timeout: 15000 });
   });
 
   test("FAQ section renders and accordion works", async ({ page }) => {
