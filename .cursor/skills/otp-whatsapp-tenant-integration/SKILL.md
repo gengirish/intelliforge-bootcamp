@@ -1,23 +1,42 @@
 ---
 name: otp-whatsapp-tenant-integration
 description: >-
-  Wires a product app into the hosted IntelliForge OTP API and WhatsApp hub as a
-  tenant — bearer/tenant clients, config-gap error contracts, Clerk session
-  minting after a verified OTP, Fly and Vercel secret plumbing, and E2E patterns
-  that never trigger real sends. Use when adding WhatsApp OTP login or WhatsApp
-  messaging to a product, onboarding a new tenant, or debugging otp_not_configured,
-  tenant_mismatch, clerk_mint_failed, or bare 500s from /api/auth/otp/*.
+  Integrates a product app into the hosted IntelliForge OTP API and WhatsApp hub
+  as a tenant — provisioning tenant keys, bearer/tenant clients, request/verify
+  routes, minting the product's session after a verified OTP, inbound webhook
+  forwarding, Fly and Vercel secret plumbing, and E2E patterns that never trigger
+  real sends. Use when adding WhatsApp OTP login or WhatsApp messaging to a
+  product (bootcamp, hrms, awaazos, forgeid, …), onboarding a new tenant, or
+  debugging otp_not_configured, tenant_mismatch, clerk_mint_failed, Meta error
+  100, template errors, undelivered codes, or bare 500s from /api/auth/otp/*.
 ---
 
 # OTP / WhatsApp Tenant Integration
 
-Product apps (bootcamp, awaazos, aaramse, …) hold **no Meta or Gupshup credentials**.
-They are tenants of two Fly services, reached over HTTP with a bearer key:
+Product apps (bootcamp, hrms, awaazos, …) hold **no Meta or Gupshup credentials**
+and do not run WhatsApp themselves. They hold a tenant API key and make
+server-side calls to two Fly services. Delivery goes out from **one shared
+WhatsApp business number** (the hub's WABA); `tenant_id` exists only for auth,
+attribution and rate limits.
 
 | Service | Host | Purpose |
 |---|---|---|
-| `intelliforge-otp-api` | `intelliforge-otp-api.fly.dev` | OTP request/verify over WhatsApp |
-| `intelliforge-whatsapp-hub` | `intelliforge-whatsapp-hub.fly.dev` | opt-in, template sends, inbound forwarding |
+| `intelliforge-otp-api` | `intelliforge-otp-api.fly.dev` | `POST /v1/otp/request`, `POST /v1/otp/verify`, `GET /v1/otp/status` |
+| `intelliforge-whatsapp-hub` | `intelliforge-whatsapp-hub.fly.dev` | opt-in, template/text sends, inbound forwarding |
+
+All `/v1/*` require `Authorization: Bearer <key>`. Reference implementation:
+`apps/otp-demo/`. Client library `@intelliforge/otp-client` is a private
+workspace package — separate repos call the API directly with `fetch`.
+
+## Workflow
+
+```
+- [ ] 1. Provision a tenant key (both Fly secrets, same value)
+- [ ] 2. Set the product's env IN ITS HOSTING PLATFORM, then redeploy
+- [ ] 3. Add request + verify routes behind the product's own API
+- [ ] 4. Mint the product's session on verify
+- [ ] 5. Verify end-to-end with a real number
+```
 
 **One `if_live_` key serves both.** `OTP_API_KEYS` (otp-api) and `WHATSAPP_API_KEYS` (hub)
 hold the same value — confirm with `fly secrets list`: identical digests mean identical
@@ -36,25 +55,47 @@ X-Tenant-Id: bootcamp
 
 ## Onboarding a new tenant
 
-1. Append `tenant:if_live_<new>` to `OTP_API_KEYS` **and** `WHATSAPP_API_KEYS` (same key).
-2. Add the tenant's inbound webhook to `WHATSAPP_TENANT_WEBHOOKS` on the hub — same
-   `tenant:value` shape, comma-separated:
-   ```
-   bootcamp:https://upskill.intelliforge.tech/api/whatsapp/inbound
-   ```
-   ⚠️ Use the app's **real production domain**. The hub's `DEPLOY.md` and `.env.example`
-   both show `bootcamp.intelliforge.tech`, which does not resolve — the bootcamp app is
-   served at `upskill.intelliforge.tech`. A wrong host here fails silently: sends still
-   work, only inbound replies vanish. Verify with:
-   ```bash
-   curl -s -o /dev/null -w "%{http_code}\n" -X POST https://<host>/api/whatsapp/inbound \
-     -H 'content-type: application/json' -d '{}'   # 403 = alive, 000 = dead host
-   ```
-3. Set in the product's host (Vercel): `OTP_API_KEY`, `WHATSAPP_HUB_API_KEY`,
-   `WHATSAPP_HUB_URL`, `WHATSAPP_TENANT_ID`. `OTP_SERVICE_URL` and `OTP_TENANT_ID`
-   have working defaults.
-4. **Redeploy.** Env changes do not apply to existing deployments.
-5. Verify with the ladder below before declaring it done.
+**1. Provision the key.** Generate with `openssl rand -hex 24`, prefix `if_live_`, and
+append the pair to **both** secrets so they stay in sync:
+
+```bash
+fly secrets set --app intelliforge-otp-api        OTP_API_KEYS="<existing>,hrms:if_live_xxx"
+fly secrets set --app intelliforge-whatsapp-hub   WHATSAPP_API_KEYS="<existing>,hrms:if_live_xxx"
+```
+
+Fly will not print the existing value back (see *Secret plumbing* below), so read it off
+the machine first or you will clobber every other tenant.
+
+**2. Register the inbound webhook** in the hub's `WHATSAPP_TENANT_WEBHOOKS`, same
+`tenant:value` shape, comma-separated:
+
+```
+bootcamp:https://upskill.intelliforge.tech/api/whatsapp/inbound
+```
+
+⚠️ **Probe the exact URL before registering it.** A wrong host *or path* fails silently:
+sends keep working and only inbound replies vanish, so nothing looks broken. Two real
+cases, both caught this way — the docs said `bootcamp.intelliforge.tech` (does not
+resolve; the app is at `upskill`), and an `hrms` entry pointed at `/api/whatsapp/inbound`
+when that app's route is `/api/webhooks/whatsapp`. Note the path differs per product.
+
+```bash
+curl -s -o /dev/null -w "%{http_code}\n" -X POST https://<host>/<path> \
+  -H 'content-type: application/json' -d '{}'
+# 403 = alive and rejecting correctly   000 = dead host
+# 401 = middleware ate it — not a public webhook route
+# 404 = wrong path
+```
+
+**3. Set the product env in its hosting platform** — `OTP_API_KEY`,
+`WHATSAPP_HUB_API_KEY`, `WHATSAPP_HUB_URL`, `WHATSAPP_TENANT_ID`. `OTP_SERVICE_URL` and
+`OTP_TENANT_ID` have working defaults.
+
+**Documenting these in `.env.example` does nothing for the deployed app.** Set them per
+environment in Vercel/Fly and **redeploy** — this is the single most common cause of
+production 500s (see [deploy-vercel](../deploy-vercel/SKILL.md)).
+
+**4. Verify with the ladder below** before declaring it done.
 
 ## Client module pattern
 
@@ -119,10 +160,27 @@ try {
 Inbound webhooks must reject tenant mismatches (`403 tenant_mismatch`) and swallow
 malformed forwards with a 200 — never 500 back at the hub, or it will retry forever.
 
-## Minting a Clerk session from a verified OTP
+## Minting the product's session from a verified OTP
 
-Possession is already proven by the OTP service; Clerk only mints the session. **Do not
-key the Clerk user by phone number.** On the IntelliForge instance that fails twice:
+On `verified: true`, mint **the product's own session** — the OTP service proves
+possession, nothing more. Two shapes exist in the estate:
+
+- **Products with their own auth** (hrms: `jose` JWT in an HTTP-only cookie) just issue
+  their normal session on verify. Simplest case, and it sidesteps everything below.
+- **Products on Clerk** (bootcamp) mint a sign-in token the client redeems with the
+  **ticket** strategy. On newer Clerk with signals hooks, use the imperative API:
+  `clerk.client.signIn.create({ strategy: "ticket", ticket })` then
+  `clerk.setActive({ session })`.
+
+Either way, map the verified number onto an account deliberately: find-or-create is right
+for self-serve signup, but a closed system (hrms, where HR creates interns) should reject
+an unknown number rather than create one, and refuse ambiguously-matched numbers instead
+of guessing which account to sign in.
+
+### The Clerk phone trap
+
+**Do not key the Clerk user by phone number.** On the IntelliForge instance that fails
+twice — and the second failure is not a dashboard toggle:
 
 ```
 phone_number is not a valid parameter for this request.   ← attribute disabled
@@ -186,6 +244,23 @@ instance — worth flagging.
 - `vercel link` pulls a **development** `.env.local` and appends duplicate `.vercel` /
   `.env*.local` lines to `.gitignore` on every run. Check `git status` afterwards.
 
+## Gotchas — each of these has bitten in production
+
+| Symptom | Cause → fix |
+|---|---|
+| bodyless `500` on `/api/auth/otp/*` | `OTP_API_KEY` unset in the host platform → the client throws. Set it + redeploy, and harden the route to return 503 (see *Route error contract*). |
+| `tenant_mismatch` (403) in hub logs | `WHATSAPP_TENANT_ID` / `X-Tenant-Id` ≠ the tenant the key maps to. Confirm the real tenant with `GET <hub>/v1/messages`, which returns `{"tenantId":…}`. |
+| Meta error `100`, "Object with ID '+91…' does not exist" | Hub `WHATSAPP_PHONE_NUMBER_ID` holds the **display number** instead of the **numeric Phone Number ID**. Get it from `GET /{WABA_ID}/phone_numbers` or Meta → WhatsApp → API Setup. |
+| Meta error `100` on an OTP (auth) template | The send is body-only. **Authentication** templates need the code echoed into the button too: `{type:"button",sub_type:"url",index:"0",parameters:[{type:"text",text:code}]}`. |
+| template not found / language error | The auth template (e.g. `intelliforge_login`) must be **APPROVED**, category **Authentication**, language matching what the code sends (`en`). |
+| `request` returns 200 but no code arrives | Delivery is async in the worker — `fly logs --app intelliforge-otp-worker` and look for `delivery_sent` vs `delivery_failed`. |
+| hub rejects a send for a valid number | The hub **requires opt-in before it will send**. Call `/v1/contacts/opt-in` at signup, or lazily before the first send. |
+| `clerk_mint_failed` "Bad Request" | Clerk's real reason is in `errors[]`, not `.message` — see the Clerk phone trap above. |
+
+**Constraints:** E.164 only; **`+91` by default** (`ALLOWED_COUNTRY_CODES`); no SMS
+fallback, so the recipient must have WhatsApp; rate limits are a 30s cooldown and 5/hour,
+so handle `429` with `retryInSeconds` rather than retrying blindly.
+
 ## Diagnosis ladder
 
 Work outward; each rung isolates a layer.
@@ -204,6 +279,12 @@ curl -s https://<app>/api/admin/whatsapp/test        # {"ok":true,"configured":t
 
 # 4. What threw? Caught errors appear in logs, not the errors table.
 #    Vercel MCP: get_runtime_errors (uncaught) / get_runtime_logs (console.*)
+
+# 5. Full round trip with a real number (sends an actual message — use your own)
+curl -s -X POST $OTP_SERVICE_URL/v1/otp/request -H "Authorization: Bearer $KEY" \
+  -H "X-Tenant-Id: $TENANT" -H "Content-Type: application/json" \
+  -d '{"phone":"+91XXXXXXXXXX","purpose":"login","channel":"whatsapp"}'   # → {"sent":true}
+# read the code off WhatsApp, then POST /v1/otp/verify with it        → {"verified":true}
 ```
 
 Prove a fix against the real service **before shipping** with a throwaway probe rather
