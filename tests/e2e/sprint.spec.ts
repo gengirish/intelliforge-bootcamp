@@ -40,7 +40,7 @@ test.describe("Sprint Landing Page", () => {
     // unambiguous — getByText("booked") matches both the legend and the
     // "Hover a booked seat for name" hint below it.
     await expect(
-      page.getByLabel("Cohort seat map: 9 of 30 seats booked, 21 available").first()
+      page.getByLabel("Cohort seat map: 13 of 30 seats booked, 17 available").first()
     ).toBeVisible();
     await expect(
       page.getByText("Hover a booked seat for name").first()

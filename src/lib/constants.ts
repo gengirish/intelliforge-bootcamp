@@ -563,6 +563,10 @@ export const SPRINT_CONFIG = {
     "Reshma J",
     "Prasad I",
     "Mukaram",
+    "Sravani",
+    "Bikshapathi B",
+    "Rajeswari P",
+    "Nethra Gowda",
   ],
 };
 
