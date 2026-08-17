@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 const WHATSAPP_GROUP_INVITE_URL =
   "https://chat.whatsapp.com/LwxMCJ1EqLm4oLOG0fLqmE";
 const SPRINT_COHORT_WHATSAPP_INVITE_URL =
-  "https://chat.whatsapp.com/EG5aUDfvrHbGa9tvEaleAu";
+  "https://chat.whatsapp.com/IHnaZegZOWsK37jg8OaB5P";
 const ZOOM_MEETING_JOIN_URL =
   "https://us06web.zoom.us/j/86071939853?pwd=VovRc9JnO1qDKxqK9L3JNJ3cp3KwCB.1";
 

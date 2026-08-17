@@ -144,7 +144,7 @@ test.describe("Sprint Success Page", () => {
   test("WhatsApp CTA points to sprint cohort redirect", async ({ page }) => {
     await page.goto("/sprint/success");
     const whatsappLink = page.getByRole("link", {
-      name: /Join UpSkill-Cohort-01 on WhatsApp/,
+      name: /Join BootCamp-UpSkill-Cohort-01 on WhatsApp/,
     });
     await expect(whatsappLink).toHaveAttribute(
       "href",

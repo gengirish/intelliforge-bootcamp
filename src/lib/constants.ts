@@ -59,8 +59,8 @@ export const WHATSAPP_GROUP = {
 export const WHATSAPP_GROUP_URL = `${SITE_CONFIG.url}/whatsapp`;
 
 export const SPRINT_COHORT_WHATSAPP = {
-  name: "UpSkill-Cohort-01",
-  inviteUrl: "https://chat.whatsapp.com/EG5aUDfvrHbGa9tvEaleAu",
+  name: "BootCamp-UpSkill-Cohort-01",
+  inviteUrl: "https://chat.whatsapp.com/IHnaZegZOWsK37jg8OaB5P",
 };
 
 export const SPRINT_COHORT_WHATSAPP_URL = `${SITE_CONFIG.url}/sprint/whatsapp`;

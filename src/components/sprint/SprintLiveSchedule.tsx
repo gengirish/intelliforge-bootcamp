@@ -11,7 +11,7 @@ import {
   resolveSprintStartIso,
 } from "@/lib/sprint-schedule";
 import { formatISTDate } from "@/lib/sprint-format";
-import { SPRINT_CONFIG } from "@/lib/constants";
+import { SPRINT_CONFIG, SPRINT_COHORT_WHATSAPP } from "@/lib/constants";
 import { Calendar, Globe } from "lucide-react";
 import { SprintSeatMap } from "@/components/sprint/SprintSeatMap";
 import { cn } from "@/lib/utils";
@@ -174,7 +174,8 @@ export function SprintLiveSchedule({
 
         <p className="mt-4 text-center text-xs text-muted">
           PST / EST / CET reflect daylight saving for August 2026. Zoom links are
-          shared in the UpSkill-Cohort-01 WhatsApp group after enrollment.
+          shared in the {SPRINT_COHORT_WHATSAPP.name} WhatsApp group after
+          enrollment.
         </p>
       </div>
     </section>

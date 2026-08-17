@@ -4,6 +4,7 @@ import {
   SITE_CONFIG,
   SPRINT_CONFIG,
   SPRINT_COHORT_WHATSAPP,
+  SPRINT_COHORT_WHATSAPP_URL,
   WHATSAPP_DEMO_URL,
   WHATSAPP_GROUP,
   WHATSAPP_GROUP_URL,
@@ -72,7 +73,7 @@ export async function sendSprintEnrollmentConfirmation(data: {
         <p>Your payment for the <strong>2-Week AI Sprint</strong> is confirmed. Your seat is reserved.</p>
         <p><strong>Step 1 — Join the cohort WhatsApp group now:</strong></p>
         <p style="margin: 24px 0;">
-          <a href="${SPRINT_COHORT_WHATSAPP.inviteUrl}" style="display: inline-block; background: #F59E0B; color: #0A0F1C; padding: 14px 24px; border-radius: 8px; font-weight: 600; text-decoration: none;">
+          <a href="${SPRINT_COHORT_WHATSAPP_URL}" style="display: inline-block; background: #F59E0B; color: #0A0F1C; padding: 14px 24px; border-radius: 8px; font-weight: 600; text-decoration: none;">
             Join ${SPRINT_COHORT_WHATSAPP.name} on WhatsApp →
           </a>
         </p>
