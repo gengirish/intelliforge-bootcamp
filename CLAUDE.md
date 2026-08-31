@@ -47,14 +47,15 @@ Next.js 16 App Router marketing + enrolment site for the IntelliForge AI Bootcam
 
 ### External services
 
-The app holds no Meta or OTP secrets of its own; it is a tenant (`WHATSAPP_TENANT_ID`, default `bootcamp`) of two hosted services on Fly.io, each reached through a thin bearer-auth client:
+The app holds no Meta secrets of its own; for WhatsApp it is a tenant (`WHATSAPP_TENANT_ID`, default `bootcamp`) of a hosted hub on Fly.io, reached through a thin bearer-auth client:
 
-- [src/lib/whatsapp-hub.ts](src/lib/whatsapp-hub.ts) — opt-in and template sends against the central hub; `/api/whatsapp/inbound` receives forwarded messages and rejects tenant mismatches.
-- [src/lib/otp.ts](src/lib/otp.ts) + [src/lib/otp-clerk.ts](src/lib/otp-clerk.ts) — WhatsApp OTP login. `/api/auth/otp/request` sends the code; `/api/auth/otp/verify` verifies it, then `mintClerkSignInToken()` returns a 60s sign-in token the client redeems via Clerk's `strategy: "ticket"`. The Clerk user is keyed by a **derived email** (`<digits>@phone.intelliforge.tech`) with the real number in `publicMetadata.phone` — not by phone number, because Clerk has `phone_number` disabled as an attribute *and* rejects Indian numbers outright ("Phone numbers from this country (India) are currently not supported"). It also passes `skipPasswordRequirement`, since the instance marks password required. Possession is proven by the OTP service, so Clerk only mints the session. Note production currently runs a Clerk **development** instance (`pk_test_`, `picked-jay-18.clerk.accounts.dev`).
+- [src/lib/whatsapp-hub.ts](src/lib/whatsapp-hub.ts) — opt-in and template sends against the central hub; `/api/whatsapp/inbound` receives forwarded messages and rejects tenant mismatches. WhatsApp is a **notification channel only** — it is not an auth factor.
 - [src/lib/lms-client.ts](src/lib/lms-client.ts) — course enrolment on learning.intelliforge.tech, 3 attempts with backoff, retrying only 5xx.
 - [src/lib/email.ts](src/lib/email.ts) — transactional email via AgentMail.
 
-Both clients expose an `isXConfigured()` guard and return null config rather than throwing at import time, so the app boots with these unset — check the guard before calling.
+WhatsApp OTP login was **retired** (2026-08-31): `src/lib/otp.ts`, `src/lib/otp-clerk.ts`, `/api/auth/otp/*`, and the `/login` OTP UI are gone, and `/login` now just redirects to `/sign-in`. Clerk's hosted sign-in is the only login. Don't reintroduce a phone/OTP identity path without revisiting that decision; the shared design notes still live in `.cursor/skills/otp-whatsapp-tenant-integration/`. `OTP_SERVICE_URL` / `OTP_API_KEY` / `OTP_TENANT_ID` are no longer read — remove them from the Vercel project when convenient.
+
+Each client exposes an `isXConfigured()` guard and return null config rather than throwing at import time, so the app boots with these unset — check the guard before calling.
 
 `src/lib/product-catalog.ts` maps product slugs to LMS course slugs and plan prices in paise; the sprint slug `ai-sprint-jun-2026` is duplicated in `SPRINT_CONFIG`, the seed, and route defaults — change all of them together.
 

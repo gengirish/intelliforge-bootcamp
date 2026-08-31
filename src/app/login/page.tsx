@@ -1,18 +1,19 @@
-import { Suspense } from "react";
-import type { Metadata } from "next";
-import { OtpLogin } from "@/components/auth/otp-login";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Sign in — IntelliForge Bootcamp",
-  description: "Sign in with a one-time code sent to your WhatsApp.",
-};
-
-export default function LoginPage() {
-  return (
-    <main className="flex min-h-screen items-center justify-center bg-background px-4 py-12">
-      <Suspense fallback={null}>
-        <OtpLogin />
-      </Suspense>
-    </main>
-  );
+/**
+ * WhatsApp OTP login has been retired — Clerk's hosted sign-in at /sign-in is
+ * the only login. This route is kept so older links (emails, WhatsApp messages,
+ * bookmarks) land on the current flow instead of a 404.
+ */
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ redirect_url?: string }>;
+}) {
+  const { redirect_url: raw } = await searchParams;
+  const target =
+    raw?.startsWith("/") && !raw.startsWith("//")
+      ? `/sign-in?redirect_url=${encodeURIComponent(raw)}`
+      : "/sign-in";
+  redirect(target);
 }
