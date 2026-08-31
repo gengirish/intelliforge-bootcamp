@@ -89,7 +89,7 @@ test.describe("Landing Page — All Sections", () => {
     await section.scrollIntoViewIfNeeded();
     await expect(section.getByText("Every Saturday & Sunday")).toBeVisible();
     await expect(section.getByLabel("Show times in")).toBeVisible();
-    await expect(section.getByText("Morning live class")).toBeVisible();
+    await expect(section.getByText("Live class", { exact: true })).toBeVisible();
     const seatMap = section.getByLabel(/Cohort seat map:/);
     await expect(seatMap).toBeVisible();
     await expect(seatMap.getByText("9", { exact: true }).first()).toBeVisible();

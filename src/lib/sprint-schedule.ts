@@ -2,19 +2,12 @@ export const SPRINT_SCHEDULE_DAYS = ["Saturday", "Sunday"] as const;
 
 export const SPRINT_LIVE_SESSIONS = [
   {
-    id: "morning",
-    label: "Morning live class",
-    istRange: "9:00 AM – 11:00 AM",
-    /** Minutes from cohort kickoff (9:00 AM IST on Day 1). */
-    startOffsetMinutes: 0,
-    endOffsetMinutes: 120,
-  },
-  {
     id: "evening",
-    label: "Evening live class",
-    istRange: "8:00 PM – 10:00 PM",
-    startOffsetMinutes: 11 * 60,
-    endOffsetMinutes: 11 * 60 + 120,
+    label: "Live class",
+    istRange: "7:00 PM – 10:00 PM",
+    /** Minutes from cohort kickoff (7:00 PM IST on Day 1). */
+    startOffsetMinutes: 0,
+    endOffsetMinutes: 180,
   },
 ] as const;
 
@@ -33,8 +26,8 @@ export const SPRINT_TIME_ZONES: readonly SprintTimeZoneOption[] = [
   { label: "GST", timeZone: "Asia/Dubai" },
 ] as const;
 
-/** First live session: Saturday 9:00 AM IST */
-export const DEFAULT_SPRINT_START_ISO = "2026-08-08T03:30:00.000Z";
+/** First live session: Saturday 7:00 PM IST */
+export const DEFAULT_SPRINT_START_ISO = "2026-08-08T13:30:00.000Z";
 
 export function resolveSprintStartIso(startDate?: string): string {
   return startDate?.trim() ? startDate : DEFAULT_SPRINT_START_ISO;

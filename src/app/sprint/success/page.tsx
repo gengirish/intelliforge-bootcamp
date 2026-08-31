@@ -56,8 +56,8 @@ export default async function SprintSuccessPage({
             </li>
             <li className="flex gap-3">
               <span className="shrink-0 font-bold text-accent">3.</span>
-              Live classes every Saturday &amp; Sunday — 9–11 AM IST &amp;
-              8–10 PM IST (see schedule on sprint page for PST / EST / CET)
+              Live classes every Saturday &amp; Sunday — 7–10 PM IST
+              (see schedule on sprint page for PST / EST / CET)
             </li>
             <li className="flex gap-3">
               <span className="shrink-0 font-bold text-accent">4.</span>

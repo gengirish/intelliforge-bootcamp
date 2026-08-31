@@ -218,7 +218,7 @@ export function SprintLandingClient({
               <Users className="w-4 h-4" /> Max {total} seats
             </span>
             <span className="flex items-center gap-2">
-              <Clock className="w-4 h-4" /> Sat &amp; Sun · 9–11 AM &amp; 8–10 PM IST
+              <Clock className="w-4 h-4" /> Sat &amp; Sun · 7–10 PM IST
             </span>
             <span className="flex items-center gap-2">
               <Shield className="w-4 h-4" /> Zero-risk guarantee
@@ -367,7 +367,7 @@ export function SprintLandingClient({
           </h2>
           <p className="text-muted mb-8">
             {price} one-time · Two live products in 14 days · Live Zoom on Sat
-            &amp; Sun (9–11 AM &amp; 8–10 PM IST) · Zero-risk guarantee
+            &amp; Sun (7–10 PM IST) · Zero-risk guarantee
           </p>
           <SprintSeatMap
             filled={filled}

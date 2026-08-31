@@ -47,7 +47,7 @@ export default async function EnrollmentSuccessPage({
             </li>
             <li className="flex gap-3">
               <span className="shrink-0 font-bold text-accent">3.</span>
-              Live sessions run Saturdays &amp; Sundays (4–5 hours per day) over
+              Live sessions run Saturdays &amp; Sundays, 7–10 PM IST (3 hours per day) over
               12 weeks — schedule details will be shared in WhatsApp
             </li>
             <li className="flex gap-3">

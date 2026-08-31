@@ -431,10 +431,10 @@ export const PRICING = {
     originalPrice: "₹12,999",
     href: "/sprint",
     features: [
-      "2 weeks live weekend sessions",
+      "2 weeks live weekend sessions (Sat & Sun, 7–10 PM IST)",
       "Two AI products deployed to production",
       "Gateway to the 12-week bootcamp",
-      "Live on Zoom — Sat & Sun, IST",
+      "Live on Zoom — Sat & Sun, 7–10 PM IST",
     ],
   },
   earlyBird: {
@@ -443,7 +443,7 @@ export const PRICING = {
     originalPrice: "₹74,999",
     savings: "₹25,000",
     features: [
-      "12 weeks live weekend sessions (Sat & Sun)",
+      "12 weeks live weekend sessions (Sat & Sun, 7–10 PM IST)",
       "Build-alongside eligibility on live IntelliForge products",
       "Verifiable credential with shipped-product link",
       "Mentor score on your shipped work",
@@ -456,7 +456,7 @@ export const PRICING = {
     name: "12-Week Bootcamp",
     price: "₹74,999",
     features: [
-      "12 weeks live weekend sessions (Sat & Sun)",
+      "12 weeks live weekend sessions (Sat & Sun, 7–10 PM IST)",
       "Build-alongside eligibility on live IntelliForge products",
       "Verifiable credential with shipped-product link",
       "Mentor score on your shipped work",
@@ -490,7 +490,7 @@ export const FAQ_ITEMS = [
   {
     question: "What's the time commitment?",
     answer:
-      "Live sessions are on Saturdays and Sundays (4–5 hours per day IST). Plan for an additional 5–8 hours of project work during the week. Total: approximately 15–18 hours per week for 12 weeks.",
+      "Live sessions are on Saturdays and Sundays, 7:00–10:00 PM IST (3 hours per day). Plan for an additional 5–8 hours of project work during the week. Total: approximately 11–14 hours per week for 12 weeks.",
   },
   {
     question: "What's the difference between the 2-Week Sprint and 12-Week Bootcamp?",
@@ -551,7 +551,7 @@ export const SPRINT_CONFIG = {
   urgencyLine:
     "Built for interviews, client pitches, and performance reviews with a deadline — not 'someday' learners.",
   liveScheduleSummary:
-    "Live on Zoom every Saturday & Sunday — 9–11 AM & 8–10 PM IST",
+    "Live on Zoom every Saturday & Sunday — 7–10 PM IST",
   /** Cohort 1 seats sold — shown on the seat map (index order, left-to-right A→C). */
   bookedSeatNames: [
     "Prasad K",

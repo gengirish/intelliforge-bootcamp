@@ -65,12 +65,12 @@ export function SprintLiveSchedule({
             id="live-schedule-heading"
             className="text-2xl md:text-3xl font-bold text-foreground mb-2"
           >
-            Every {daysLabel} — two live sessions
+            Every {daysLabel} — 7–10 PM IST
           </h2>
           <p className="text-muted text-sm sm:text-base max-w-2xl mx-auto">
             Cohort 1 kicks off {startLabel}. Classes run live on Zoom every
-            weekend — morning and evening slots in IST. Pick your timezone to
-            see local times.
+            weekend evening, 7:00–10:00 PM IST. Pick your timezone to see
+            local times.
           </p>
         </div>
 
