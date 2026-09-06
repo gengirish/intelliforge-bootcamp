@@ -23,7 +23,7 @@ Env vars live in `.env.local` (not `.env`) — every `db:*` script and the Playw
 
 Deployed on **Vercel** at `https://upskill.intelliforge.tech`, from the project named **`learning-bootcamp`** (not `intelliforge-bootcamp`). There is no `vercel.json`/`.vercel` in the repo — the project is linked on Vercel's side, so deploy config and env vars change in the dashboard, not here. Pushing to `master` deploys production.
 
-Tests that need a real dependency are skipped rather than failed when it is absent — `DATABASE_URL` for anything asserting the live-cohort sprint UI or the seats API, `AGENTMAIL_API_KEY` for the email round-trips. With no `.env.local` the suite is 98 passed / 11 skipped; a seeded DB turns the skips into real coverage. `tests/e2e/helpers/env-local.ts` reads `.env.local` the way `playwright.config.ts` does, because test workers do not inherit the webServer env.
+Tests that need a real dependency are skipped rather than failed when it is absent — `DATABASE_URL` for anything asserting the live-cohort sprint UI or the seats API, `AGENTMAIL_API_KEY` for the email round-trips. With no `.env.local` the suite is 99 passed / 11 skipped, plus 2 known failures on the sprint countdown (`SPRINT_CONFIG.session1Date` is in the past, so the live-schedule assertions no longer match); a seeded DB turns the skips into real coverage. `tests/e2e/helpers/env-local.ts` reads `.env.local` the way `playwright.config.ts` does, because test workers do not inherit the webServer env.
 
 ## Architecture
 
@@ -66,6 +66,32 @@ Clerk middleware only matches `/sign-in`, `/sprint/enroll`, `/bootcamp/enroll` (
 ### E2E bypass
 
 Playwright can't drive Clerk, so tests run the dev server with `E2E_BYPASS_CLERK=1` / `NEXT_PUBLIC_E2E_BYPASS=1`. That flag swaps the middleware for a pass-through, makes server routes skip `auth()`/`currentUser()`, and picks the `*Stub` variant in the `X` / `XClerk` / `XStub` checkout-button triple (`SprintCheckoutButton.tsx` is just the selector). When adding a Clerk-dependent component, follow that three-file pattern or the suite will hang on Clerk's UI.
+
+### CCAR-F prep hub (`/claude`)
+
+A free-content funnel entry, independent of the payment spine: `/claude` (hub), `/claude/quiz`
+(mock exam), `/claude/review` (full bank), `/claude/foundations` (exam guide).
+
+The question bank is authored in-repo as TypeScript under [src/lib/ccarf/bank/](src/lib/ccarf/bank/),
+one file per exam domain. `bank/index.ts` runs invariants at module load — unique ids, four options,
+`answer` present in `options`, a docs link on every item — so a malformed bank fails the build rather
+than shipping an unscoreable exam. Keep it weight-proportional to the blueprint (27/18/20/20/15);
+`tests/e2e/ccarf.spec.ts` asserts the mix stays within 3 points.
+
+Everything the bank says about the exam itself — domains, weights, scenarios, pass analogue — lives in
+[src/lib/ccarf/blueprint.ts](src/lib/ccarf/blueprint.ts), ported from the IntelliForge CCA-F course in
+`~/code-reviewer-course`. That course's `module-06` bank is **transcribed verbatim from Anthropic's exam
+guide**; it is a private calibration reference only and must never be published here. Published items are
+original, written from the blueprint and the public Claude documentation, and every page carries the
+`DISCLAIMER` string.
+
+The bank is served to the browser by a static route handler at `/claude/quiz/questions.json`, so it stays
+out of the client bundle; `/claude/review` imports it directly and server-renders. `/claude/*` pages use
+their own chrome in `src/app/claude/layout.tsx` — not the site `Header`, whose nav is landing-page hash
+anchors that do not resolve off the home page.
+
+Placeholders to fill before announcing: `CREDENTIALS` badge URLs and `BOOKING_URL` in `blueprint.ts`.
+Both degrade gracefully when unset.
 
 ### Content
 

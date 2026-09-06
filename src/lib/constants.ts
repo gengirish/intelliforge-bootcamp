@@ -575,6 +575,7 @@ export const NAV_LINKS = [
   { label: "Credential", href: "#credential" },
   { label: "Curriculum", href: "#curriculum" },
   { label: "Free Demo", href: "#free-preview" },
+  { label: "CCAR-F Prep", href: "/claude" },
   { label: "Pricing", href: "#pricing" },
   { label: "FAQ", href: "#faq" },
   { label: "Contact", href: "#contact" },

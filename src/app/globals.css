@@ -234,3 +234,8 @@ button {
     transform: none;
   }
 }
+
+/* CCAR-F review library: "test mode" hides the answer blocks so the page reads as a quiz. */
+.ccarf-test-mode [data-ccarf-answer] {
+  display: none;
+}
