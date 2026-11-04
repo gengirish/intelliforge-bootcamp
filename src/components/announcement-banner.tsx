@@ -19,8 +19,11 @@ export function AnnouncementBanner() {
       }}
     >
       <span className="min-w-0">
-        {COHORT_2.name} opens {COHORT_2.launchWeekendShort} · First class{" "}
-        {COHORT_2.firstClassShort}
+        {COHORT_2.name} opens {COHORT_2.launchWeekendShort}
+        <span className="hidden sm:inline">
+          {" "}
+          · First class {COHORT_2.firstClassShort}
+        </span>
       </span>
       <Link
         href={COHORT_2.waitlistHref}
