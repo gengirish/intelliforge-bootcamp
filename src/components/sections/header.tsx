@@ -123,7 +123,7 @@ export function Header() {
             Sign in
           </Link>
           <Link
-            href={SPRINT_CONFIG.href}
+            href={SPRINT_CONFIG.ctaHref}
             className="glow-cta inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-cta px-4 py-2 text-sm font-medium text-background transition-transform duration-200 hover:scale-105 hover:bg-cta-hover focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
           >
             {SPRINT_CONFIG.ctaLabelShort}
@@ -159,7 +159,7 @@ export function Header() {
             </Link>
           ))}
           <Link
-            href={SPRINT_CONFIG.href}
+            href={SPRINT_CONFIG.ctaHref}
             className="mt-2 inline-flex items-center justify-center gap-2 rounded-lg bg-cta px-4 py-3 text-sm font-medium text-background hover:bg-cta-hover transition-colors focus:outline-none focus:ring-2 focus:ring-accent"
             onClick={() => setIsMobileMenuOpen(false)}
           >

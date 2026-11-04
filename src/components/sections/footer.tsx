@@ -47,7 +47,7 @@ export function Footer() {
                 <ExternalLink className="h-3 w-3" aria-hidden />
               </a>
               <Link
-                href={SPRINT_CONFIG.href}
+                href={SPRINT_CONFIG.ctaHref}
                 className="inline-flex items-center rounded-full border border-cta/30 bg-cta/10 px-3 py-1.5 text-xs font-medium text-cta hover:border-cta/50 focus:outline-none focus:ring-2 focus:ring-accent"
               >
                 {SPRINT_CONFIG.ctaLabelShort}

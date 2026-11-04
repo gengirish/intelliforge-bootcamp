@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { X } from "lucide-react";
-import { FREE_LIVE_DEMO_URL, SPRINT_CONFIG } from "@/lib/constants";
+import { COHORT_2, FREE_LIVE_DEMO_URL } from "@/lib/constants";
 
 export function AnnouncementBanner() {
   const [isVisible, setIsVisible] = useState(true);
@@ -12,21 +12,24 @@ export function AnnouncementBanner() {
 
   return (
     <div
-      className="relative z-[60] flex w-full items-center justify-center gap-2 py-2 pr-10 text-center text-sm text-foreground"
+      className="relative z-[60] flex w-full flex-wrap items-center justify-center gap-x-2 py-2 pl-3 pr-10 text-center text-sm text-foreground"
       style={{
         background:
           "linear-gradient(90deg, var(--primary) 0%, #8B5CF6 50%, var(--primary) 100%)",
       }}
     >
-      <span className="shrink-0">
-        Interview soon? Ship 2 live products — {SPRINT_CONFIG.priceDisplay} ·
-        Cohort 1 starts {SPRINT_CONFIG.cohortStartDate}
+      <span className="min-w-0">
+        {COHORT_2.name} opens {COHORT_2.launchWeekendShort}
+        <span className="hidden sm:inline">
+          {" "}
+          · First class {COHORT_2.firstClassShort}
+        </span>
       </span>
       <Link
-        href={SPRINT_CONFIG.href}
+        href={COHORT_2.waitlistHref}
         className="shrink-0 font-medium underline underline-offset-2 hover:no-underline focus:outline-none focus:ring-2 focus:ring-white rounded"
       >
-        Join sprint →
+        Join the waitlist →
       </Link>
       <a
         href={FREE_LIVE_DEMO_URL}

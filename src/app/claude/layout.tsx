@@ -21,10 +21,10 @@ export default function ClaudeLayout({ children }: { children: React.ReactNode }
             CCAR-F Prep
           </Link>
           <Link
-            href={SPRINT_CONFIG.href}
+            href={SPRINT_CONFIG.ctaHref}
             className="rounded-lg bg-cta px-3 py-1.5 text-xs font-semibold text-background transition-colors hover:bg-cta-hover sm:text-sm"
           >
-            Join the AI Sprint
+            {SPRINT_CONFIG.ctaLabelShort}
           </Link>
         </div>
       </div>

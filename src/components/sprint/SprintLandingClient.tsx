@@ -23,7 +23,7 @@ import { SprintLiveSchedule } from "@/components/sprint/SprintLiveSchedule";
 import { SprintSeatMap } from "@/components/sprint/SprintSeatMap";
 import { useSprintSeats } from "@/components/sprint/use-sprint-seats";
 import { formatISTDate, formatRupee } from "@/lib/sprint-format";
-import { SITE_CONFIG, SPRINT_CONFIG } from "@/lib/constants";
+import { COHORT_2, SITE_CONFIG, SPRINT_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 interface SprintLandingClientProps {
@@ -123,9 +123,28 @@ export function SprintLandingClient({
   const originalPrice = formatRupee(originalPriceInPaise);
   const startLabel = formatISTDate(startDate);
   const soldOut = !isActive || displayRemaining <= 0;
+  const enrollmentOpen = SPRINT_CONFIG.enrollmentOpen;
+  const waitlistCta = (
+    <Link
+      href={COHORT_2.waitlistHref}
+      className="inline-flex items-center justify-center rounded-lg bg-cta px-10 py-4 font-semibold text-background transition-colors hover:bg-cta-hover focus:outline-none focus:ring-2 focus:ring-accent"
+    >
+      Join the {COHORT_2.name} waitlist
+    </Link>
+  );
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <p className="bg-primary px-4 py-2 text-center text-sm text-foreground">
+        Cohort 1 is underway. {COHORT_2.name} opens{" "}
+        {COHORT_2.launchWeekendShort}, first class {COHORT_2.firstClassShort}.{" "}
+        <Link
+          href={COHORT_2.waitlistHref}
+          className="font-medium underline underline-offset-2 hover:no-underline"
+        >
+          Join the waitlist →
+        </Link>
+      </p>
       <header className="border-b border-border/50 bg-background/90 backdrop-blur sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="text-foreground font-bold text-lg">
@@ -138,19 +157,27 @@ export function SprintLandingClient({
             >
               Full 12-Week Bootcamp →
             </Link>
-            <span
-              className={cn(
-                "text-sm font-medium",
-                displayRemaining <= 5 ? "text-amber-400" : "text-green-400"
-              )}
-            >
-              {soldOut ? "Sold out" : `${displayRemaining} seats left`}
-            </span>
-            {!soldOut && (
-              <SprintCheckoutButton
-                priceInPaise={priceInPaise}
-                className="!py-2 !px-5 !text-sm"
-              />
+            {enrollmentOpen ? (
+              <>
+                <span
+                  className={cn(
+                    "text-sm font-medium",
+                    displayRemaining <= 5 ? "text-amber-400" : "text-green-400"
+                  )}
+                >
+                  {soldOut ? "Sold out" : `${displayRemaining} seats left`}
+                </span>
+                {!soldOut && (
+                  <SprintCheckoutButton
+                    priceInPaise={priceInPaise}
+                    className="!py-2 !px-5 !text-sm"
+                  />
+                )}
+              </>
+            ) : (
+              <span className="text-sm font-medium text-muted">
+                Enrolment closed
+              </span>
             )}
           </div>
         </div>
@@ -161,10 +188,18 @@ export function SprintLandingClient({
         <div className="max-w-4xl mx-auto text-center relative">
           <div className="inline-flex items-center gap-2 bg-surface border border-border rounded-full px-4 py-1.5 text-sm text-accent mb-6">
             <Sparkles className="w-4 h-4" />
-            Cohort 1 · Starts {startLabel} · Live Sat &amp; Sun
+            {enrollmentOpen ? (
+              <>Cohort 1 · Starts {startLabel} · Live Sat &amp; Sun</>
+            ) : (
+              <>
+                {COHORT_2.name} enrolment opens {COHORT_2.launchWeekendShort}
+              </>
+            )}
           </div>
 
-          <SprintCountdown startDate={startDate} className="mb-8 max-w-xl mx-auto" />
+          {enrollmentOpen && (
+            <SprintCountdown startDate={startDate} className="mb-8 max-w-xl mx-auto" />
+          )}
 
           <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 leading-tight">
             Interview in 3 weeks?{" "}
@@ -177,21 +212,27 @@ export function SprintLandingClient({
             certificates. Not slide decks.
           </p>
 
-          <p className="text-base text-amber-400/90 mb-8 max-w-xl mx-auto font-medium">
-            Cohort 1 starts {startLabel}. Every week you wait, someone else
-            shows up with live deploys — and you show up with plans.
-          </p>
+          {enrollmentOpen && (
+            <>
+              <p className="text-base text-amber-400/90 mb-8 max-w-xl mx-auto font-medium">
+                Cohort 1 starts {startLabel}. Every week you wait, someone else
+                shows up with live deploys — and you show up with plans.
+              </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 mb-10">
-            <div className="text-4xl font-bold text-foreground">{price}</div>
-            <div className="text-xl text-muted line-through">{originalPrice}</div>
-            <div className="bg-green-500/20 text-green-400 text-sm font-semibold px-3 py-1 rounded-full">
-              Save {formatRupee(originalPriceInPaise - priceInPaise)}
-            </div>
-          </div>
+              <div className="flex flex-wrap items-center justify-center gap-4 mb-10">
+                <div className="text-4xl font-bold text-foreground">{price}</div>
+                <div className="text-xl text-muted line-through">{originalPrice}</div>
+                <div className="bg-green-500/20 text-green-400 text-sm font-semibold px-3 py-1 rounded-full">
+                  Save {formatRupee(originalPriceInPaise - priceInPaise)}
+                </div>
+              </div>
+            </>
+          )}
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-            {soldOut ? (
+            {!enrollmentOpen ? (
+              waitlistCta
+            ) : soldOut ? (
               <button
                 disabled
                 className="bg-surface-light text-muted font-bold py-4 px-8 rounded-lg text-lg cursor-not-allowed"
@@ -213,27 +254,31 @@ export function SprintLandingClient({
             </Link>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-6 text-sm text-muted mb-10">
-            <span className="flex items-center gap-2">
-              <Users className="w-4 h-4" /> Max {total} seats
-            </span>
-            <span className="flex items-center gap-2">
-              <Clock className="w-4 h-4" /> Sat &amp; Sun · 7–10 PM IST
-            </span>
-            <span className="flex items-center gap-2">
-              <Shield className="w-4 h-4" /> Zero-risk guarantee
-            </span>
-          </div>
+          {enrollmentOpen && (
+            <>
+              <div className="flex flex-wrap justify-center gap-6 text-sm text-muted mb-10">
+                <span className="flex items-center gap-2">
+                  <Users className="w-4 h-4" /> Max {total} seats
+                </span>
+                <span className="flex items-center gap-2">
+                  <Clock className="w-4 h-4" /> Sat &amp; Sun · 7–10 PM IST
+                </span>
+                <span className="flex items-center gap-2">
+                  <Shield className="w-4 h-4" /> Zero-risk guarantee
+                </span>
+              </div>
 
-          <SprintSeatMap
-            filled={filled}
-            total={total}
-            bookedNames={SPRINT_CONFIG.bookedSeatNames}
-          />
+              <SprintSeatMap
+                filled={filled}
+                total={total}
+                bookedNames={SPRINT_CONFIG.bookedSeatNames}
+              />
+            </>
+          )}
         </div>
       </section>
 
-      <SprintLiveSchedule startDate={startDate} />
+      {enrollmentOpen && <SprintLiveSchedule startDate={startDate} />}
 
       <section className="px-6 py-14 border-b border-border/50 bg-surface/30">
         <div className="max-w-3xl mx-auto text-center">
@@ -359,33 +404,46 @@ export function SprintLandingClient({
       </section>
 
       <section className="px-6 py-16 bg-gradient-to-t from-surface to-transparent">
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-foreground mb-4">
-            {displayRemaining <= 5 && !soldOut
-              ? `Only ${displayRemaining} seats left — act before ${startLabel}`
-              : "Stop planning. Start shipping."}
-          </h2>
-          <p className="text-muted mb-8">
-            {price} one-time · Two live products in 14 days · Live Zoom on Sat
-            &amp; Sun (7–10 PM IST) · Zero-risk guarantee
-          </p>
-          <SprintSeatMap
-            filled={filled}
-            total={total}
-            bookedNames={SPRINT_CONFIG.bookedSeatNames}
-            className="mb-8"
-          />
-          {!soldOut && (
-            <SprintCheckoutButton
-              priceInPaise={priceInPaise}
-              label={`Secure My Seat — ${price}`}
-              className="!py-4 !px-10 w-full sm:w-auto"
+        {enrollmentOpen ? (
+          <div className="max-w-2xl mx-auto text-center">
+            <h2 className="text-3xl font-bold text-foreground mb-4">
+              {displayRemaining <= 5 && !soldOut
+                ? `Only ${displayRemaining} seats left — act before ${startLabel}`
+                : "Stop planning. Start shipping."}
+            </h2>
+            <p className="text-muted mb-8">
+              {price} one-time · Two live products in 14 days · Live Zoom on Sat
+              &amp; Sun (7–10 PM IST) · Zero-risk guarantee
+            </p>
+            <SprintSeatMap
+              filled={filled}
+              total={total}
+              bookedNames={SPRINT_CONFIG.bookedSeatNames}
+              className="mb-8"
             />
-          )}
-          <p className="text-xs text-muted mt-6">
-            100% secure checkout via Razorpay · UPI, cards, netbanking accepted
-          </p>
-        </div>
+            {!soldOut && (
+              <SprintCheckoutButton
+                priceInPaise={priceInPaise}
+                label={`Secure My Seat — ${price}`}
+                className="!py-4 !px-10 w-full sm:w-auto"
+              />
+            )}
+            <p className="text-xs text-muted mt-6">
+              100% secure checkout via Razorpay · UPI, cards, netbanking accepted
+            </p>
+          </div>
+        ) : (
+          <div className="max-w-2xl mx-auto text-center">
+            <h2 className="text-3xl font-bold text-foreground mb-4">
+              Enrolment is closed for now
+            </h2>
+            <p className="text-muted mb-8">
+              {COHORT_2.name} enrolment opens {COHORT_2.launchWeekend}. First
+              class {COHORT_2.firstClass}. The waitlist hears first.
+            </p>
+            {waitlistCta}
+          </div>
+        )}
       </section>
 
       <footer className="border-t border-border/50 px-6 py-8 text-center text-sm text-muted">

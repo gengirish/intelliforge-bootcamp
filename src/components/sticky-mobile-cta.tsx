@@ -55,10 +55,10 @@ export function StickyMobileCta() {
             Free Demo
           </a>
           <Link
-            href={SPRINT_CONFIG.href}
+            href={SPRINT_CONFIG.ctaHref}
             className="glow-cta flex flex-1 items-center justify-center rounded-lg bg-cta px-4 py-2.5 text-sm font-medium text-background transition-colors hover:bg-cta-hover focus:outline-none focus:ring-2 focus:ring-accent"
           >
-            Sprint {SPRINT_CONFIG.priceDisplay}
+            {SPRINT_CONFIG.ctaLabelShort}
           </Link>
         </div>
         <p className="mt-2 text-center text-[11px] leading-snug text-muted">

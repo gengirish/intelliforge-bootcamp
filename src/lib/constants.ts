@@ -527,10 +527,38 @@ export const TRUST_SIGNALS = {
   ],
 } as const;
 
+/** Cohort 2 launch details. Enrolment opens on launch weekend; the waitlist hears first. */
+export const COHORT_2 = {
+  slug: "cohort-2",
+  name: "Cohort 2",
+  waitlistHref: "/waitlist",
+  launchWeekend: "5–6 December 2026",
+  launchWeekendShort: "5–6 Dec",
+  firstClass: "Saturday, 9 January 2027",
+  firstClassShort: "9 Jan 2027",
+  format:
+    "Six 2-week sprints over 12 weeks, live on Zoom every Saturday and Sunday, 7–10 PM IST.",
+  motivations: [
+    { value: "ship-at-work", label: "Ship AI in my current job" },
+    { value: "job-move", label: "Prepare for interviews or a job move" },
+    { value: "own-product", label: "Build my own product" },
+    { value: "other", label: "Something else" },
+  ],
+} as const;
+
+/**
+ * Whether the site sells seats. Set by hand, not by date: these checkouts still
+ * sell Cohort 1 at the old slug and prices, so turn them on only once they sell
+ * Cohort 2. While closed, every sprint CTA points at the waitlist.
+ */
+const SPRINT_ENROLLMENT_OPEN: boolean = false;
+export const BOOTCAMP_ENROLLMENT_OPEN: boolean = false;
+
 export const CTA_MICRO_TRUST = {
   freeDemo: "Live demo · No signup · See the curriculum before you pay",
-  sprint:
-    "Two live deploy URLs in 14 days · Razorpay checkout · Built for interview deadlines",
+  sprint: SPRINT_ENROLLMENT_OPEN
+    ? "Two live deploy URLs in 14 days · Razorpay checkout · Built for interview deadlines"
+    : `Enrolment opens ${COHORT_2.launchWeekendShort} · First class ${COHORT_2.firstClassShort} · Free to join`,
   bootcamp:
     "Secure checkout · 15-day money-back after first 2 weekends · 0% EMI available",
   freeClass: "No payment · No commitment · Real curriculum preview",
@@ -546,8 +574,14 @@ export const SPRINT_CONFIG = {
   slug: "ai-sprint-jun-2026",
   seatsTotal: 30,
   href: "/sprint",
-  ctaLabel: "Ship Proof in 14 Days — ₹4,999",
-  ctaLabelShort: "Ship in 14 Days — ₹4,999",
+  enrollmentOpen: SPRINT_ENROLLMENT_OPEN,
+  ctaHref: SPRINT_ENROLLMENT_OPEN ? "/sprint" : COHORT_2.waitlistHref,
+  ctaLabel: SPRINT_ENROLLMENT_OPEN
+    ? "Ship Proof in 14 Days — ₹4,999"
+    : `Join the ${COHORT_2.name} waitlist`,
+  ctaLabelShort: SPRINT_ENROLLMENT_OPEN
+    ? "Ship in 14 Days — ₹4,999"
+    : "Join the waitlist",
   urgencyLine:
     "Built for interviews, client pitches, and performance reviews with a deadline — not 'someday' learners.",
   liveScheduleSummary:
@@ -591,9 +625,13 @@ export const FUNNEL_STEPS = [
   },
   {
     step: 2,
-    label: "Join the 2-Week Sprint",
-    description: "₹4,999 · two live URLs before your interview",
-    href: SPRINT_CONFIG.href,
+    label: SPRINT_CONFIG.enrollmentOpen
+      ? "Join the 2-Week Sprint"
+      : SPRINT_CONFIG.ctaLabel,
+    description: SPRINT_CONFIG.enrollmentOpen
+      ? "₹4,999 · two live URLs before your interview"
+      : `Enrolment opens ${COHORT_2.launchWeekendShort}`,
+    href: SPRINT_CONFIG.ctaHref,
     external: false,
   },
   {

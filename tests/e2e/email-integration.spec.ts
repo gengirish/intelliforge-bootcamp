@@ -11,14 +11,14 @@ test.describe("Email Integration — Contact Form & New Sections", () => {
   });
 
   test.describe("Announcement Banner", () => {
-    test("renders with sprint enroll link and dismiss button", async ({ page }) => {
+    test("renders with waitlist link and dismiss button", async ({ page }) => {
       const banner = page.locator('[class*="z-[60]"]');
       await expect(banner).toBeVisible();
-      await expect(banner.getByText(/Ship 2 live products/)).toBeVisible();
+      await expect(banner.getByText(/Cohort 2 opens/)).toBeVisible();
 
-      const sprintLink = banner.getByRole("link", { name: "Join sprint →" });
-      await expect(sprintLink).toBeVisible();
-      await expect(sprintLink).toHaveAttribute("href", "/sprint");
+      const waitlistLink = banner.getByRole("link", { name: "Join the waitlist →" });
+      await expect(waitlistLink).toBeVisible();
+      await expect(waitlistLink).toHaveAttribute("href", "/waitlist");
     });
 
     test("can be dismissed with X button", async ({ page }) => {
@@ -117,10 +117,10 @@ test.describe("Email Integration — Contact Form & New Sections", () => {
       });
 
       const sprintCTA = finalCtaSection.getByRole("link", {
-        name: /Ship Proof in 14 Days — ₹4,999/,
+        name: /Join the Cohort 2 waitlist/,
       });
       await expect(sprintCTA).toBeVisible();
-      await expect(sprintCTA).toHaveAttribute("href", "/sprint");
+      await expect(sprintCTA).toHaveAttribute("href", "/waitlist");
 
       const freeDemoCTA = finalCtaSection.getByRole("link", {
         name: /Try the free demo — live, no signup/,

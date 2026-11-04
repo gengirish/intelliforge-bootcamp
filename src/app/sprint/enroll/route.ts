@@ -4,6 +4,7 @@ import Razorpay from "razorpay";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import type { ApiResponse } from "@/lib/api-response";
+import { COHORT_2, SPRINT_CONFIG } from "@/lib/constants";
 import { getSprintSeatCounts, resolveSprintDisplaySeats } from "@/lib/sprint-seats";
 
 const schema = z.object({
@@ -25,6 +26,18 @@ function createSprintReceipt() {
 }
 
 export async function POST(req: Request) {
+  // Stops new orders only. Payments on orders already open still confirm through
+  // the webhook and confirm-payment routes.
+  if (!SPRINT_CONFIG.enrollmentOpen) {
+    return NextResponse.json<ApiResponse<null>>(
+      {
+        success: false,
+        error: `Enrolment is closed. ${COHORT_2.name} opens ${COHORT_2.launchWeekend}.`,
+      },
+      { status: 409 }
+    );
+  }
+
   const userId =
     process.env.E2E_BYPASS_CLERK === "1"
       ? null

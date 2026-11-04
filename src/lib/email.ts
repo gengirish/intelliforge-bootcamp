@@ -187,6 +187,42 @@ export async function sendEnquiryNotification(data: EnquiryPayload) {
   return [adminResult, confirmResult];
 }
 
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+/** Tells the admin about a new waitlist entry. */
+export async function sendWaitlistNotification(data: {
+  cohortName: string;
+  name: string;
+  email: string;
+  phone?: string;
+  motivation: string;
+}) {
+  const rows = [
+    ["Name", data.name],
+    ["Email", data.email],
+    ["Phone", data.phone],
+    ["Motivation", data.motivation],
+  ]
+    .filter(([, value]) => value)
+    .map(
+      ([label, value]) =>
+        `<tr><td style="padding: 8px 0; color: #94A3B8;">${label}</td><td style="padding: 8px 0;">${escapeHtml(value as string)}</td></tr>`
+    )
+    .join("");
+
+  await agentMailSend({
+    to: ADMIN_EMAIL,
+    subject: `${data.cohortName} waitlist: ${data.name.replace(/[\r\n]+/g, " ")}`,
+    html: `<div style="font-family: system-ui, sans-serif; max-width: 600px; margin: 0 auto; background: #0A0F1C; color: #E2E8F0; padding: 32px; border-radius: 12px;"><h2 style="color: #7C3AED; margin-top: 0;">New ${data.cohortName} waitlist entry</h2><table style="width: 100%; border-collapse: collapse;">${rows}</table></div>`,
+  });
+}
+
 export async function sendTestEmail(to: string) {
   return agentMailSend({
     to,

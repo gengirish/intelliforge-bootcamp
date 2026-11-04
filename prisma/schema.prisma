@@ -77,6 +77,21 @@ model BootcampEnrollment {
   @@index([razorpayOrderId])
 }
 
+model WaitlistEntry {
+  id          String   @id @default(cuid())
+  cohort      String
+  name        String
+  email       String
+  phone       String?
+  motivation  String
+  consentedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([cohort, email])
+  @@index([cohort])
+}
+
 enum EnrollmentStatus {
   PENDING
   PAID

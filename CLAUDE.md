@@ -93,6 +93,12 @@ anchors that do not resolve off the home page.
 Placeholders to fill before announcing: `CREDENTIALS` badge URLs and `BOOKING_URL` in `blueprint.ts`.
 Both degrade gracefully when unset.
 
+### Cohort 2 waitlist
+
+`/waitlist` posts to `/api/waitlist`, which upserts a `WaitlistEntry` keyed on cohort and email, then notifies the admin by email on a best-effort basis. Launch details live in `COHORT_2` in `src/lib/constants.ts`. Deploying this needs `npm run db:deploy`, because the build does not run migrations.
+
+Checkout is closed by two flags at the top of the launch block in `src/lib/constants.ts`. `SPRINT_ENROLLMENT_OPEN` strips `/sprint` of its price, seats and buy buttons, points every sprint CTA at the waitlist, and makes `POST /sprint/enroll` return 409. `BOOTCAMP_ENROLLMENT_OPEN` swaps the pricing section's buy button for the waitlist and makes `POST /bootcamp/enroll` and `POST /api/razorpay` return 409. Orders already open still confirm. They are manual flags, not dates, because these checkouts still sell Cohort 1 at the old slug and prices — turn them on only once they sell Cohort 2.
+
 ### Content
 
 Marketing copy, pricing, curriculum, FAQs, testimonials, and cohort dates are centralised as exported constants in [src/lib/constants.ts](src/lib/constants.ts) rather than inlined in components — copy changes belong there. Note that prices appear both as display strings there and as paise integers in `product-catalog.ts` / the seed.

@@ -204,7 +204,7 @@ export default function ClaudeHubPage() {
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
-              href={SPRINT_CONFIG.href}
+              href={SPRINT_CONFIG.ctaHref}
               className="rounded-lg bg-cta px-5 py-3 text-sm font-semibold text-background transition-colors hover:bg-cta-hover"
             >
               {SPRINT_CONFIG.ctaLabelShort}
