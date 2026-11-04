@@ -93,6 +93,10 @@ anchors that do not resolve off the home page.
 Placeholders to fill before announcing: `CREDENTIALS` badge URLs and `BOOKING_URL` in `blueprint.ts`.
 Both degrade gracefully when unset.
 
+### Cohort 2 waitlist
+
+`/waitlist` posts to `/api/waitlist`, which upserts a `WaitlistEntry` keyed on cohort and email, then notifies the admin by email on a best-effort basis. Launch details live in `COHORT_2` in `src/lib/constants.ts`. Deploying this needs `npm run db:deploy`, because the build does not run migrations.
+
 ### Content
 
 Marketing copy, pricing, curriculum, FAQs, testimonials, and cohort dates are centralised as exported constants in [src/lib/constants.ts](src/lib/constants.ts) rather than inlined in components — copy changes belong there. Note that prices appear both as display strings there and as paise integers in `product-catalog.ts` / the seed.

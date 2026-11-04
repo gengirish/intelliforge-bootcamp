@@ -570,6 +570,25 @@ export const SPRINT_CONFIG = {
   ],
 };
 
+/** Cohort 2 launch details. Enrolment opens on launch weekend; the waitlist hears first. */
+export const COHORT_2 = {
+  slug: "cohort-2",
+  name: "Cohort 2",
+  waitlistHref: "/waitlist",
+  launchWeekend: "5–6 December 2026",
+  launchWeekendShort: "5–6 Dec",
+  firstClass: "Saturday, 9 January 2027",
+  firstClassShort: "9 Jan 2027",
+  format:
+    "Six 2-week sprints over 12 weeks, live on Zoom every Saturday and Sunday, 7–10 PM IST.",
+  motivations: [
+    { value: "ship-at-work", label: "Ship AI in my current job" },
+    { value: "job-move", label: "Prepare for interviews or a job move" },
+    { value: "own-product", label: "Build my own product" },
+    { value: "other", label: "Something else" },
+  ],
+} as const;
+
 export const NAV_LINKS = [
   { label: "Build-Alongside", href: "#build-alongside" },
   { label: "Credential", href: "#credential" },
