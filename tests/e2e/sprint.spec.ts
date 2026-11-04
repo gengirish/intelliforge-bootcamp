@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { envLocal } from "./helpers/env-local";
 import { signWebhook } from "./helpers/razorpay";
+import { SPRINT_CONFIG } from "../../src/lib/constants";
 
 /**
  * The sprint page reads isActive from the DB and falls back to false when it is
@@ -9,6 +10,8 @@ import { signWebhook } from "./helpers/razorpay";
  */
 const HAS_DB = envLocal("DATABASE_URL", "") !== "";
 const NEEDS_DB = "needs a seeded DATABASE_URL — page renders sold out without one";
+const ENROLLMENT_OPEN = SPRINT_CONFIG.enrollmentOpen;
+const NEEDS_OPEN = "SPRINT_CONFIG.enrollmentOpen is false — no checkout to assert";
 
 test.describe("Sprint Landing Page", () => {
   test.beforeEach(async ({ page }) => {
@@ -26,12 +29,14 @@ test.describe("Sprint Landing Page", () => {
   });
 
   test("shows pricing and savings", async ({ page }) => {
+    test.skip(!ENROLLMENT_OPEN, NEEDS_OPEN);
     await expect(page.getByText("₹4,999").first()).toBeVisible();
     await expect(page.getByText("₹12,999").first()).toBeVisible();
     await expect(page.getByText("Save ₹8,000")).toBeVisible();
   });
 
   test("shows cohort start date and seat count", async ({ page }) => {
+    test.skip(!ENROLLMENT_OPEN, NEEDS_OPEN);
     test.skip(!HAS_DB, NEEDS_DB);
     await expect(page.getByText(/Cohort 1 · Starts/)).toBeVisible();
     await expect(page.getByText(/seats left|Sold out/)).toBeVisible();
@@ -48,6 +53,7 @@ test.describe("Sprint Landing Page", () => {
   });
 
   test("booked seats show occupant name on hover", async ({ page }) => {
+    test.skip(!ENROLLMENT_OPEN, NEEDS_OPEN);
     test.skip(!HAS_DB, NEEDS_DB);
     const seatMap = page.getByLabel(/Cohort seat map:/).first();
     await expect(seatMap).toBeVisible();
@@ -62,6 +68,7 @@ test.describe("Sprint Landing Page", () => {
   });
 
   test("shows countdown and timezone-selectable live schedule", async ({ page }) => {
+    test.skip(!ENROLLMENT_OPEN, NEEDS_OPEN);
     await expect(
       page.getByText("Countdown to Cohort 1 kickoff")
     ).toBeVisible();
@@ -91,6 +98,7 @@ test.describe("Sprint Landing Page", () => {
   });
 
   test("has enroll CTAs and bootcamp cross-link", async ({ page }) => {
+    test.skip(!ENROLLMENT_OPEN, NEEDS_OPEN);
     test.skip(!HAS_DB, NEEDS_DB);
     await expect(
       page.getByRole("button", { name: /Enroll Now — ₹4,999/ })
@@ -103,6 +111,27 @@ test.describe("Sprint Landing Page", () => {
     ).toBeVisible();
   });
 
+  test("closed enrolment offers the waitlist and no checkout", async ({
+    page,
+  }) => {
+    test.skip(ENROLLMENT_OPEN, "enrolment is open");
+    await expect(page.getByText("Enrolment closed")).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Enrolment is closed for now" })
+    ).toBeVisible();
+    await expect(page.getByRole("button", { name: /Enroll|Secure/ })).toHaveCount(0);
+    await expect(page.getByText(/Sold out/i)).toHaveCount(0);
+    await expect(page.getByText(/₹4,999|₹12,999/)).toHaveCount(0);
+    await expect(page.getByLabel(/Cohort seat map:/)).toHaveCount(0);
+
+    const waitlistCtas = page.getByRole("link", {
+      name: "Join the Cohort 2 waitlist",
+    });
+    await expect(waitlistCtas).toHaveCount(2);
+    await waitlistCtas.first().click();
+    await expect(page).toHaveURL(/\/waitlist$/);
+  });
+
   test("header links back to home", async ({ page }) => {
     const homeLink = page.getByRole("link", { name: "IntelliForge AI" });
     await expect(homeLink).toHaveAttribute("href", "/");
@@ -111,6 +140,7 @@ test.describe("Sprint Landing Page", () => {
   test("redirects unauthenticated user to sign-in on enroll click", async ({
     page,
   }) => {
+    test.skip(!ENROLLMENT_OPEN, NEEDS_OPEN);
     test.skip(!HAS_DB, NEEDS_DB);
     // The button is server-rendered before React attaches its onClick, so a
     // click that lands too early is silently dropped and the URL never changes.
@@ -203,7 +233,21 @@ test.describe("Sprint API", () => {
     expect(body.error).toContain("not found");
   });
 
+  test("POST /sprint/enroll is refused while enrolment is closed", async ({
+    request,
+  }) => {
+    test.skip(ENROLLMENT_OPEN, "enrolment is open");
+    const response = await request.post("/sprint/enroll", {
+      data: { sprintSlug: "ai-sprint-jun-2026" },
+    });
+    expect(response.status()).toBe(409);
+    const body = await response.json();
+    expect(body.success).toBe(false);
+    expect(body.error).toContain("Enrolment is closed");
+  });
+
   test("POST /sprint/enroll without auth returns 401", async ({ request }) => {
+    test.skip(!ENROLLMENT_OPEN, NEEDS_OPEN);
     const response = await request.post("/sprint/enroll", {
       data: { sprintSlug: "ai-sprint-jun-2026" },
     });
@@ -272,6 +316,7 @@ test.describe("Sprint — Mobile", () => {
   });
 
   test("shows the enroll CTA on mobile", async ({ page }) => {
+    test.skip(!ENROLLMENT_OPEN, NEEDS_OPEN);
     test.skip(!HAS_DB, NEEDS_DB);
     await page.goto("/sprint");
     await expect(

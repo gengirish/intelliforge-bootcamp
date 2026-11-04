@@ -4,6 +4,7 @@ import Razorpay from "razorpay";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import type { ApiResponse } from "@/lib/api-response";
+import { BOOTCAMP_ENROLLMENT_OPEN, COHORT_2 } from "@/lib/constants";
 import { PRODUCTS } from "@/lib/product-catalog";
 
 const schema = z.object({
@@ -25,6 +26,17 @@ function createBootcampReceipt() {
 }
 
 export async function POST(req: Request) {
+  // Stops new orders only. Payments on orders already open still confirm.
+  if (!BOOTCAMP_ENROLLMENT_OPEN) {
+    return NextResponse.json<ApiResponse<null>>(
+      {
+        success: false,
+        error: `Enrolment is closed. ${COHORT_2.name} opens ${COHORT_2.launchWeekend}.`,
+      },
+      { status: 409 }
+    );
+  }
+
   const userId =
     process.env.E2E_BYPASS_CLERK === "1"
       ? null

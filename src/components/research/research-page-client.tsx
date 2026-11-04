@@ -43,10 +43,10 @@ export function ResearchPageClient() {
             Back to Bootcamp
           </Link>
           <Link
-            href={SPRINT_CONFIG.href}
+            href={SPRINT_CONFIG.ctaHref}
             className="rounded-lg bg-cta px-3 py-1.5 text-xs font-semibold text-background sm:text-sm"
           >
-            Join AI Sprint
+            {SPRINT_CONFIG.ctaLabelShort}
           </Link>
         </div>
       </div>

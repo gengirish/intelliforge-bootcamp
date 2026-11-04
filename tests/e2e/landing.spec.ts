@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { BOOTCAMP_ENROLLMENT_OPEN } from "../../src/lib/constants";
 
 test.describe("Landing Page — All Sections", () => {
   test.beforeEach(async ({ page }) => {
@@ -36,7 +37,7 @@ test.describe("Landing Page — All Sections", () => {
     await expect(page.getByText("Ship proof they can click.")).toBeVisible();
     await expect(page.getByText("Not another portfolio toy.")).toBeVisible();
     await expect(
-      page.getByRole("link", { name: /Ship Proof in 14 Days — ₹4,999/ }).first()
+      page.getByRole("link", { name: /Join the Cohort 2 waitlist/ }).first()
     ).toBeVisible();
     await expect(
       page.getByRole("link", { name: /Try the free demo — live, no signup/ }).first()
@@ -131,13 +132,27 @@ test.describe("Landing Page — All Sections", () => {
     await expect(section.getByText("₹49,999", { exact: true })).toBeVisible();
     await expect(section.getByText("₹74,999").first()).toBeVisible();
     await expect(
-      section.getByRole("link", { name: /Ship Proof in 14 Days — ₹4,999/ })
+      section.getByRole("link", { name: /Join the Cohort 2 waitlist/ }).first()
     ).toBeVisible();
+  });
+
+  test("closed bootcamp enrolment offers the waitlist and no checkout", async ({
+    page,
+  }) => {
+    test.skip(BOOTCAMP_ENROLLMENT_OPEN, "enrolment is open");
+    const section = page.locator("#pricing");
+    await section.scrollIntoViewIfNeeded();
+    await expect(section.getByRole("button", { name: /Enrol/ })).toHaveCount(0);
+    await expect(section.getByText("100% Secure Checkout")).toHaveCount(0);
+    await expect(
+      section.getByRole("link", { name: "Join the Cohort 2 waitlist" }).last()
+    ).toHaveAttribute("href", "/waitlist");
   });
 
   test("bootcamp enroll redirects unauthenticated user to sign-in", async ({
     page,
   }) => {
+    test.skip(!BOOTCAMP_ENROLLMENT_OPEN, "bootcamp enrolment is closed");
     const section = page.locator("#pricing");
     await section.scrollIntoViewIfNeeded();
     // The button is server-rendered before React attaches its onClick, so a
@@ -168,7 +183,7 @@ test.describe("Landing Page — All Sections", () => {
     });
     await finalCta.scrollIntoViewIfNeeded();
     await expect(
-      finalCta.getByRole("link", { name: /Ship Proof in 14 Days — ₹4,999/ })
+      finalCta.getByRole("link", { name: /Join the Cohort 2 waitlist/ })
     ).toBeVisible();
     await expect(
       finalCta.getByRole("link", { name: /Try the free demo — live, no signup/ })

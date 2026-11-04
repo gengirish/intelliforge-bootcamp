@@ -38,7 +38,7 @@ export function FinalCTA() {
 
         <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
           <Link
-            href={SPRINT_CONFIG.href}
+            href={SPRINT_CONFIG.ctaHref}
             className={cn(
               "glow-cta inline-flex cursor-pointer items-center justify-center gap-3 rounded-xl bg-cta px-10 py-5 text-lg font-semibold text-background",
               "shadow-lg transition-colors duration-200 hover:bg-cta-hover",

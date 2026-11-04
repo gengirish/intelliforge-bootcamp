@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { BOOTCAMP_ENROLLMENT_OPEN } from "../../src/lib/constants";
 
 test.describe("Bootcamp Razorpay API", () => {
   test("POST /api/razorpay rejects invalid plan", async ({ request }) => {
@@ -31,9 +32,21 @@ test.describe("Bootcamp Razorpay API", () => {
     expect(body.code).toBe("INVALID_BODY");
   });
 
+  test("POST /api/razorpay is refused while enrolment is closed", async ({
+    request,
+  }) => {
+    test.skip(BOOTCAMP_ENROLLMENT_OPEN, "enrolment is open");
+    const response = await request.post("/api/razorpay", {
+      data: { plan: "earlyBird" },
+    });
+    expect(response.status()).toBe(409);
+    expect((await response.json()).code).toBe("ENROLLMENT_CLOSED");
+  });
+
   test("POST /api/razorpay accepts earlyBird plan when configured", async ({
     request,
   }) => {
+    test.skip(!BOOTCAMP_ENROLLMENT_OPEN, "bootcamp enrolment is closed");
     const response = await request.post("/api/razorpay", {
       data: { plan: "earlyBird" },
     });
@@ -53,7 +66,21 @@ test.describe("Bootcamp Razorpay API", () => {
 });
 
 test.describe("Bootcamp enrollment route", () => {
+  test("POST /bootcamp/enroll is refused while enrolment is closed", async ({
+    request,
+  }) => {
+    test.skip(BOOTCAMP_ENROLLMENT_OPEN, "enrolment is open");
+    const response = await request.post("/bootcamp/enroll", {
+      data: { plan: "earlyBird" },
+    });
+    expect(response.status()).toBe(409);
+    const body = await response.json();
+    expect(body.success).toBe(false);
+    expect(body.error).toContain("Enrolment is closed");
+  });
+
   test("POST /bootcamp/enroll without auth returns 401", async ({ request }) => {
+    test.skip(!BOOTCAMP_ENROLLMENT_OPEN, "bootcamp enrolment is closed");
     const response = await request.post("/bootcamp/enroll", {
       data: { plan: "earlyBird" },
     });
@@ -67,6 +94,7 @@ test.describe("Bootcamp enrollment route", () => {
   test("POST /bootcamp/enroll checks auth before validating the plan", async ({
     request,
   }) => {
+    test.skip(!BOOTCAMP_ENROLLMENT_OPEN, "bootcamp enrolment is closed");
     const response = await request.post("/bootcamp/enroll", {
       data: { plan: "not-a-real-plan" },
     });

@@ -117,10 +117,10 @@ test.describe("Email Integration — Contact Form & New Sections", () => {
       });
 
       const sprintCTA = finalCtaSection.getByRole("link", {
-        name: /Ship Proof in 14 Days — ₹4,999/,
+        name: /Join the Cohort 2 waitlist/,
       });
       await expect(sprintCTA).toBeVisible();
-      await expect(sprintCTA).toHaveAttribute("href", "/sprint");
+      await expect(sprintCTA).toHaveAttribute("href", "/waitlist");
 
       const freeDemoCTA = finalCtaSection.getByRole("link", {
         name: /Try the free demo — live, no signup/,

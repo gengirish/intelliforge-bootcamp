@@ -85,7 +85,7 @@ export function Curriculum() {
                 2 weeks · Two products deployed · Gateway to the full bootcamp
               </p>
               <Link
-                href={SPRINT_CONFIG.href}
+                href={SPRINT_CONFIG.ctaHref}
                 className={cn(
                   "mt-4 inline-flex items-center justify-center rounded-lg bg-cta px-4 py-2.5 text-sm font-semibold text-background",
                   "hover:bg-cta-hover transition-colors",

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Razorpay from "razorpay";
+import { BOOTCAMP_ENROLLMENT_OPEN, COHORT_2 } from "@/lib/constants";
 
 type PlanType = "earlyBird" | "regular";
 
@@ -47,6 +48,16 @@ export async function POST(req: NextRequest) {
           code: "INVALID_PLAN",
         },
         { status: 400 }
+      );
+    }
+
+    if (!BOOTCAMP_ENROLLMENT_OPEN) {
+      return NextResponse.json(
+        {
+          error: `Enrolment is closed. ${COHORT_2.name} opens ${COHORT_2.launchWeekend}.`,
+          code: "ENROLLMENT_CLOSED",
+        },
+        { status: 409 }
       );
     }
 

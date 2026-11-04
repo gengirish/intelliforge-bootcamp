@@ -5,6 +5,8 @@ import { Check } from "lucide-react";
 import { FadeIn } from "@/components/animations/fade-in";
 import { BootcampCheckoutButton } from "@/components/bootcamp/BootcampCheckoutButton";
 import {
+  BOOTCAMP_ENROLLMENT_OPEN,
+  COHORT_2,
   CTA_MICRO_TRUST,
   FREE_LIVE_DEMO_URL,
   PRICING,
@@ -72,7 +74,7 @@ export function Pricing() {
               </ul>
               <div className="mt-8 flex flex-col gap-3">
                 <Link
-                  href={SPRINT_CONFIG.href}
+                  href={SPRINT_CONFIG.ctaHref}
                   className={cn(
                     "glow-cta inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-cta px-6 py-3 text-base font-semibold text-background",
                     "hover:bg-cta-hover transition-colors",
@@ -154,21 +156,36 @@ export function Pricing() {
                   </li>
                 ))}
               </ul>
-              <div className="mt-8 flex flex-col gap-3">
-                <BootcampCheckoutButton
-                  plan="earlyBird"
-                  label={`Enrol — ${PRICING.earlyBird.price}`}
-                  className="border-2 border-border bg-transparent text-foreground hover:bg-surface"
-                />
-                <CtaMicroTrust text={CTA_MICRO_TRUST.bootcamp} className="text-center" />
-              </div>
+              {BOOTCAMP_ENROLLMENT_OPEN ? (
+                <div className="mt-8 flex flex-col gap-3">
+                  <BootcampCheckoutButton
+                    plan="earlyBird"
+                    label={`Enrol — ${PRICING.earlyBird.price}`}
+                    className="border-2 border-border bg-transparent text-foreground hover:bg-surface"
+                  />
+                  <CtaMicroTrust text={CTA_MICRO_TRUST.bootcamp} className="text-center" />
+                </div>
+              ) : (
+                <Link
+                  href={COHORT_2.waitlistHref}
+                  className={cn(
+                    "mt-8 inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-border px-6 py-3 text-base font-semibold text-foreground",
+                    "hover:bg-surface hover:border-primary/30 transition-colors",
+                    "focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
+                  )}
+                >
+                  Join the {COHORT_2.name} waitlist
+                </Link>
+              )}
             </article>
           </FadeIn>
         </div>
 
-        <FadeIn delay={0.3} className="mt-12">
-          <TrustSignals signals={TRUST_SIGNALS.checkout} variant="badges" />
-        </FadeIn>
+        {BOOTCAMP_ENROLLMENT_OPEN && (
+          <FadeIn delay={0.3} className="mt-12">
+            <TrustSignals signals={TRUST_SIGNALS.checkout} variant="badges" />
+          </FadeIn>
+        )}
 
         <FadeIn delay={0.4} className="mt-8 text-center">
           <a

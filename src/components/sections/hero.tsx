@@ -55,7 +55,7 @@ export function Hero() {
         <div className="hero-animate-cta mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <div className="flex w-full flex-col items-center sm:w-auto">
             <Link
-              href={SPRINT_CONFIG.href}
+              href={SPRINT_CONFIG.ctaHref}
               className={cn(
                 "glow-cta inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-cta px-8 py-4 text-base font-semibold text-background sm:w-auto",
                 "hover:bg-cta-hover shadow-lg transition-colors",

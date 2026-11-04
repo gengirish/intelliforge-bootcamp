@@ -31,7 +31,7 @@ test.describe("Responsive — Mobile (375x812)", () => {
   test("hero stacks vertically on mobile", async ({ page }) => {
     await expect(page.getByText("Ship proof they can click.")).toBeVisible();
     await expect(
-      page.getByRole("link", { name: /Ship Proof in 14 Days — ₹4,999/ }).first()
+      page.getByRole("link", { name: /Join the Cohort 2 waitlist/ }).first()
     ).toBeVisible();
   });
 
