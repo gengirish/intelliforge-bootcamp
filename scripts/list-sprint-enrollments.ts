@@ -1,10 +1,14 @@
+import { SPRINT_CONFIG } from "../src/lib/constants";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+/** Defaults to the sprint on sale. Set SPRINT_SLUG to work on another run. */
+const SPRINT_SLUG = process.env.SPRINT_SLUG ?? SPRINT_CONFIG.slug;
+
 async function main() {
   const rows = await prisma.sprintEnrollment.findMany({
-    where: { sprint: { slug: "ai-sprint-jun-2026" } },
+    where: { sprint: { slug: SPRINT_SLUG } },
     select: {
       id: true,
       email: true,

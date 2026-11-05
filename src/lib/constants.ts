@@ -225,6 +225,7 @@ export const CURRICULUM = [
   {
     phase: "Phase 1: Ship Your First Agent",
     weeks: "Weeks 1–4",
+    sprints: "Sprints 1–2",
     outcome: "You deploy a working AI agent with tool calling to a live endpoint.",
     color: "violet",
     modules: [
@@ -277,6 +278,7 @@ export const CURRICULUM = [
   {
     phase: "Phase 2: Ship Multi-Agent Systems",
     weeks: "Weeks 5–8",
+    sprints: "Sprints 3–4",
     outcome: "You ship a multi-agent system with enterprise integration patterns.",
     color: "cyan",
     modules: [
@@ -329,6 +331,7 @@ export const CURRICULUM = [
   {
     phase: "Phase 3: Ship Your Product",
     weeks: "Weeks 9–12",
+    sprints: "Sprints 5–6",
     outcome: "You launch an AI product — or contribute to a live IntelliForge repo.",
     color: "amber",
     modules: [
@@ -425,43 +428,28 @@ export const LEARNER_TESTIMONIALS = [
 ];
 
 export const PRICING = {
-  sprint: {
-    name: "2-Week Sprint",
+  perSprint: {
+    name: "Per sprint",
     price: "₹4,999",
-    originalPrice: "₹12,999",
-    href: "/sprint",
+    unit: "per 2-week sprint",
     features: [
-      "2 weeks live weekend sessions (Sat & Sun, 7–10 PM IST)",
-      "Two AI products deployed to production",
-      "Gateway to the 12-week bootcamp",
-      "Live on Zoom — Sat & Sun, 7–10 PM IST",
-    ],
-  },
-  earlyBird: {
-    name: "12-Week Bootcamp",
-    price: "₹49,999",
-    originalPrice: "₹74,999",
-    savings: "₹25,000",
-    features: [
-      "12 weeks live weekend sessions (Sat & Sun, 7–10 PM IST)",
-      "Build-alongside eligibility on live IntelliForge products",
-      "Verifiable credential with shipped-product link",
-      "Mentor score on your shipped work",
-      "Lifetime LMS access (learning.intelliforge.tech)",
-      "Lifetime community membership",
+      "Live weekend sessions (Sat & Sun, 7–10 PM IST)",
+      "Something deployed to production by the end of every sprint",
+      "Full course access on learning.intelliforge.tech",
       "Direct founder mentorship from Girish",
+      "Pay as you go: no commitment beyond the sprint you buy",
     ],
   },
-  regular: {
-    name: "12-Week Bootcamp",
-    price: "₹74,999",
+  fullProgramme: {
+    name: "All 6 sprints",
+    price: "₹29,994",
+    unit: "6 × ₹4,999, paid one sprint at a time",
     features: [
-      "12 weeks live weekend sessions (Sat & Sun, 7–10 PM IST)",
+      "Everything in each sprint, across all 12 weeks",
       "Build-alongside eligibility on live IntelliForge products",
       "Verifiable credential with shipped-product link",
       "Mentor score on your shipped work",
-      "Lifetime LMS access",
-      "Community membership",
+      "Lifetime LMS access and community membership",
     ],
   },
 };
@@ -493,14 +481,14 @@ export const FAQ_ITEMS = [
       "Live sessions are on Saturdays and Sundays, 7:00–10:00 PM IST (3 hours per day). Plan for an additional 5–8 hours of project work during the week. Total: approximately 11–14 hours per week for 12 weeks.",
   },
   {
-    question: "What's the difference between the 2-Week Sprint and 12-Week Bootcamp?",
+    question: "How does the 12-week bootcamp relate to the sprints?",
     answer:
-      "The 2-Week Sprint (₹4,999) is a focused gateway — two products deployed in 14 days. The 12-Week Bootcamp (₹49,999 early bird) is the full path with build-alongside eligibility, mentor scoring, and a verifiable credential. Start with the free live demo to see which fits.",
+      "The 12-week bootcamp is six 2-week sprints, and you pay ₹4,999 per sprint, ₹29,994 in all. Stop whenever you like. Finish all six to earn the verifiable credential, mentor score, and build-alongside eligibility. Start with the free live demo to see if it fits.",
   },
   {
-    question: "Is there a money-back guarantee?",
+    question: "What's the refund policy?",
     answer:
-      "Yes — 15-day money-back guarantee. If you attend the first two weekends and feel the bootcamp isn't right for you, we'll refund your full payment.",
+      "Each sprint is refundable in full until its first class. After that, that sprint's payment is non-refundable. You only ever pay for one sprint at a time.",
   },
   {
     question: "How is content delivered after the bootcamp?",
@@ -515,13 +503,8 @@ export const TRUST_SIGNALS = {
     { icon: "ShieldCheck", label: "Recruiter-checkable credential" },
     { icon: "User", label: "Founder-taught by Girish" },
   ],
-  checkout: [
-    { icon: "Lock", label: "100% Secure Checkout" },
-    { icon: "Shield", label: "15-Day Money-Back Guarantee" },
-    { icon: "CreditCard", label: "0% EMI Available" },
-  ],
   finalCta: [
-    { icon: "Shield", label: "15-day money-back guarantee" },
+    { icon: "Shield", label: "Refundable until each sprint's first class" },
     { icon: "Video", label: "Live weekend sessions on Zoom" },
     { icon: "Award", label: "Verifiable shipped-product credential" },
   ],
@@ -547,31 +530,112 @@ export const COHORT_2 = {
 } as const;
 
 /**
- * Whether the site sells seats. Set by hand, not by date: these checkouts still
- * sell Cohort 1 at the old slug and prices, so turn them on only once they sell
- * Cohort 2. While closed, every sprint CTA points at the waitlist.
+ * Whether the site sells seats. Set by hand, not by date: turn it on for the
+ * launch weekend, once the seed has run and SPRINT_COHORT_WHATSAPP points at the
+ * Cohort 2 group. While closed, every sprint CTA points at the waitlist.
  */
 const SPRINT_ENROLLMENT_OPEN: boolean = false;
-export const BOOTCAMP_ENROLLMENT_OPEN: boolean = false;
+
+/**
+ * The Cohort 2 programme: six 2-week sprints, one Razorpay checkout each. A slug
+ * here must have a Sprint row (prisma/seed.ts) with the same price and dates.
+ * Classes are Sat & Sun, 7:00 PM IST (13:30 UTC). startIso is the first class and
+ * endIso the last.
+ */
+export const COHORT_2_SPRINTS = [
+  {
+    number: 1,
+    slug: "ai-sprint-c2-s1",
+    title: "Chatbot + RAG",
+    weeks: "Weeks 1–2",
+    ships: "A Claude chatbot and a RAG system, both deployed to production.",
+    dates: "9–17 Jan 2027",
+    firstClass: "Saturday, 09/01/2027",
+    startIso: "2027-01-09T13:30:00.000Z",
+    endIso: "2027-01-17T13:30:00.000Z",
+  },
+  {
+    number: 2,
+    slug: "ai-sprint-c2-s2",
+    title: "Tool Calling & Agent Workflows",
+    weeks: "Weeks 3–4",
+    ships: "A working AI agent with tool calling on a live endpoint.",
+    dates: "23–31 Jan 2027",
+    firstClass: "Saturday, 23/01/2027",
+    startIso: "2027-01-23T13:30:00.000Z",
+    endIso: "2027-01-31T13:30:00.000Z",
+  },
+  {
+    number: 3,
+    slug: "ai-sprint-c2-s3",
+    title: "Multi-Agent Systems & Integration",
+    weeks: "Weeks 5–6",
+    ships: "A multi-agent system wired into enterprise integration patterns.",
+    dates: "6–14 Feb 2027",
+    firstClass: "Saturday, 06/02/2027",
+    startIso: "2027-02-06T13:30:00.000Z",
+    endIso: "2027-02-14T13:30:00.000Z",
+  },
+  {
+    number: 4,
+    slug: "ai-sprint-c2-s4",
+    title: "Production & Workflow Automation",
+    weeks: "Weeks 7–8",
+    ships: "A production deployment and an automated AI workflow.",
+    dates: "20–28 Feb 2027",
+    firstClass: "Saturday, 20/02/2027",
+    startIso: "2027-02-20T13:30:00.000Z",
+    endIso: "2027-02-28T13:30:00.000Z",
+  },
+  {
+    number: 5,
+    slug: "ai-sprint-c2-s5",
+    title: "Vibe Coding & Your Micro-SaaS",
+    weeks: "Weeks 9–10",
+    ships: "The first working version of your own AI micro-SaaS.",
+    dates: "6–14 Mar 2027",
+    firstClass: "Saturday, 06/03/2027",
+    startIso: "2027-03-06T13:30:00.000Z",
+    endIso: "2027-03-14T13:30:00.000Z",
+  },
+  {
+    number: 6,
+    slug: "ai-sprint-c2-s6",
+    title: "Launch & Demo Day",
+    weeks: "Weeks 11–12",
+    ships: "Your launched product, plus Demo Day and credential issuance.",
+    dates: "20–28 Mar 2027",
+    firstClass: "Saturday, 20/03/2027",
+    startIso: "2027-03-20T13:30:00.000Z",
+    endIso: "2027-03-28T13:30:00.000Z",
+  },
+] as const;
+
+/** The closed Cohort 1 run. Kept so its orders still confirm and fulfil. */
+export const COHORT_1_SPRINT_SLUG = "ai-sprint-jun-2026";
+
+export const SPRINT_PRICE_IN_PAISE = 499900;
+
+export function findCohort2Sprint(slug: string | null | undefined) {
+  return COHORT_2_SPRINTS.find((sprint) => sprint.slug === slug);
+}
 
 export const CTA_MICRO_TRUST = {
   freeDemo: "Live demo · No signup · See the curriculum before you pay",
   sprint: SPRINT_ENROLLMENT_OPEN
     ? "Two live deploy URLs in 14 days · Razorpay checkout · Built for interview deadlines"
     : `Enrolment opens ${COHORT_2.launchWeekendShort} · First class ${COHORT_2.firstClassShort} · Free to join`,
-  bootcamp:
-    "Secure checkout · 15-day money-back after first 2 weekends · 0% EMI available",
   freeClass: "No payment · No commitment · Real curriculum preview",
 } as const;
 
 export const SPRINT_CONFIG = {
   name: "2-Week AI Sprint",
   priceDisplay: "₹4,999",
-  originalPriceDisplay: "₹12,999",
-  session1Date: "Saturday, 08/08/2026",
-  cohortStartDate: "08/08/2026",
-  cohortEndDate: "22/08/2026",
-  slug: "ai-sprint-jun-2026",
+  session1Date: COHORT_2_SPRINTS[0].firstClass,
+  cohortStartDate: "09/01/2027",
+  cohortEndDate: "17/01/2027",
+  /** The sprint /sprint sells. Other sprints are bought from /sprint/all. */
+  slug: COHORT_2_SPRINTS[0].slug,
   seatsTotal: 30,
   href: "/sprint",
   enrollmentOpen: SPRINT_ENROLLMENT_OPEN,
@@ -586,22 +650,6 @@ export const SPRINT_CONFIG = {
     "Built for interviews, client pitches, and performance reviews with a deadline — not 'someday' learners.",
   liveScheduleSummary:
     "Live on Zoom every Saturday & Sunday — 7–10 PM IST",
-  /** Cohort 1 seats sold — shown on the seat map (index order, left-to-right A→C). */
-  bookedSeatNames: [
-    "Prasad K",
-    "Harish H",
-    "Shreya R",
-    "Rohini D",
-    "Naresh T",
-    "Lokamma B",
-    "Reshma J",
-    "Prasad I",
-    "Mukaram",
-    "Sravani",
-    "Bikshapathi B",
-    "Rajeswari P",
-    "Nethra Gowda",
-  ],
 };
 
 export const NAV_LINKS = [

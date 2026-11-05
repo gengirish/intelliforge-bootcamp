@@ -1,8 +1,12 @@
+import { SPRINT_CONFIG } from "../src/lib/constants";
 import { PrismaClient } from "@prisma/client";
 import { markSprintEnrollmentPaidManually } from "../src/lib/sprint-payment";
 import { getSprintSeatCounts } from "../src/lib/sprint-seats";
 
 const prisma = new PrismaClient();
+
+/** Defaults to the sprint on sale. Set SPRINT_SLUG to work on another run. */
+const SPRINT_SLUG = process.env.SPRINT_SLUG ?? SPRINT_CONFIG.slug;
 
 const email = process.argv[2];
 const note = process.argv[3] ?? "Manual payment";
@@ -16,7 +20,7 @@ async function main() {
   const enrollment = await prisma.sprintEnrollment.findFirst({
     where: {
       email: { equals: email, mode: "insensitive" },
-      sprint: { slug: "ai-sprint-jun-2026" },
+      sprint: { slug: SPRINT_SLUG },
       status: { not: "PAID" },
     },
     orderBy: { enrolledAt: "asc" },
@@ -27,7 +31,7 @@ async function main() {
     const paid = await prisma.sprintEnrollment.findFirst({
       where: {
         email: { equals: email, mode: "insensitive" },
-        sprint: { slug: "ai-sprint-jun-2026" },
+        sprint: { slug: SPRINT_SLUG },
         status: "PAID",
       },
       select: { id: true, email: true, name: true },
@@ -42,7 +46,7 @@ async function main() {
   }
 
   const result = await markSprintEnrollmentPaidManually(enrollment.id, note);
-  const seats = await getSprintSeatCounts("ai-sprint-jun-2026");
+  const seats = await getSprintSeatCounts(SPRINT_SLUG);
 
   console.log(
     JSON.stringify(

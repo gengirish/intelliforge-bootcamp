@@ -31,7 +31,6 @@ interface SprintLandingClientProps {
   seatsFilled: number;
   seatsTotal: number;
   priceInPaise: number;
-  originalPriceInPaise: number;
   startDate: string;
   isActive: boolean;
 }
@@ -107,7 +106,6 @@ export function SprintLandingClient({
   seatsFilled,
   seatsTotal,
   priceInPaise,
-  originalPriceInPaise,
   startDate,
   isActive,
 }: SprintLandingClientProps) {
@@ -120,7 +118,6 @@ export function SprintLandingClient({
   const { total, filled, remaining: displayRemaining } = liveSeats;
 
   const price = formatRupee(priceInPaise);
-  const originalPrice = formatRupee(originalPriceInPaise);
   const startLabel = formatISTDate(startDate);
   const soldOut = !isActive || displayRemaining <= 0;
   const enrollmentOpen = SPRINT_CONFIG.enrollmentOpen;
@@ -135,16 +132,18 @@ export function SprintLandingClient({
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <p className="bg-primary px-4 py-2 text-center text-sm text-foreground">
-        Cohort 1 is underway. {COHORT_2.name} opens{" "}
-        {COHORT_2.launchWeekendShort}, first class {COHORT_2.firstClassShort}.{" "}
-        <Link
-          href={COHORT_2.waitlistHref}
-          className="font-medium underline underline-offset-2 hover:no-underline"
-        >
-          Join the waitlist →
-        </Link>
-      </p>
+      {!enrollmentOpen && (
+        <p className="bg-primary px-4 py-2 text-center text-sm text-foreground">
+          {COHORT_2.name} opens {COHORT_2.launchWeekendShort}, first class{" "}
+          {COHORT_2.firstClassShort}.{" "}
+          <Link
+            href={COHORT_2.waitlistHref}
+            className="font-medium underline underline-offset-2 hover:no-underline"
+          >
+            Join the waitlist →
+          </Link>
+        </p>
+      )}
       <header className="border-b border-border/50 bg-background/90 backdrop-blur sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="text-foreground font-bold text-lg">
@@ -152,10 +151,10 @@ export function SprintLandingClient({
           </Link>
           <div className="flex items-center gap-4">
             <Link
-              href="/"
+              href="/sprint/all"
               className="hidden sm:inline text-sm text-muted transition-colors hover:text-foreground"
             >
-              Full 12-Week Bootcamp →
+              All 6 sprints →
             </Link>
             {enrollmentOpen ? (
               <>
@@ -189,7 +188,7 @@ export function SprintLandingClient({
           <div className="inline-flex items-center gap-2 bg-surface border border-border rounded-full px-4 py-1.5 text-sm text-accent mb-6">
             <Sparkles className="w-4 h-4" />
             {enrollmentOpen ? (
-              <>Cohort 1 · Starts {startLabel} · Live Sat &amp; Sun</>
+              <>{COHORT_2.name} · Sprint 1 of 6 · Starts {startLabel} · Live Sat &amp; Sun</>
             ) : (
               <>
                 {COHORT_2.name} enrolment opens {COHORT_2.launchWeekendShort}
@@ -215,16 +214,13 @@ export function SprintLandingClient({
           {enrollmentOpen && (
             <>
               <p className="text-base text-amber-400/90 mb-8 max-w-xl mx-auto font-medium">
-                Cohort 1 starts {startLabel}. Every week you wait, someone else
+                {COHORT_2.name} starts {startLabel}. Every week you wait, someone else
                 shows up with live deploys — and you show up with plans.
               </p>
 
               <div className="flex flex-wrap items-center justify-center gap-4 mb-10">
                 <div className="text-4xl font-bold text-foreground">{price}</div>
-                <div className="text-xl text-muted line-through">{originalPrice}</div>
-                <div className="bg-green-500/20 text-green-400 text-sm font-semibold px-3 py-1 rounded-full">
-                  Save {formatRupee(originalPriceInPaise - priceInPaise)}
-                </div>
+                <div className="text-sm text-muted">for this 2-week sprint</div>
               </div>
             </>
           )}
@@ -247,10 +243,10 @@ export function SprintLandingClient({
               />
             )}
             <Link
-              href="/"
+              href="/sprint/all"
               className="text-muted hover:text-foreground text-sm transition-colors"
             >
-              Full 12-Week Bootcamp →
+              All 6 sprints →
             </Link>
           </div>
 
@@ -264,14 +260,13 @@ export function SprintLandingClient({
                   <Clock className="w-4 h-4" /> Sat &amp; Sun · 7–10 PM IST
                 </span>
                 <span className="flex items-center gap-2">
-                  <Shield className="w-4 h-4" /> Zero-risk guarantee
+                  <Shield className="w-4 h-4" /> Refundable until first class
                 </span>
               </div>
 
               <SprintSeatMap
                 filled={filled}
                 total={total}
-                bookedNames={SPRINT_CONFIG.bookedSeatNames}
               />
             </>
           )}
@@ -412,13 +407,12 @@ export function SprintLandingClient({
                 : "Stop planning. Start shipping."}
             </h2>
             <p className="text-muted mb-8">
-              {price} one-time · Two live products in 14 days · Live Zoom on Sat
-              &amp; Sun (7–10 PM IST) · Zero-risk guarantee
+              {price} for this sprint · Two live products in 14 days · Live Zoom on Sat
+              &amp; Sun (7–10 PM IST) · Refundable until first class
             </p>
             <SprintSeatMap
               filled={filled}
               total={total}
-              bookedNames={SPRINT_CONFIG.bookedSeatNames}
               className="mb-8"
             />
             {!soldOut && (
@@ -448,10 +442,10 @@ export function SprintLandingClient({
 
       <footer className="border-t border-border/50 px-6 py-8 text-center text-sm text-muted">
         <Link
-          href="/"
+          href="/sprint/all"
           className="inline-block mb-4 text-muted transition-colors hover:text-foreground"
         >
-          Full 12-Week Bootcamp →
+          All 6 sprints →
         </Link>
         <p>
           IntelliForge AI · {SITE_CONFIG.contact.email} ·{" "}

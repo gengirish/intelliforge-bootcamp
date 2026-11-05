@@ -31,7 +31,7 @@ Next.js 16 App Router marketing + enrolment site for the IntelliForge AI Bootcam
 
 ### Enrolment → payment → fulfilment
 
-1. `POST /sprint/enroll` (or `/bootcamp/enroll`) — Clerk-authenticated, validates seats, creates a Razorpay order plus a `PENDING` enrollment row keyed by `razorpayOrderId`.
+1. `POST /sprint/enroll` — Clerk-authenticated, validates seats, creates a Razorpay order plus a `PENDING` enrollment row keyed by `razorpayOrderId`.
 2. Razorpay checkout runs client-side in `Sprint/BootcampCheckoutButtonClerk`.
 3. Payment is confirmed by **two independent paths** that must stay idempotent:
    - webhook `POST /sprint/webhook` (and `/api/webhooks/razorpay`) → `src/lib/razorpay-webhook.ts`, HMAC-verified against `RAZORPAY_WEBHOOK_SECRET`, dispatches on `order_id` to the sprint or bootcamp table;
@@ -41,9 +41,11 @@ Next.js 16 App Router marketing + enrolment site for the IntelliForge AI Bootcam
 
 `markSprintEnrollmentPaidManually()` is the same path for offline/UPI payments, invoked by `POST /api/admin/mark-sprint-paid` or `scripts/mark-sprint-manual-paid.ts`.
 
-### Seat counts have two sources of truth
+### Six sprints, one price
 
-`getSprintSeatCounts()` reads the real DB count (and self-heals `Sprint.seatsFilled` when it drifts), but everything user-facing runs through `resolveSprintDisplaySeats()`, which overrides `filled` with the length of `SPRINT_CONFIG.bookedSeatNames` in [src/lib/constants.ts](src/lib/constants.ts). Editing that array changes what the landing page, seat map, and the enrol route's "no seats remaining" check all report. Update it whenever a manual booking is recorded.
+The 12-week bootcamp is six 2-week sprints at ₹4,999 each; there is no upfront plan. `COHORT_2_SPRINTS` in [src/lib/constants.ts](src/lib/constants.ts) holds their slugs and dates, `prisma/seed.ts` creates a `Sprint` row for each, and `/sprint/all` lists them. `/sprint` is the Sprint 1 landing page. A sprint is on sale when its row has `isActive: true`, which is set by hand as each opens; re-seeding does not change it on an existing row. Seat counts come only from the database. All sprints unlock the same LMS course, so a sprint buys its live sessions and mentorship, not its material.
+
+`BootcampEnrollment`, its webhook branch, and the retry job remain only for orders placed under the old plans. The `/bootcamp/enroll` and `/api/razorpay` checkouts are gone.
 
 ### External services
 
@@ -57,11 +59,11 @@ WhatsApp OTP login was **retired** (2026-08-31): `src/lib/otp.ts`, `src/lib/otp-
 
 Each client exposes an `isXConfigured()` guard and return null config rather than throwing at import time, so the app boots with these unset — check the guard before calling.
 
-`src/lib/product-catalog.ts` maps product slugs to LMS course slugs and plan prices in paise; the sprint slug `ai-sprint-jun-2026` is duplicated in `SPRINT_CONFIG`, the seed, and route defaults — change all of them together.
+`src/lib/product-catalog.ts` maps sprint slugs to LMS course slugs. A new sprint slug goes in `COHORT_2_SPRINTS`; the catalog and seed read it from there.
 
 ### Auth boundaries
 
-Clerk middleware only matches `/sign-in`, `/sprint/enroll`, `/bootcamp/enroll` ([src/middleware.ts](src/middleware.ts)); everything else is public. Admin routes are not Clerk-guarded — they check a bearer token against `ADMIN_SECRET` (`CRON_SECRET` for the retry job) inside each handler.
+Clerk middleware only matches `/sign-in` and `/sprint/enroll` ([src/middleware.ts](src/middleware.ts)); everything else is public. Admin routes are not Clerk-guarded — they check a bearer token against `ADMIN_SECRET` (`CRON_SECRET` for the retry job) inside each handler.
 
 ### E2E bypass
 
@@ -97,10 +99,10 @@ Both degrade gracefully when unset.
 
 `/waitlist` posts to `/api/waitlist`, which upserts a `WaitlistEntry` keyed on cohort and email, then notifies the admin by email on a best-effort basis. Launch details live in `COHORT_2` in `src/lib/constants.ts`. Deploying this needs `npm run db:deploy`, because the build does not run migrations.
 
-Checkout is closed by two flags at the top of the launch block in `src/lib/constants.ts`. `SPRINT_ENROLLMENT_OPEN` strips `/sprint` of its price, seats and buy buttons, points every sprint CTA at the waitlist, and makes `POST /sprint/enroll` return 409. `BOOTCAMP_ENROLLMENT_OPEN` swaps the pricing section's buy button for the waitlist and makes `POST /bootcamp/enroll` and `POST /api/razorpay` return 409. Orders already open still confirm. They are manual flags, not dates, because these checkouts still sell Cohort 1 at the old slug and prices — turn them on only once they sell Cohort 2.
+Checkout is closed by `SPRINT_ENROLLMENT_OPEN` in `src/lib/constants.ts`. While false it strips `/sprint` of its price, seats and buy buttons, points every sprint CTA at the waitlist, and makes `POST /sprint/enroll` return 409; orders already open still confirm. Before turning it on: run the seed against production and point `SPRINT_COHORT_WHATSAPP` at the Cohort 2 group.
 
 ### Content
 
-Marketing copy, pricing, curriculum, FAQs, testimonials, and cohort dates are centralised as exported constants in [src/lib/constants.ts](src/lib/constants.ts) rather than inlined in components — copy changes belong there. Note that prices appear both as display strings there and as paise integers in `product-catalog.ts` / the seed.
+Marketing copy, pricing, curriculum, FAQs, testimonials, and cohort dates are centralised as exported constants in [src/lib/constants.ts](src/lib/constants.ts) rather than inlined in components — copy changes belong there. Prices appear both as display strings there and as `SPRINT_PRICE_IN_PAISE`, which the seed copies to each `Sprint` row.
 
 `/zoom`, `/whatsapp`, and `/sprint/whatsapp` are server redirect routes to external invite URLs, so the links can be changed in one place; `tests/e2e/redirects.spec.ts` asserts them.

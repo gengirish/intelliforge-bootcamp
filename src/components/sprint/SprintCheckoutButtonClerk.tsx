@@ -1,5 +1,6 @@
 "use client";
 
+import { findCohort2Sprint, SPRINT_CONFIG } from "@/lib/constants";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
@@ -15,7 +16,7 @@ interface SprintCheckoutButtonProps {
 }
 
 export function SprintCheckoutButtonClerk({
-  sprintSlug = "ai-sprint-jun-2026",
+  sprintSlug = SPRINT_CONFIG.slug,
   label = "Enroll Now",
   className,
 }: SprintCheckoutButtonProps) {
@@ -66,7 +67,9 @@ export function SprintCheckoutButtonClerk({
         amount,
         currency,
         name: "IntelliForge AI",
-        description: "2-Week AI Sprint — Cohort 1",
+        description: findCohort2Sprint(sprintSlug)
+          ? `Sprint ${findCohort2Sprint(sprintSlug)?.number} of 6 — Cohort 2`
+          : SPRINT_CONFIG.name,
         image: "https://upskill.intelliforge.tech/logo.png",
         prefill: {
           name: user?.fullName ?? "",
@@ -90,7 +93,7 @@ export function SprintCheckoutButtonClerk({
           }
 
           router.push(
-            `/sprint/success?payment_id=${response.razorpay_payment_id}&order_id=${response.razorpay_order_id}`
+            `/sprint/success?payment_id=${response.razorpay_payment_id}&order_id=${response.razorpay_order_id}&sprint=${sprintSlug}`
           );
         },
         modal: {

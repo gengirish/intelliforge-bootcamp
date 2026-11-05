@@ -2,7 +2,7 @@ import {
   LMS_SIGNIN_URL,
   LMS_UPSKILL_ROADMAP_URL,
   SITE_CONFIG,
-  SPRINT_CONFIG,
+  findCohort2Sprint,
   SPRINT_COHORT_WHATSAPP,
   SPRINT_COHORT_WHATSAPP_URL,
   WHATSAPP_DEMO_URL,
@@ -60,17 +60,20 @@ export async function sendSprintEnrollmentConfirmation(data: {
   name: string;
   email: string;
   paymentId: string;
+  sprintSlug: string;
 }) {
   const displayName = data.name.trim() || "there";
+  // Undefined for a late Cohort 1 confirmation, which must not quote Cohort 2 dates.
+  const sprint = findCohort2Sprint(data.sprintSlug);
 
   return agentMailSend({
     to: data.email,
     subject: `You're in — ${SPRINT_COHORT_WHATSAPP.name} · IntelliForge AI Sprint`,
     html: `
       <div style="font-family: system-ui, sans-serif; max-width: 600px; margin: 0 auto; background: #0A0F1C; color: #E2E8F0; padding: 32px; border-radius: 12px;">
-        <h2 style="color: #7C3AED; margin-top: 0;">You're in, Cohort 1!</h2>
+        <h2 style="color: #7C3AED; margin-top: 0;">You're in${sprint ? ", Cohort 2" : ""}!</h2>
         <p>Hi ${displayName},</p>
-        <p>Your payment for the <strong>2-Week AI Sprint</strong> is confirmed. Your seat is reserved.</p>
+        <p>Your payment for <strong>${sprint ? `Sprint ${sprint.number} of 6: ${sprint.title}` : "the 2-Week AI Sprint"}</strong> is confirmed. Your seat is reserved.</p>
         <p><strong>Step 1 — Join the cohort WhatsApp group now:</strong></p>
         <p style="margin: 24px 0;">
           <a href="${SPRINT_COHORT_WHATSAPP_URL}" style="display: inline-block; background: #F59E0B; color: #0A0F1C; padding: 14px 24px; border-radius: 8px; font-weight: 600; text-decoration: none;">
@@ -85,7 +88,7 @@ export async function sendSprintEnrollmentConfirmation(data: {
           </a>
         </p>
         <p style="font-size: 13px; color: #94A3B8;">Or <a href="${LMS_SIGNIN_URL}" style="color: #06B6D4;">sign in to LMS</a> first if prompted.</p>
-        <p>Session 1 is <strong>${SPRINT_CONFIG.session1Date}</strong>. Live classes run every <strong>Saturday &amp; Sunday</strong> — <strong>7:00–10:00 PM IST</strong>. Zoom links and pre-read materials will be shared in the group.</p>
+        <p>${sprint ? `Session 1 is <strong>${sprint.firstClass}</strong>. ` : ""}Live classes run every <strong>Saturday &amp; Sunday</strong> — <strong>7:00–10:00 PM IST</strong>. Zoom links and pre-read materials will be shared in the group.</p>
         <p style="color: #94A3B8; font-size: 13px;">Payment ID: ${data.paymentId}</p>
         <hr style="border: none; border-top: 1px solid #1E293B; margin: 24px 0;" />
         <p style="color: #94A3B8; font-size: 12px;">IntelliForge AI · <a href="${SITE_CONFIG.url}" style="color: #94A3B8;">upskill.intelliforge.tech</a></p>

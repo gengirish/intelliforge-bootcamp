@@ -27,8 +27,7 @@ const svg = `
   <text x="100" y="280" fill="url(#accent)" font-family="system-ui,sans-serif" font-size="64" font-weight="bold">2-Week AI Sprint</text>
   <text x="100" y="360" fill="#E2E8F0" font-family="system-ui,sans-serif" font-size="36">Ship your first AI product in 14 days</text>
   <text x="100" y="440" fill="#94A3B8" font-family="system-ui,sans-serif" font-size="28">Claude API + RAG · Deployed to Vercel</text>
-  <text x="100" y="520" fill="#22C55E" font-family="system-ui,sans-serif" font-size="48" font-weight="bold">₹4,999</text>
-  <text x="280" y="520" fill="#64748B" font-family="system-ui,sans-serif" font-size="32" text-decoration="line-through">₹12,999</text>
+  <text x="100" y="520" fill="#22C55E" font-family="system-ui,sans-serif" font-size="48" font-weight="bold">₹4,999 per sprint</text>
 </svg>
 `;
 

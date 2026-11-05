@@ -38,8 +38,8 @@ test.describe("Responsive — Mobile (375x812)", () => {
   test("pricing cards stack on mobile", async ({ page }) => {
     const section = page.locator("#pricing");
     await section.scrollIntoViewIfNeeded();
-    await expect(section.getByText("₹49,999", { exact: true })).toBeVisible();
-    await expect(section.getByText("₹74,999").first()).toBeVisible();
+    await expect(section.getByText("₹4,999", { exact: true })).toBeVisible();
+    await expect(section.getByText("₹29,994", { exact: true })).toBeVisible();
   });
 });
 
@@ -51,8 +51,8 @@ test.describe("Responsive — Tablet (768x1024)", () => {
     await page.waitForLoadState("domcontentloaded");
 
     await expect(page.getByText("Ship proof they can click.")).toBeVisible();
-    await expect(page.getByText("12 Weeks. Four Phases. One Shipped Product.")).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Start with the 2-Week Sprint" })).toBeVisible();
+    await expect(page.getByText("12 Weeks. Six Sprints. One Shipped Product.")).toBeVisible();
+    await expect(page.getByRole("heading", { name: /₹4,999 per sprint/ })).toBeVisible();
   });
 });
 

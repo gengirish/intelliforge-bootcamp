@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ChevronDown, Check, Rocket } from "lucide-react";
 import { FadeIn } from "@/components/animations/fade-in";
-import { CURRICULUM, PRICING, SPRINT_CONFIG } from "@/lib/constants";
+import { CURRICULUM, PRICING } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
@@ -64,7 +64,7 @@ export function Curriculum() {
             id="curriculum-heading"
             className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl"
           >
-            12 Weeks. Four Phases. One Shipped Product.
+            12 Weeks. Six Sprints. One Shipped Product.
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted">
             Every week ends with something deployed — not something studied.
@@ -73,47 +73,30 @@ export function Curriculum() {
 
         {/* Two tracks */}
         <FadeIn delay={0.05} className="mb-12">
-          <div className="grid gap-6 md:grid-cols-2">
-            <article className="rounded-xl border border-cta/30 bg-cta/5 p-6">
-              <p className="text-sm font-medium uppercase tracking-wider text-cta">
-                {SPRINT_CONFIG.name}
-              </p>
-              <p className="mt-2 text-3xl font-bold text-foreground">
-                {PRICING.sprint.price}
-              </p>
-              <p className="mt-2 text-sm text-muted">
-                2 weeks · Two products deployed · Gateway to the full bootcamp
-              </p>
-              <Link
-                href={SPRINT_CONFIG.ctaHref}
-                className={cn(
-                  "mt-4 inline-flex items-center justify-center rounded-lg bg-cta px-4 py-2.5 text-sm font-semibold text-background",
-                  "hover:bg-cta-hover transition-colors",
-                  "focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
-                )}
-              >
-                {SPRINT_CONFIG.ctaLabelShort}
-              </Link>
-            </article>
-            <article className="rounded-xl border border-border bg-surface-light p-6">
-              <p className="text-sm font-medium uppercase tracking-wider text-muted">
-                {PRICING.earlyBird.name}
-              </p>
-              <p className="mt-2 text-3xl font-bold text-foreground">
-                {PRICING.earlyBird.price}
+          <article className="flex flex-col gap-4 rounded-xl border border-cta/30 bg-cta/5 p-6 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-3xl font-bold text-foreground">
+                {PRICING.perSprint.price}{" "}
+                <span className="text-base font-medium text-muted">
+                  {PRICING.perSprint.unit}
+                </span>
               </p>
               <p className="mt-2 text-sm text-muted">
-                12 weeks · Build-alongside · Verifiable credential with
-                shipped-product link
+                Six sprints over 12 weeks · Pay for one at a time · Finish all
+                six for the verifiable credential
               </p>
-              <Link
-                href="#pricing"
-                className="mt-4 inline-flex text-sm font-medium text-accent hover:underline focus:outline-none focus:ring-2 focus:ring-accent rounded"
-              >
-                See full pricing →
-              </Link>
-            </article>
-          </div>
+            </div>
+            <Link
+              href="/sprint/all"
+              className={cn(
+                "inline-flex shrink-0 items-center justify-center rounded-lg bg-cta px-4 py-2.5 text-sm font-semibold text-background",
+                "hover:bg-cta-hover transition-colors",
+                "focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
+              )}
+            >
+              See all 6 sprints
+            </Link>
+          </article>
         </FadeIn>
 
         <div className="space-y-8">
@@ -139,7 +122,7 @@ export function Curriculum() {
                     <h3 className="text-xl font-semibold text-foreground sm:text-2xl">
                       {phase.phase}
                     </h3>
-                    <span className="text-muted">{phase.weeks}</span>
+                    <span className="text-muted">{phase.sprints} · {phase.weeks}</span>
                   </div>
                 </div>
 

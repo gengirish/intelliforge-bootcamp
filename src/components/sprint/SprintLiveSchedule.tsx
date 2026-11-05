@@ -11,9 +11,8 @@ import {
   resolveSprintStartIso,
 } from "@/lib/sprint-schedule";
 import { formatISTDate } from "@/lib/sprint-format";
-import { SPRINT_CONFIG, SPRINT_COHORT_WHATSAPP } from "@/lib/constants";
+import { COHORT_2 } from "@/lib/constants";
 import { Calendar, Globe } from "lucide-react";
-import { SprintSeatMap } from "@/components/sprint/SprintSeatMap";
 import { cn } from "@/lib/utils";
 
 interface SprintLiveScheduleProps {
@@ -68,7 +67,7 @@ export function SprintLiveSchedule({
             Every {daysLabel} — 7–10 PM IST
           </h2>
           <p className="text-muted text-sm sm:text-base max-w-2xl mx-auto">
-            Cohort 1 kicks off {startLabel}. Classes run live on Zoom every
+            {COHORT_2.name} kicks off {startLabel}. Classes run live on Zoom every
             weekend evening, 7:00–10:00 PM IST. Pick your timezone to see
             local times.
           </p>
@@ -165,17 +164,10 @@ export function SprintLiveSchedule({
           </table>
         </div>
 
-        <SprintSeatMap
-          filled={SPRINT_CONFIG.bookedSeatNames.length}
-          total={SPRINT_CONFIG.seatsTotal}
-          bookedNames={SPRINT_CONFIG.bookedSeatNames}
-          className="mt-8"
-        />
-
         <p className="mt-4 text-center text-xs text-muted">
-          PST / EST / CET reflect daylight saving for August 2026. Zoom links are
-          shared in the {SPRINT_COHORT_WHATSAPP.name} WhatsApp group after
-          enrollment.
+          Local times are for the first class. PST, EST and CET move an hour in
+          March when daylight saving starts. Zoom links are shared in the cohort
+          WhatsApp group after enrollment.
         </p>
       </div>
     </section>

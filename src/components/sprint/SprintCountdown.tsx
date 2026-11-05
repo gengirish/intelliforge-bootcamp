@@ -47,7 +47,7 @@ export function SprintCountdown({
         )}
       >
         <p className="text-sm font-medium uppercase tracking-wider text-green-400">
-          Cohort 1 is underway
+          Cohort 2 is underway
         </p>
         <p className="mt-1 text-muted text-sm">
           Live classes run every Saturday &amp; Sunday — join via WhatsApp for Zoom links.
@@ -70,7 +70,7 @@ export function SprintCountdown({
           compact ? "text-sm" : "text-base"
         )}
       >
-        Countdown to Cohort 1 kickoff
+        Countdown to Cohort 2 kickoff
       </p>
       <p className="mt-1 text-sm text-muted">
         First live class · {startLabel} · 7:00 PM IST

@@ -1,106 +1,15 @@
 import { test, expect } from "@playwright/test";
-import { BOOTCAMP_ENROLLMENT_OPEN } from "../../src/lib/constants";
 
-test.describe("Bootcamp Razorpay API", () => {
-  test("POST /api/razorpay rejects invalid plan", async ({ request }) => {
-    const response = await request.post("/api/razorpay", {
-      data: { plan: "invalid" },
+test.describe("Retired bootcamp checkout", () => {
+  // The upfront ₹49,999 and ₹74,999 plans are gone: nothing may create those orders.
+  for (const path of ["/api/razorpay", "/bootcamp/enroll"]) {
+    test(`POST ${path} no longer exists`, async ({ request }) => {
+      const response = await request.post(path, {
+        data: { plan: "earlyBird" },
+      });
+      expect(response.status()).toBe(404);
     });
-    expect(response.status()).toBe(400);
-    const body = await response.json();
-    expect(body.error).toMatch(/Invalid or missing plan/);
-    expect(body.code).toBe("INVALID_PLAN");
-  });
-
-  test("POST /api/razorpay rejects missing plan", async ({ request }) => {
-    const response = await request.post("/api/razorpay", {
-      data: {},
-    });
-    expect(response.status()).toBe(400);
-    const body = await response.json();
-    expect(body.code).toBe("INVALID_PLAN");
-  });
-
-  test("POST /api/razorpay rejects malformed JSON", async ({ baseURL }) => {
-    const response = await fetch(`${baseURL}/api/razorpay`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: "not-json",
-    });
-    expect(response.status).toBe(400);
-    const body = await response.json();
-    expect(body.code).toBe("INVALID_BODY");
-  });
-
-  test("POST /api/razorpay is refused while enrolment is closed", async ({
-    request,
-  }) => {
-    test.skip(BOOTCAMP_ENROLLMENT_OPEN, "enrolment is open");
-    const response = await request.post("/api/razorpay", {
-      data: { plan: "earlyBird" },
-    });
-    expect(response.status()).toBe(409);
-    expect((await response.json()).code).toBe("ENROLLMENT_CLOSED");
-  });
-
-  test("POST /api/razorpay accepts earlyBird plan when configured", async ({
-    request,
-  }) => {
-    test.skip(!BOOTCAMP_ENROLLMENT_OPEN, "bootcamp enrolment is closed");
-    const response = await request.post("/api/razorpay", {
-      data: { plan: "earlyBird" },
-    });
-
-    if (response.status() === 500) {
-      const body = await response.json();
-      expect(body.code).toMatch(/CONFIG_ERROR|ORDER_CREATE_FAILED/);
-      return;
-    }
-
-    expect(response.status()).toBe(200);
-    const body = await response.json();
-    expect(body.orderId).toBeTruthy();
-    expect(body.amount).toBe(4999900);
-    expect(body.currency).toBe("INR");
-  });
-});
-
-test.describe("Bootcamp enrollment route", () => {
-  test("POST /bootcamp/enroll is refused while enrolment is closed", async ({
-    request,
-  }) => {
-    test.skip(BOOTCAMP_ENROLLMENT_OPEN, "enrolment is open");
-    const response = await request.post("/bootcamp/enroll", {
-      data: { plan: "earlyBird" },
-    });
-    expect(response.status()).toBe(409);
-    const body = await response.json();
-    expect(body.success).toBe(false);
-    expect(body.error).toContain("Enrolment is closed");
-  });
-
-  test("POST /bootcamp/enroll without auth returns 401", async ({ request }) => {
-    test.skip(!BOOTCAMP_ENROLLMENT_OPEN, "bootcamp enrolment is closed");
-    const response = await request.post("/bootcamp/enroll", {
-      data: { plan: "earlyBird" },
-    });
-
-    expect(response.status()).toBe(401);
-    const body = await response.json();
-    expect(body.success).toBe(false);
-    expect(body.error).toBe("Unauthorized");
-  });
-
-  test("POST /bootcamp/enroll checks auth before validating the plan", async ({
-    request,
-  }) => {
-    test.skip(!BOOTCAMP_ENROLLMENT_OPEN, "bootcamp enrolment is closed");
-    const response = await request.post("/bootcamp/enroll", {
-      data: { plan: "not-a-real-plan" },
-    });
-
-    expect(response.status()).toBe(401);
-  });
+  }
 });
 
 test.describe("Sprint payment confirmation", () => {
