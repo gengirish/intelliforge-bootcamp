@@ -6,10 +6,7 @@ import {
   SPRINT_COHORT_WHATSAPP,
   SPRINT_COHORT_WHATSAPP_URL,
   WHATSAPP_DEMO_URL,
-  WHATSAPP_GROUP,
   WHATSAPP_GROUP_URL,
-  ZOOM_MEETING,
-  ZOOM_URL,
 } from "@/lib/constants";
 
 const API_BASE = "https://api.agentmail.to/v0";
@@ -148,10 +145,10 @@ export async function sendEnquiryNotification(data: EnquiryPayload) {
     <div style="font-family: system-ui, sans-serif; max-width: 600px; margin: 0 auto; background: #0A0F1C; color: #E2E8F0; padding: 32px; border-radius: 12px;">
       <h2 style="color: #7C3AED; margin-top: 0;">New Bootcamp Enquiry</h2>
       <table style="width: 100%; border-collapse: collapse;">
-        <tr><td style="padding: 8px 0; color: #94A3B8;">Name</td><td style="padding: 8px 0;">${data.name}</td></tr>
-        <tr><td style="padding: 8px 0; color: #94A3B8;">Email</td><td style="padding: 8px 0;"><a href="mailto:${data.email}" style="color: #06B6D4;">${data.email}</a></td></tr>
-        ${data.phone ? `<tr><td style="padding: 8px 0; color: #94A3B8;">Phone</td><td style="padding: 8px 0;">${data.phone}</td></tr>` : ""}
-        <tr><td style="padding: 8px 0; color: #94A3B8; vertical-align: top;">Message</td><td style="padding: 8px 0;">${data.message}</td></tr>
+        <tr><td style="padding: 8px 0; color: #94A3B8;">Name</td><td style="padding: 8px 0;">${escapeHtml(data.name)}</td></tr>
+        <tr><td style="padding: 8px 0; color: #94A3B8;">Email</td><td style="padding: 8px 0;"><a href="mailto:${escapeHtml(data.email)}" style="color: #06B6D4;">${escapeHtml(data.email)}</a></td></tr>
+        ${data.phone ? `<tr><td style="padding: 8px 0; color: #94A3B8;">Phone</td><td style="padding: 8px 0;">${escapeHtml(data.phone)}</td></tr>` : ""}
+        <tr><td style="padding: 8px 0; color: #94A3B8; vertical-align: top;">Message</td><td style="padding: 8px 0;">${escapeHtml(data.message)}</td></tr>
       </table>
       <hr style="border: none; border-top: 1px solid #1E293B; margin: 24px 0;" />
       <p style="color: #94A3B8; font-size: 12px;">Sent from IntelliForge AI Bootcamp — upskill.intelliforge.tech</p>
@@ -160,12 +157,10 @@ export async function sendEnquiryNotification(data: EnquiryPayload) {
 
   const confirmHtml = `
     <div style="font-family: system-ui, sans-serif; max-width: 600px; margin: 0 auto; background: #0A0F1C; color: #E2E8F0; padding: 32px; border-radius: 12px;">
-      <h2 style="color: #7C3AED; margin-top: 0;">Thanks for reaching out, ${data.name}!</h2>
+      <h2 style="color: #7C3AED; margin-top: 0;">Thanks for reaching out, ${escapeHtml(data.name)}!</h2>
       <p>We received your enquiry about the <strong>IntelliForge AI Bootcamp</strong>. Our team will get back to you within 24 hours.</p>
       <p>In the meantime, you can:</p>
       <ul style="padding-left: 20px;">
-        <li style="margin-bottom: 8px;"><a href="${ZOOM_URL}" style="color: #06B6D4;">Join our live session: ${ZOOM_MEETING.topic} (${ZOOM_MEETING.time})</a></li>
-        <li style="margin-bottom: 8px;"><a href="${WHATSAPP_GROUP_URL}" style="color: #06B6D4;">Join our WhatsApp group: ${WHATSAPP_GROUP.name}</a></li>
         <li style="margin-bottom: 8px;"><a href="${SITE_CONFIG.lms}" style="color: #06B6D4;">Try a free class on our LMS</a></li>
         <li style="margin-bottom: 8px;"><a href="${WHATSAPP_DEMO_URL}" style="color: #06B6D4;">Chat with us on WhatsApp</a></li>
       </ul>

@@ -1,6 +1,5 @@
-import { NextResponse } from "next/server";
-import { ZOOM_MEETING } from "@/lib/constants";
+import { redirectToCohortLink } from "@/lib/cohort-links";
 
-export function GET() {
-  return NextResponse.redirect(ZOOM_MEETING.joinUrl, 302);
+export function GET(req: Request) {
+  return redirectToCohortLink(req, "ZOOM_JOIN_URL");
 }

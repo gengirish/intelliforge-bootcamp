@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 interface SprintSeatMapProps {
   filled: number;
   total: number;
-  /** Names for booked seats, in seat index order (left-to-right, row A→C). */
+  /** Initials for booked seats, in seat index order (left-to-right, row A→C). */
   bookedNames?: readonly string[];
   className?: string;
 }
@@ -128,7 +128,7 @@ export function SprintSeatMap({
             Booked
           </span>
           {bookedNames.length > 0 && (
-            <span className="text-muted/80">Hover a booked seat for name</span>
+            <span className="text-muted/80">Hover a booked seat for initials</span>
           )}
         </div>
       </div>

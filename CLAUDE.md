@@ -19,7 +19,7 @@ npm run db:deploy        # prisma migrate deploy
 npm run db:seed          # seeds the active Sprint row (prisma/seed.ts)
 ```
 
-Env vars live in `.env.local` (not `.env`) — every `db:*` script and the Playwright config read that file explicitly. `.env.example` only documents the WhatsApp/OTP block; the full set also includes `DATABASE_URL`, `DIRECT_URL`, Clerk keys, `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET` / `NEXT_PUBLIC_RAZORPAY_KEY_ID` / `RAZORPAY_WEBHOOK_SECRET`, `LMS_API_URL` / `LMS_API_KEY`, `AGENTMAIL_API_KEY` / `AGENTMAIL_INBOX` / `ADMIN_NOTIFY_EMAIL`, `ADMIN_SECRET`, `CRON_SECRET`.
+Env vars live in `.env.local` (not `.env`) — every `db:*` script and the Playwright config read that file explicitly. `.env.example` only documents the WhatsApp/OTP block; the full set also includes `DATABASE_URL`, `DIRECT_URL`, Clerk keys, `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET` / `NEXT_PUBLIC_RAZORPAY_KEY_ID` / `RAZORPAY_WEBHOOK_SECRET`, `LMS_API_URL` / `LMS_API_KEY`, `AGENTMAIL_API_KEY` / `AGENTMAIL_INBOX` / `ADMIN_NOTIFY_EMAIL`, `ADMIN_SECRET`, `CRON_SECRET`, `ZOOM_JOIN_URL` / `WHATSAPP_GROUP_INVITE_URL` / `SPRINT_WHATSAPP_INVITE_URL`.
 
 Deployed on **Vercel** at `https://upskill.intelliforge.tech`, from the project named **`learning-bootcamp`** (not `intelliforge-bootcamp`). There is no `vercel.json`/`.vercel` in the repo — the project is linked on Vercel's side, so deploy config and env vars change in the dashboard, not here. Pushing to `master` deploys production.
 
@@ -63,7 +63,7 @@ Each client exposes an `isXConfigured()` guard and return null config rather tha
 
 ### Auth boundaries
 
-Clerk middleware only matches `/sign-in` and `/sprint/enroll` ([src/middleware.ts](src/middleware.ts)); everything else is public. Admin routes are not Clerk-guarded — they check a bearer token against `ADMIN_SECRET` (`CRON_SECRET` for the retry job) inside each handler.
+Clerk middleware only matches `/sign-in`, `/sprint/enroll` and the class links `/zoom`, `/whatsapp`, `/sprint/whatsapp` ([src/middleware.ts](src/middleware.ts)); everything else is public. Admin routes are not Clerk-guarded — they check a bearer token against `ADMIN_SECRET` (`CRON_SECRET` for the retry job) inside each handler.
 
 ### E2E bypass
 
@@ -105,4 +105,4 @@ Checkout is closed by `SPRINT_ENROLLMENT_OPEN` in `src/lib/constants.ts`. While 
 
 Marketing copy, pricing, curriculum, FAQs, testimonials, and cohort dates are centralised as exported constants in [src/lib/constants.ts](src/lib/constants.ts) rather than inlined in components — copy changes belong there. Prices appear both as display strings there and as `SPRINT_PRICE_IN_PAISE`, which the seed copies to each `Sprint` row.
 
-`/zoom`, `/whatsapp`, and `/sprint/whatsapp` are server redirect routes to external invite URLs, so the links can be changed in one place; `tests/e2e/redirects.spec.ts` asserts them.
+`/zoom`, `/whatsapp`, and `/sprint/whatsapp` are the class links for paid learners. [src/lib/cohort-links.ts](src/lib/cohort-links.ts) sends signed-out visitors to sign-in and anyone without a `PAID` enrolment (matched on Clerk id or verified email) to `/cohort-access`. The real invite URLs live in `ZOOM_JOIN_URL`, `WHATSAPP_GROUP_INVITE_URL` and `SPRINT_WHATSAPP_INVITE_URL`, never in source, because this repo is public. Don't link these routes from public pages or the contact auto-reply.

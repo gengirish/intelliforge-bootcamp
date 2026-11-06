@@ -166,8 +166,8 @@ export function SprintLiveSchedule({
 
         <p className="mt-4 text-center text-xs text-muted">
           Local times are for the first class. PST, EST and CET move an hour in
-          March when daylight saving starts. Zoom links are shared in the cohort
-          WhatsApp group after enrollment.
+          March when daylight saving starts. Zoom links are shared with learners
+          after enrolment.
         </p>
       </div>
     </section>
