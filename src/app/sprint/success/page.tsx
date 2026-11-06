@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { SprintPaymentConfirm } from "@/components/sprint/SprintPaymentConfirm";
 import {
+  COHORT_2_SPRINTS,
+  findCohort2Sprint,
   LMS_SIGNIN_URL,
   LMS_UPSKILL_ROADMAP_URL,
-  SPRINT_CONFIG,
   SPRINT_COHORT_WHATSAPP,
   SPRINT_COHORT_WHATSAPP_URL,
 } from "@/lib/constants";
@@ -11,9 +12,14 @@ import {
 export default async function SprintSuccessPage({
   searchParams,
 }: {
-  searchParams: Promise<{ payment_id?: string; order_id?: string }>;
+  searchParams: Promise<{
+    payment_id?: string;
+    order_id?: string;
+    sprint?: string;
+  }>;
 }) {
   const params = await searchParams;
+  const sprint = findCohort2Sprint(params.sprint) ?? COHORT_2_SPRINTS[0];
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-background px-6">
@@ -26,10 +32,10 @@ export default async function SprintSuccessPage({
           🎉
         </div>
         <h1 className="mb-4 text-3xl font-bold text-foreground">
-          You&apos;re in, Cohort 1!
+          You&apos;re in, Cohort 2!
         </h1>
         <p className="mb-8 text-lg leading-relaxed text-muted">
-          Payment confirmed. Your seat in the 2-Week AI Sprint is reserved.
+          Payment confirmed. Your seat in Sprint {sprint.number} of 6 is reserved.
           Join <strong>{SPRINT_COHORT_WHATSAPP.name}</strong> on WhatsApp — your
           cohort channel for session links, materials, and updates.
         </p>
@@ -61,7 +67,7 @@ export default async function SprintSuccessPage({
             </li>
             <li className="flex gap-3">
               <span className="shrink-0 font-bold text-accent">4.</span>
-              Session 1 is {SPRINT_CONFIG.session1Date} · Zoom link in WhatsApp
+              Session 1 is {sprint.firstClass} · Zoom link in WhatsApp
             </li>
             <li className="flex gap-3">
               <span className="shrink-0 font-bold text-accent">5.</span>

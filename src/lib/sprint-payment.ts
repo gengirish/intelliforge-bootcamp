@@ -65,6 +65,7 @@ async function fulfillSprintEnrollment(enrollment: {
         name: enrollment.name,
         email: enrollment.email,
         paymentId,
+        sprintSlug: enrollment.sprint.slug,
       });
     } catch (err) {
       console.error(

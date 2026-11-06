@@ -2,9 +2,12 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+/** Defaults to Cohort 2 Sprint 1. Set SPRINT_SLUG to check another run. */
+const SPRINT_SLUG = process.env.SPRINT_SLUG ?? "ai-sprint-c2-s1";
+
 async function main() {
   const enrollments = await prisma.sprintEnrollment.findMany({
-    where: { sprint: { slug: "ai-sprint-jun-2026" } },
+    where: { sprint: { slug: SPRINT_SLUG } },
     select: {
       status: true,
       email: true,
@@ -19,7 +22,7 @@ async function main() {
   const pending = enrollments.filter((e) => e.status === "PENDING");
 
   const sprint = await prisma.sprint.findUnique({
-    where: { slug: "ai-sprint-jun-2026" },
+    where: { slug: SPRINT_SLUG },
     select: { seatsTotal: true, seatsFilled: true },
   });
 

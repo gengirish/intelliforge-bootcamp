@@ -26,8 +26,8 @@ export const SPRINT_TIME_ZONES: readonly SprintTimeZoneOption[] = [
   { label: "GST", timeZone: "Asia/Dubai" },
 ] as const;
 
-/** First live session: Saturday 7:00 PM IST */
-export const DEFAULT_SPRINT_START_ISO = "2026-08-08T13:30:00.000Z";
+/** First live session of Cohort 2: Saturday 7:00 PM IST */
+export const DEFAULT_SPRINT_START_ISO = "2027-01-09T13:30:00.000Z";
 
 export function resolveSprintStartIso(startDate?: string): string {
   return startDate?.trim() ? startDate : DEFAULT_SPRINT_START_ISO;

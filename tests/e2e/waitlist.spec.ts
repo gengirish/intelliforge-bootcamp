@@ -14,10 +14,10 @@ test.describe("Cohort 2 waitlist", () => {
     ).toBeVisible();
   });
 
-  test("sprint page tells visitors Cohort 1 is underway", async ({ page }) => {
+  test("sprint page announces Cohort 2 dates", async ({ page }) => {
     await page.goto("/sprint");
     await expect(
-      page.getByText(/Cohort 1 is underway\. Cohort 2 opens/)
+      page.getByText(/Cohort 2 opens 5–6 Dec, first class 9 Jan 2027/)
     ).toBeVisible();
     await expect(
       page.getByRole("link", { name: "Join the waitlist →" })

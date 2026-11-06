@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { SPRINT_CONFIG } from "@/lib/constants";
 import { markSprintEnrollmentPaidManually } from "@/lib/sprint-payment";
 import { getSprintSeatCounts } from "@/lib/sprint-seats";
 
@@ -38,7 +39,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: result.error }, { status: 400 });
   }
 
-  const seats = await getSprintSeatCounts("ai-sprint-jun-2026");
+  const seats = await getSprintSeatCounts(SPRINT_CONFIG.slug);
 
   return NextResponse.json({
     ok: true,

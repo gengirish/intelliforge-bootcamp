@@ -1,13 +1,11 @@
 import { NextResponse } from "next/server";
 import type { ApiResponse } from "@/lib/api-response";
-import {
-  getSprintSeatCounts,
-  resolveSprintDisplaySeats,
-} from "@/lib/sprint-seats";
+import { SPRINT_CONFIG } from "@/lib/constants";
+import { getSprintSeatCounts } from "@/lib/sprint-seats";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const slug = searchParams.get("slug") ?? "ai-sprint-jun-2026";
+  const slug = searchParams.get("slug") ?? SPRINT_CONFIG.slug;
 
   const seats = await getSprintSeatCounts(slug);
 
@@ -18,17 +16,15 @@ export async function GET(req: Request) {
     );
   }
 
-  const display = resolveSprintDisplaySeats(seats);
-
   return NextResponse.json<
     ApiResponse<{ remaining: number; filled: number; total: number }>
   >(
     {
       success: true,
       data: {
-        remaining: display.remaining,
-        filled: display.filled,
-        total: display.total,
+        remaining: seats.remaining,
+        filled: seats.filled,
+        total: seats.total,
       },
     },
     {

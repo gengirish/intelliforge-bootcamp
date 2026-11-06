@@ -1,8 +1,12 @@
+import { SPRINT_CONFIG } from "../src/lib/constants";
 import Razorpay from "razorpay";
 import { PrismaClient } from "@prisma/client";
 import { markSprintEnrollmentPaid } from "../src/lib/sprint-payment";
 
 const prisma = new PrismaClient();
+
+/** Defaults to the sprint on sale. Set SPRINT_SLUG to work on another run. */
+const SPRINT_SLUG = process.env.SPRINT_SLUG ?? SPRINT_CONFIG.slug;
 
 function getRazorpay() {
   const keyId = process.env.RAZORPAY_KEY_ID;
@@ -13,7 +17,7 @@ function getRazorpay() {
 
 async function main() {
   const pending = await prisma.sprintEnrollment.findMany({
-    where: { sprint: { slug: "ai-sprint-jun-2026" }, status: "PENDING" },
+    where: { sprint: { slug: SPRINT_SLUG }, status: "PENDING" },
     select: { razorpayOrderId: true, email: true },
   });
 
@@ -55,11 +59,11 @@ async function main() {
   }
 
   const paid = await prisma.sprintEnrollment.count({
-    where: { sprint: { slug: "ai-sprint-jun-2026" }, status: "PAID" },
+    where: { sprint: { slug: SPRINT_SLUG }, status: "PAID" },
   });
 
   const sprint = await prisma.sprint.findUnique({
-    where: { slug: "ai-sprint-jun-2026" },
+    where: { slug: SPRINT_SLUG },
     select: { seatsFilled: true, seatsTotal: true },
   });
 

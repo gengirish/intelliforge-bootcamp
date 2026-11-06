@@ -1,5 +1,4 @@
 import { test, expect } from "@playwright/test";
-import { BOOTCAMP_ENROLLMENT_OPEN } from "../../src/lib/constants";
 
 test.describe("Landing Page — All Sections", () => {
   test.beforeEach(async ({ page }) => {
@@ -79,22 +78,20 @@ test.describe("Landing Page — All Sections", () => {
   test("curriculum section renders 3 phases", async ({ page }) => {
     const section = page.locator("#curriculum");
     await section.scrollIntoViewIfNeeded();
-    await expect(page.getByText("12 Weeks. Four Phases. One Shipped Product.")).toBeVisible();
+    await expect(page.getByText("12 Weeks. Six Sprints. One Shipped Product.")).toBeVisible();
     await expect(page.getByText("Phase 1: Ship Your First Agent")).toBeVisible();
     await expect(page.getByText("Phase 2: Ship Multi-Agent Systems")).toBeVisible();
     await expect(page.getByText("Phase 3: Ship Your Product")).toBeVisible();
   });
 
-  test("live schedule section has timezone selector and seat map", async ({ page }) => {
+  test("live schedule section has timezone selector and no past-cohort seats", async ({ page }) => {
     const section = page.locator("#live-schedule");
     await section.scrollIntoViewIfNeeded();
     await expect(section.getByText("Every Saturday & Sunday")).toBeVisible();
     await expect(section.getByLabel("Show times in")).toBeVisible();
     await expect(section.getByText("Live class", { exact: true })).toBeVisible();
-    const seatMap = section.getByLabel(/Cohort seat map:/);
-    await expect(seatMap).toBeVisible();
-    await expect(seatMap.getByText("9", { exact: true }).first()).toBeVisible();
-    await expect(seatMap.getByText("21", { exact: true })).toBeVisible();
+    await expect(section.getByText(/Cohort 2 kicks off/)).toBeVisible();
+    await expect(section.getByLabel(/Cohort seat map:/)).toHaveCount(0);
   });
 
   test("who's behind section renders founder Girish", async ({ page }) => {
@@ -124,44 +121,21 @@ test.describe("Landing Page — All Sections", () => {
     );
   });
 
-  test("pricing section renders all three tracks", async ({ page }) => {
+  test("pricing section shows one price per sprint", async ({ page }) => {
     const section = page.locator("#pricing");
     await section.scrollIntoViewIfNeeded();
-    await expect(section.getByText("Start with the 2-Week Sprint")).toBeVisible();
-    await expect(section.getByText("₹4,999", { exact: true })).toBeVisible();
-    await expect(section.getByText("₹49,999", { exact: true })).toBeVisible();
-    await expect(section.getByText("₹74,999").first()).toBeVisible();
     await expect(
-      section.getByRole("link", { name: /Join the Cohort 2 waitlist/ }).first()
+      section.getByRole("heading", { name: /₹4,999 per sprint/ })
     ).toBeVisible();
-  });
-
-  test("closed bootcamp enrolment offers the waitlist and no checkout", async ({
-    page,
-  }) => {
-    test.skip(BOOTCAMP_ENROLLMENT_OPEN, "enrolment is open");
-    const section = page.locator("#pricing");
-    await section.scrollIntoViewIfNeeded();
+    await expect(section.getByText("₹29,994", { exact: true })).toBeVisible();
+    await expect(section.getByText(/₹49,999|₹74,999|₹12,999/)).toHaveCount(0);
     await expect(section.getByRole("button", { name: /Enrol/ })).toHaveCount(0);
-    await expect(section.getByText("100% Secure Checkout")).toHaveCount(0);
     await expect(
-      section.getByRole("link", { name: "Join the Cohort 2 waitlist" }).last()
+      section.getByRole("link", { name: /Join the Cohort 2 waitlist/ })
     ).toHaveAttribute("href", "/waitlist");
-  });
-
-  test("bootcamp enroll redirects unauthenticated user to sign-in", async ({
-    page,
-  }) => {
-    test.skip(!BOOTCAMP_ENROLLMENT_OPEN, "bootcamp enrolment is closed");
-    const section = page.locator("#pricing");
-    await section.scrollIntoViewIfNeeded();
-    // The button is server-rendered before React attaches its onClick, so a
-    // click that lands too early is silently dropped and the URL never changes.
-    await page.waitForLoadState("networkidle");
-    await page
-      .getByRole("button", { name: /Enrol — ₹49,999/ })
-      .click();
-    await expect(page).toHaveURL(/\/sign-in/, { timeout: 15000 });
+    await expect(
+      section.getByRole("link", { name: "See all 6 sprints" })
+    ).toHaveAttribute("href", "/sprint/all");
   });
 
   test("FAQ section renders and accordion works", async ({ page }) => {

@@ -31,58 +31,35 @@ test.describe("Sprint Landing Page", () => {
   test("shows pricing and savings", async ({ page }) => {
     test.skip(!ENROLLMENT_OPEN, NEEDS_OPEN);
     await expect(page.getByText("₹4,999").first()).toBeVisible();
-    await expect(page.getByText("₹12,999").first()).toBeVisible();
-    await expect(page.getByText("Save ₹8,000")).toBeVisible();
+    await expect(page.getByText("for this 2-week sprint")).toBeVisible();
+    await expect(page.getByText(/₹12,999|Save ₹/)).toHaveCount(0);
   });
 
   test("shows cohort start date and seat count", async ({ page }) => {
     test.skip(!ENROLLMENT_OPEN, NEEDS_OPEN);
     test.skip(!HAS_DB, NEEDS_DB);
-    await expect(page.getByText(/Cohort 1 · Starts/)).toBeVisible();
+    await expect(page.getByText(/Cohort 2 · Sprint 1 of 6 · Starts/)).toBeVisible();
     await expect(page.getByText(/seats left|Sold out/)).toBeVisible();
     await expect(page.getByText("Max 30 seats")).toBeVisible();
-    // The counts are already spelled out in the map's own aria-label, which is
-    // unambiguous — getByText("booked") matches both the legend and the
-    // "Hover a booked seat for name" hint below it.
-    await expect(
-      page.getByLabel("Cohort seat map: 13 of 30 seats booked, 17 available").first()
-    ).toBeVisible();
-    await expect(
-      page.getByText("Hover a booked seat for name").first()
-    ).toBeVisible();
-  });
-
-  test("booked seats show occupant name on hover", async ({ page }) => {
-    test.skip(!ENROLLMENT_OPEN, NEEDS_OPEN);
-    test.skip(!HAS_DB, NEEDS_DB);
-    const seatMap = page.getByLabel(/Cohort seat map:/).first();
-    await expect(seatMap).toBeVisible();
-    const firstBooked = seatMap.getByLabel("Seat A1, booked by Prasad K");
-    await expect(firstBooked).toBeVisible();
-    await firstBooked.hover();
-    // SprintLandingClient renders the seat map more than once, so scope the
-    // tooltip to the map actually hovered rather than matching all of them.
-    await expect(
-      seatMap.getByRole("tooltip", { name: "Prasad K" })
-    ).toBeVisible();
+    await expect(page.getByLabel(/Cohort seat map: \d+ of 30 seats booked/).first()).toBeVisible();
   });
 
   test("shows countdown and timezone-selectable live schedule", async ({ page }) => {
     test.skip(!ENROLLMENT_OPEN, NEEDS_OPEN);
     await expect(
-      page.getByText("Countdown to Cohort 1 kickoff")
+      page.getByText("Countdown to Cohort 2 kickoff")
     ).toBeVisible();
     await expect(page.getByText("Live class schedule")).toBeVisible();
     await expect(page.getByText(/Every Saturday & Sunday/)).toBeVisible();
     await expect(page.getByLabel("Show times in")).toBeVisible();
     await expect(page.getByRole("columnheader", { name: "IST (anchor)" })).toBeVisible();
     await expect(page.getByText("Live class", { exact: true })).toBeVisible();
-    await expect(page.getByText("7:00 PM – 10:00 PM")).toBeVisible();
+    await expect(page.getByText("7:00 PM – 10:00 PM").first()).toBeVisible();
 
     const timezoneSelect = page.getByLabel("Show times in");
     await timezoneSelect.selectOption("America/Los_Angeles");
     await expect(page.getByRole("columnheader", { name: "PST" })).toBeVisible();
-    await expect(page.getByText("6:30 AM – 9:30 AM").first()).toBeVisible();
+    await expect(page.getByText("5:30 AM – 8:30 AM").first()).toBeVisible();
   });
 
   test("renders curriculum weeks and outcomes", async ({ page }) => {
@@ -97,7 +74,7 @@ test.describe("Sprint Landing Page", () => {
     ).toBeVisible();
   });
 
-  test("has enroll CTAs and bootcamp cross-link", async ({ page }) => {
+  test("has enroll CTAs and all-sprints link", async ({ page }) => {
     test.skip(!ENROLLMENT_OPEN, NEEDS_OPEN);
     test.skip(!HAS_DB, NEEDS_DB);
     await expect(
@@ -107,7 +84,7 @@ test.describe("Sprint Landing Page", () => {
       page.getByRole("button", { name: /Secure My Seat — ₹4,999/ })
     ).toBeVisible();
     await expect(
-      page.getByRole("link", { name: /Full 12-Week Bootcamp/ }).first()
+      page.getByRole("link", { name: /All 6 sprints/ }).first()
     ).toBeVisible();
   });
 
@@ -152,17 +129,42 @@ test.describe("Sprint Landing Page", () => {
   });
 });
 
+test.describe("All sprints page", () => {
+  test("lists six dated sprints at one price, with no checkout while closed", async ({
+    page,
+  }) => {
+    await page.goto("/sprint/all");
+    await expect(page.getByRole("heading", { level: 2 })).toHaveCount(6);
+    await expect(page.getByText(/Sprint 1 · 9–17 Jan 2027/)).toBeVisible();
+    await expect(page.getByText(/Sprint 6 · 20–28 Mar 2027/)).toBeVisible();
+    await expect(page.getByText(/₹4,999 per sprint/)).toBeVisible();
+    test.skip(ENROLLMENT_OPEN, "enrolment is open");
+    await expect(page.getByRole("button", { name: /Enroll/ })).toHaveCount(0);
+    await expect(
+      page.getByRole("link", { name: "Join the Cohort 2 waitlist" })
+    ).toHaveAttribute("href", "/waitlist");
+  });
+});
+
 test.describe("Sprint Success Page", () => {
+  test("quotes the first class of the sprint that was bought", async ({ page }) => {
+    await page.goto("/sprint/success?sprint=ai-sprint-c2-s3");
+    await expect(page.getByText(/Sprint 3 of 6 is reserved/)).toBeVisible();
+    await expect(
+      page.getByText(/Session 1 is Saturday, 06\/02\/2027/)
+    ).toBeVisible();
+  });
+
   test("renders confirmation and next steps", async ({ page }) => {
     await page.goto(
       "/sprint/success?payment_id=pay_e2e_test&order_id=order_e2e_test"
     );
     await expect(
-      page.getByRole("heading", { name: /You're in, Cohort 1!/ })
+      page.getByRole("heading", { name: /You're in, Cohort 2!/ })
     ).toBeVisible();
     await expect(page.getByText("What happens next")).toBeVisible();
     await expect(
-      page.getByText(/Session 1 is Saturday, 08\/08\/2026/)
+      page.getByText(/Session 1 is Saturday, 09\/01\/2027/)
     ).toBeVisible();
     await expect(
       page.getByText(/7–10 PM IST/)
@@ -205,15 +207,13 @@ test.describe("Sprint API", () => {
       total: expect.any(Number),
     });
     expect(body.data.remaining).toBe(body.data.total - body.data.filled);
-    expect(body.data.filled).toBe(9);
-    expect(body.data.remaining).toBe(21);
     expect(body.data.total).toBe(30);
   });
 
   test("GET /api/sprint/seats accepts slug query param", async ({ request }) => {
     test.skip(!HAS_DB, NEEDS_DB);
     const response = await request.get(
-      "/api/sprint/seats?slug=ai-sprint-jun-2026"
+      "/api/sprint/seats?slug=ai-sprint-c2-s1"
     );
     expect(response.status()).toBe(200);
     const body = await response.json();
@@ -238,7 +238,7 @@ test.describe("Sprint API", () => {
   }) => {
     test.skip(ENROLLMENT_OPEN, "enrolment is open");
     const response = await request.post("/sprint/enroll", {
-      data: { sprintSlug: "ai-sprint-jun-2026" },
+      data: { sprintSlug: "ai-sprint-c2-s1" },
     });
     expect(response.status()).toBe(409);
     const body = await response.json();
@@ -249,7 +249,7 @@ test.describe("Sprint API", () => {
   test("POST /sprint/enroll without auth returns 401", async ({ request }) => {
     test.skip(!ENROLLMENT_OPEN, NEEDS_OPEN);
     const response = await request.post("/sprint/enroll", {
-      data: { sprintSlug: "ai-sprint-jun-2026" },
+      data: { sprintSlug: "ai-sprint-c2-s1" },
     });
     expect(response.status()).toBe(401);
     const body = await response.json();

@@ -43,12 +43,12 @@ export default function TermsPage() {
               Refund Policy
             </h2>
             <p className="leading-relaxed">
-              We offer a 15-day money-back guarantee for the 12-week AI Bootcamp.
-              If you attend the first two weekends and feel the program isn&apos;t
-              right for you, contact us within 15 days of your enrollment date for
-              a full refund — no questions asked. Sprint enrollments are
-              non-refundable after the cohort start date unless otherwise stated
-              at the time of purchase.
+              Each 2-week sprint is refundable in full until its first class, and
+              non-refundable after that unless otherwise stated at the time of
+              purchase. Bootcamp plans bought before per-sprint pricing keep their
+              15-day money-back guarantee: if you attended the first two weekends
+              and felt the program wasn&apos;t right for you, contact us within 15
+              days of your enrollment date for a full refund.
             </p>
           </section>
 
