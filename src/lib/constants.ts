@@ -519,7 +519,36 @@ export const COHORT_2 = {
     { value: "own-product", label: "Build my own product" },
     { value: "other", label: "Something else" },
   ],
+  /** Qualifying questions on the waitlist form. Scored in src/lib/lead-score.ts. */
+  roles: [
+    { value: "software", label: "Software or full-stack developer" },
+    { value: "data-ml", label: "Data, ML or analytics" },
+    { value: "cloud-devops", label: "Cloud, DevOps or SRE" },
+    { value: "qa-security-infra", label: "QA, security or IT infrastructure" },
+    { value: "eng-lead", label: "Tech lead, architect or engineering manager" },
+    { value: "non-engineering", label: "Product, design or another non-engineering role" },
+    { value: "student", label: "Student or looking for my first job" },
+  ],
+  experience: [
+    { value: "0-2", label: "0–2 years" },
+    { value: "3-5", label: "3–5 years" },
+    { value: "6-10", label: "6–10 years" },
+    { value: "11-15", label: "11–15 years" },
+    { value: "15+", label: "More than 15 years" },
+  ],
+  payers: [
+    { value: "self", label: "I'm paying myself" },
+    { value: "employer", label: "My employer would pay" },
+    { value: "undecided", label: "Not sure yet" },
+  ],
 } as const;
+
+/**
+ * Sends the tier-specific welcome email (A: personal note, B: standard,
+ * C: setup-course first) instead of the one standard email. Off until the
+ * tiered copy is approved; while off, every tier gets the standard email.
+ */
+export const TIERED_WELCOME_EMAILS = false;
 
 /**
  * Whether the site sells seats. Set by hand, not by date: turn it on for the

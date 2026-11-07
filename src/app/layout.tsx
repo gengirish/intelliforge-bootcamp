@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { Geist } from "next/font/google";
 import "./globals.css";
+import { LeadAttribution } from "@/components/lead-attribution";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -65,6 +66,7 @@ export default function RootLayout({
         className={`${geistSans.variable} antialiased bg-background text-foreground`}
       >
         {children}
+        <LeadAttribution />
         <Script
           src="https://masterclass-first-agent.vercel.app/embed.js"
           strategy="afterInteractive"

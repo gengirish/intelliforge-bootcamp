@@ -200,12 +200,17 @@ export async function sendWaitlistNotification(data: {
   email: string;
   phone?: string;
   motivation: string;
+  tier?: string;
+  score?: number;
+  source?: string;
 }) {
   const rows = [
     ["Name", data.name],
     ["Email", data.email],
     ["Phone", data.phone],
     ["Motivation", data.motivation],
+    ["ICP fit", data.tier ? `Tier ${data.tier} (${data.score}/100)` : undefined],
+    ["Source", data.source],
   ]
     .filter(([, value]) => value)
     .map(
@@ -216,7 +221,7 @@ export async function sendWaitlistNotification(data: {
 
   await agentMailSend({
     to: ADMIN_EMAIL,
-    subject: `${data.cohortName} waitlist: ${data.name.replace(/[\r\n]+/g, " ")}`,
+    subject: `${data.tier ? `[${data.tier}] ` : ""}${data.cohortName} waitlist: ${data.name.replace(/[\r\n]+/g, " ")}`,
     html: `<div style="font-family: system-ui, sans-serif; max-width: 600px; margin: 0 auto; background: #0A0F1C; color: #E2E8F0; padding: 32px; border-radius: 12px;"><h2 style="color: #7C3AED; margin-top: 0;">New ${data.cohortName} waitlist entry</h2><table style="width: 100%; border-collapse: collapse;">${rows}</table></div>`,
   });
 }
@@ -224,6 +229,10 @@ export async function sendWaitlistNotification(data: {
 /**
  * Welcome email to someone who joined a waitlist: confirms their place, points
  * them at the free setup course, and gives them a direct WhatsApp line.
+ *
+ * `tier` picks a variant (only when TIERED_WELCOME_EMAILS is on): A adds a
+ * personal note inviting a reply, C leads with the setup course and drops the
+ * WhatsApp step, and B or no tier gets the standard email.
  */
 export async function sendWaitlistConfirmation(data: {
   name: string;
@@ -234,6 +243,7 @@ export async function sendWaitlistConfirmation(data: {
   prepCourseName: string;
   prepCourseUrl: string;
   whatsappUrl: string;
+  tier?: "A" | "B" | "C";
 }) {
   const firstName = escapeHtml(data.name.trim().split(/\s+/)[0] || "there");
   const button = (href: string, label: string, primary: boolean) =>
@@ -243,26 +253,51 @@ export async function sendWaitlistConfirmation(data: {
         : "background: #1E293B; color: #E2E8F0; border: 1px solid #334155;"
     }">${label}</a>`;
 
-  return agentMailSend({
-    to: data.email,
-    subject: `You're on the ${data.cohortName} waitlist: two things to do now`,
-    html: `
-      <div style="font-family: system-ui, sans-serif; max-width: 600px; margin: 0 auto; background: #0A0F1C; color: #E2E8F0; padding: 32px; border-radius: 12px; line-height: 1.6;">
-        <h2 style="color: #7C3AED; margin-top: 0;">You're on the ${escapeHtml(data.cohortName)} waitlist</h2>
-        <p>Hi ${firstName},</p>
-        <p>Thanks for joining. Enrolment opens on <strong>${escapeHtml(data.launchWeekend)}</strong>, and the first class is on <strong>${escapeHtml(data.firstClass)}</strong>. You'll hear from us first.</p>
-
-        <h3 style="color: #E2E8F0; margin-bottom: 4px;">1. Set up your machine</h3>
+  const cohort = escapeHtml(data.cohortName);
+  const dates = `Enrolment opens on <strong>${escapeHtml(data.launchWeekend)}</strong>, and the first class is on <strong>${escapeHtml(data.firstClass)}</strong>.`;
+  const setupStep = (heading: string) => `
+        <h3 style="color: #E2E8F0; margin-bottom: 4px;">${heading}</h3>
         <p style="margin-top: 0;">Work through the free <strong>${escapeHtml(data.prepCourseName)}</strong> before the cohort starts, so you can build from the first class instead of installing tools.</p>
-        <p>${button(data.prepCourseUrl, "Start the setup course", true)}</p>
-
+        <p>${button(data.prepCourseUrl, "Start the setup course", true)}</p>`;
+  const whatsappStep = `
         <h3 style="color: #E2E8F0; margin-bottom: 4px;">2. Say hello on WhatsApp</h3>
         <p style="margin-top: 0;">Message me directly with any questions about the cohort.</p>
-        <p>${button(data.whatsappUrl, "Chat on WhatsApp", false)}</p>
+        <p>${button(data.whatsappUrl, "Chat on WhatsApp", false)}</p>`;
+
+  const variant =
+    data.tier === "A"
+      ? {
+          subject: `You're on the ${data.cohortName} waitlist: what do you want to build?`,
+          intro: `<p>Thanks for joining. ${dates}</p>
+        <p>From what you told us, this cohort is built for exactly where you are. <strong>Reply and tell me one thing you'd like to ship with AI at work.</strong> I read and answer every reply, and I'll make sure the sprints cover it.</p>`,
+          steps: setupStep("1. Set up your machine") + whatsappStep,
+        }
+      : data.tier === "C"
+        ? {
+            subject: `You're on the ${data.cohortName} waitlist: start with the setup course`,
+            intro: `<p>Thanks for joining. ${dates} We'll be in touch before then.</p>
+        <p>The best way to get ready is the free setup course. It takes you from a blank laptop to a working AI development setup at your own pace.</p>`,
+            steps: setupStep("Start here"),
+          }
+        : {
+            subject: `You're on the ${data.cohortName} waitlist: two things to do now`,
+            intro: `<p>Thanks for joining. ${dates} You'll hear from us first.</p>`,
+            steps: setupStep("1. Set up your machine") + whatsappStep,
+          };
+
+  return agentMailSend({
+    to: data.email,
+    subject: variant.subject,
+    html: `
+      <div style="font-family: system-ui, sans-serif; max-width: 600px; margin: 0 auto; background: #0A0F1C; color: #E2E8F0; padding: 32px; border-radius: 12px; line-height: 1.6;">
+        <h2 style="color: #7C3AED; margin-top: 0;">You're on the ${cohort} waitlist</h2>
+        <p>Hi ${firstName},</p>
+        ${variant.intro}
+${variant.steps}
 
         <p style="margin-top: 28px;">See you soon,<br />Girish<br /><span style="color: #94A3B8;">IntelliForge AI</span></p>
         <hr style="border: none; border-top: 1px solid #1E293B; margin: 24px 0;" />
-        <p style="color: #94A3B8; font-size: 12px;">You're getting this because you joined the ${escapeHtml(data.cohortName)} waitlist at ${SITE_CONFIG.url}/waitlist. Reply to this email if you'd like to be removed.</p>
+        <p style="color: #94A3B8; font-size: 12px;">You're getting this because you joined the ${cohort} waitlist at ${SITE_CONFIG.url}/waitlist. Reply to this email if you'd like to be removed.</p>
       </div>
     `,
   });

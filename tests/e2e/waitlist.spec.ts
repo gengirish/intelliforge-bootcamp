@@ -24,13 +24,19 @@ test.describe("Cohort 2 waitlist", () => {
     ).toHaveAttribute("href", "/waitlist");
   });
 
-  async function fillForm(page: import("@playwright/test").Page) {
-    await page.goto("/waitlist");
+  async function fillForm(
+    page: import("@playwright/test").Page,
+    path = "/waitlist"
+  ) {
+    await page.goto(path);
     await page.getByLabel("Name", { exact: true }).fill("Test Learner");
     await page.getByLabel("Email", { exact: true }).fill("learner@example.com");
     await page
       .getByLabel("What do you most want from this?")
       .selectOption("ship-at-work");
+    await page.getByLabel("What's your current role?").selectOption("software");
+    await page.getByLabel("Years of work experience").selectOption("6-10");
+    await page.getByLabel("Who would pay for the course?").selectOption("self");
     await page.getByLabel(/Contact me about Cohort 2/).check();
     await page.getByRole("button", { name: "Join the waitlist" }).click();
   }
@@ -56,7 +62,29 @@ test.describe("Cohort 2 waitlist", () => {
     expect(body).toMatchObject({
       email: "learner@example.com",
       motivation: "ship-at-work",
+      role: "software",
+      experience: "6-10",
+      payer: "self",
       consent: true,
+    });
+  });
+
+  test("form sends the campaign that brought the visitor", async ({ page }) => {
+    let body: Record<string, unknown> = {};
+    await page.route("**/api/waitlist", async (route) => {
+      body = route.request().postDataJSON();
+      await route.fulfill({ json: { success: true, data: null } });
+    });
+    await fillForm(
+      page,
+      "/waitlist?utm_source=linkedin&utm_medium=dm&utm_campaign=cohort2"
+    );
+    await expect(page.getByRole("status")).toBeVisible();
+    expect(body.attribution).toMatchObject({
+      utmSource: "linkedin",
+      utmMedium: "dm",
+      utmCampaign: "cohort2",
+      landingPath: "/waitlist",
     });
   });
 
