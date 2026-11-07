@@ -42,9 +42,17 @@ test.describe("Cohort 2 waitlist", () => {
       await route.fulfill({ json: { success: true, data: null } });
     });
     await fillForm(page);
-    await expect(page.getByRole("status")).toContainText(
-      "You're on the Cohort 2 waitlist"
+    const status = page.getByRole("status");
+    await expect(status).toContainText("You're on the Cohort 2 waitlist");
+    await expect(
+      status.getByRole("link", { name: "Start the setup course" })
+    ).toHaveAttribute(
+      "href",
+      "https://learning.intelliforge.tech/courses/fresher-prerequisite-setup"
     );
+    await expect(
+      status.getByRole("link", { name: "Chat on WhatsApp" })
+    ).toHaveAttribute("href", /^https:\/\/wa\.me\/\d+\?text=/);
     expect(body).toMatchObject({
       email: "learner@example.com",
       motivation: "ship-at-work",

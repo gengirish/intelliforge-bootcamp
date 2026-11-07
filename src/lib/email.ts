@@ -221,6 +221,53 @@ export async function sendWaitlistNotification(data: {
   });
 }
 
+/**
+ * Welcome email to someone who joined a waitlist: confirms their place, points
+ * them at the free setup course, and gives them a direct WhatsApp line.
+ */
+export async function sendWaitlistConfirmation(data: {
+  name: string;
+  email: string;
+  cohortName: string;
+  launchWeekend: string;
+  firstClass: string;
+  prepCourseName: string;
+  prepCourseUrl: string;
+  whatsappUrl: string;
+}) {
+  const firstName = escapeHtml(data.name.trim().split(/\s+/)[0] || "there");
+  const button = (href: string, label: string, primary: boolean) =>
+    `<a href="${escapeHtml(href)}" style="display: inline-block; padding: 12px 22px; border-radius: 8px; font-weight: 600; text-decoration: none; ${
+      primary
+        ? "background: #7C3AED; color: #FFFFFF;"
+        : "background: #1E293B; color: #E2E8F0; border: 1px solid #334155;"
+    }">${label}</a>`;
+
+  return agentMailSend({
+    to: data.email,
+    subject: `You're on the ${data.cohortName} waitlist: two things to do now`,
+    html: `
+      <div style="font-family: system-ui, sans-serif; max-width: 600px; margin: 0 auto; background: #0A0F1C; color: #E2E8F0; padding: 32px; border-radius: 12px; line-height: 1.6;">
+        <h2 style="color: #7C3AED; margin-top: 0;">You're on the ${escapeHtml(data.cohortName)} waitlist</h2>
+        <p>Hi ${firstName},</p>
+        <p>Thanks for joining. Enrolment opens on <strong>${escapeHtml(data.launchWeekend)}</strong>, and the first class is on <strong>${escapeHtml(data.firstClass)}</strong>. You'll hear from us first.</p>
+
+        <h3 style="color: #E2E8F0; margin-bottom: 4px;">1. Set up your machine</h3>
+        <p style="margin-top: 0;">Work through the free <strong>${escapeHtml(data.prepCourseName)}</strong> before the cohort starts, so you can build from the first class instead of installing tools.</p>
+        <p>${button(data.prepCourseUrl, "Start the setup course", true)}</p>
+
+        <h3 style="color: #E2E8F0; margin-bottom: 4px;">2. Say hello on WhatsApp</h3>
+        <p style="margin-top: 0;">Message me directly with any questions about the cohort.</p>
+        <p>${button(data.whatsappUrl, "Chat on WhatsApp", false)}</p>
+
+        <p style="margin-top: 28px;">See you soon,<br />Girish<br /><span style="color: #94A3B8;">IntelliForge AI</span></p>
+        <hr style="border: none; border-top: 1px solid #1E293B; margin: 24px 0;" />
+        <p style="color: #94A3B8; font-size: 12px;">You're getting this because you joined the ${escapeHtml(data.cohortName)} waitlist at ${SITE_CONFIG.url}/waitlist. Reply to this email if you'd like to be removed.</p>
+      </div>
+    `,
+  });
+}
+
 export async function sendTestEmail(to: string) {
   return agentMailSend({
     to,

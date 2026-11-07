@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import type { ApiResponse } from "@/lib/api-response";
 import { COHORT_2 } from "@/lib/constants";
-import { sendWaitlistNotification } from "@/lib/email";
+import {
+  sendWaitlistConfirmation,
+  sendWaitlistNotification,
+} from "@/lib/email";
 import { prisma } from "@/lib/prisma";
 
 const motivationValues = COHORT_2.motivations.map((m) => m.value) as [
@@ -57,17 +60,31 @@ export async function POST(req: Request) {
     );
   }
 
-  // The entry is saved, so a failed notification must not fail the request.
-  try {
-    await sendWaitlistNotification({
+  // The entry is saved, so a failed email must not fail the request.
+  const [admin, learner] = await Promise.allSettled([
+    sendWaitlistNotification({
       cohortName: COHORT_2.name,
       name,
       email,
       phone,
       motivation,
-    });
-  } catch (err) {
-    console.error("[Waitlist] Admin notification failed:", err);
+    }),
+    sendWaitlistConfirmation({
+      name,
+      email,
+      cohortName: COHORT_2.name,
+      launchWeekend: COHORT_2.launchWeekend,
+      firstClass: COHORT_2.firstClass,
+      prepCourseName: COHORT_2.prepCourse.name,
+      prepCourseUrl: COHORT_2.prepCourse.url,
+      whatsappUrl: COHORT_2.whatsappUrl,
+    }),
+  ]);
+  if (admin.status === "rejected") {
+    console.error("[Waitlist] Admin notification failed:", admin.reason);
+  }
+  if (learner.status === "rejected") {
+    console.error("[Waitlist] Learner confirmation failed:", learner.reason);
   }
 
   return NextResponse.json<ApiResponse<null>>({ success: true, data: null });
