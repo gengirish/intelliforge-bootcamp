@@ -88,8 +88,24 @@ model WaitlistEntry {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  /// Qualifying answers (null on signups from before they were asked).
+  role       String?
+  experience String?
+  payer      String?
+  /// ICP fit 0–100 and its tier (A/B/C), from src/lib/lead-score.ts.
+  score      Int?
+  tier       String?
+
+  /// First-touch attribution: UTM tags, referring site, and landing page.
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  referrer    String?
+  landingPath String?
+
   @@unique([cohort, email])
   @@index([cohort])
+  @@index([cohort, tier])
 }
 
 enum EnrollmentStatus {

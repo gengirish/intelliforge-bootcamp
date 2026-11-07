@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { AlertCircle, CheckCircle, Loader2 } from "lucide-react";
+import { attributionFromPage, readAttribution } from "@/lib/attribution";
 import { COHORT_2 } from "@/lib/constants";
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
@@ -10,6 +11,35 @@ type FormStatus = "idle" | "submitting" | "success" | "error";
 const inputClass =
   "w-full rounded-lg border border-border bg-surface-light px-4 py-3 text-foreground placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary";
 const labelClass = "mb-1.5 block text-sm font-medium text-foreground";
+
+function ChoiceField({
+  name,
+  label,
+  options,
+}: {
+  name: string;
+  label: string;
+  options: readonly { value: string; label: string }[];
+}) {
+  const id = `waitlist-${name}`;
+  return (
+    <div>
+      <label htmlFor={id} className={labelClass}>
+        {label}
+      </label>
+      <select id={id} name={name} required defaultValue="" className={inputClass}>
+        <option value="" disabled>
+          Choose one
+        </option>
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>
+            {o.label}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
 
 export function WaitlistForm() {
   const [status, setStatus] = useState<FormStatus>("idle");
@@ -31,8 +61,12 @@ export function WaitlistForm() {
           email: formData.get("email"),
           phone: formData.get("phone"),
           motivation: formData.get("motivation"),
+          role: formData.get("role"),
+          experience: formData.get("experience"),
+          payer: formData.get("payer"),
           consent: formData.get("consent") === "on",
           website: formData.get("website"),
+          attribution: readAttribution() ?? attributionFromPage(),
         }),
       });
       const data = await res.json();
@@ -175,6 +209,22 @@ export function WaitlistForm() {
           ))}
         </select>
       </div>
+
+      <ChoiceField
+        name="role"
+        label="What's your current role?"
+        options={COHORT_2.roles}
+      />
+      <ChoiceField
+        name="experience"
+        label="Years of work experience"
+        options={COHORT_2.experience}
+      />
+      <ChoiceField
+        name="payer"
+        label="Who would pay for the course?"
+        options={COHORT_2.payers}
+      />
 
       {/* Honeypot: hidden from people and assistive tech. */}
       <div className="hidden" aria-hidden="true">

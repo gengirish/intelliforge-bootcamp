@@ -1,5 +1,9 @@
 import { isAdminSession } from "@/lib/admin-session";
-import { findWaitlistEntries, parseWaitlistFilters } from "@/lib/waitlist-admin";
+import {
+  findWaitlistEntries,
+  leadSource,
+  parseWaitlistFilters,
+} from "@/lib/waitlist-admin";
 
 export const dynamic = "force-dynamic";
 
@@ -19,14 +23,29 @@ export async function GET(req: Request) {
   const filters = parseWaitlistFilters((k) => searchParams.get(k));
   const entries = await findWaitlistEntries(filters);
 
-  const header = ["created_at", "name", "email", "phone", "motivation", "consented_at", "cohort"];
+  const header = [
+    "created_at", "tier", "score", "name", "email", "phone", "role", "experience",
+    "payer", "motivation", "source", "utm_source", "utm_medium", "utm_campaign",
+    "referrer", "landing_path", "consented_at", "cohort",
+  ];
   const rows = entries.map((e) =>
     [
       e.createdAt.toISOString(),
+      e.tier,
+      e.score?.toString(),
       e.name,
       e.email,
       e.phone,
+      e.role,
+      e.experience,
+      e.payer,
       e.motivation,
+      leadSource(e),
+      e.utmSource,
+      e.utmMedium,
+      e.utmCampaign,
+      e.referrer,
+      e.landingPath,
       e.consentedAt.toISOString(),
       e.cohort,
     ]
