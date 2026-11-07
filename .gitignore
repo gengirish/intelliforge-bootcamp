@@ -44,3 +44,6 @@ agentmail_api_key*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# one-off send logs
+/scripts/.waitlist-welcome-sent.log

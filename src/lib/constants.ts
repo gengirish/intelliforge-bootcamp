@@ -504,6 +504,15 @@ export const COHORT_2 = {
   firstClassIso: "2027-01-09T13:30:00.000Z",
   format:
     "Six 2-week sprints over 12 weeks, live on Zoom every Saturday and Sunday, 7–10 PM IST.",
+  /** Free self-paced setup course waitlisters are pointed at while they wait. */
+  prepCourse: {
+    name: "Fresher Track Pre-Requisite Guide",
+    url: `${SITE_CONFIG.lms}/courses/fresher-prerequisite-setup`,
+  },
+  /** Direct chat with the founder. Never a class group: those are for paid learners only. */
+  whatsappUrl: getWhatsAppUrl(
+    "Hi Girish! I just joined the IntelliForge AI Cohort 2 waitlist."
+  ),
   motivations: [
     { value: "ship-at-work", label: "Ship AI in my current job" },
     { value: "job-move", label: "Prepare for interviews or a job move" },
