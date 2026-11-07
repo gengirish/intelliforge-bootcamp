@@ -239,3 +239,26 @@ button {
 .ccarf-test-mode [data-ccarf-answer] {
   display: none;
 }
+
+/*
+ * The chat widget (embed.js, hosted elsewhere) pins itself to the bottom corner
+ * at the top of the stacking order, with inline styles, so these overrides need !important.
+ */
+@media (max-width: 767px) {
+  body:has([data-sticky-cta]) #if-chat-launcher {
+    bottom: 8rem !important;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 767px) {
+  body:has([data-sticky-cta]) #if-chat-panel {
+    bottom: 12.25rem !important;
+    height: min(620px, calc(100dvh - 14rem)) !important;
+  }
+}
+
+/* Pages where the launcher would sit on a primary control. */
+body:has([data-hide-chat]) #if-chat-launcher,
+body:has([data-hide-chat]) #if-chat-panel {
+  display: none !important;
+}

@@ -7,8 +7,6 @@ import {
   NAV_LINKS,
   SITE_CONFIG,
   SPRINT_CONFIG,
-  WHATSAPP_GROUP_URL,
-  ZOOM_URL,
 } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
@@ -109,26 +107,6 @@ export function Footer() {
               </li>
               <li>{SITE_CONFIG.contact.location}</li>
               <li className="pt-2">
-                <a
-                  href={WHATSAPP_GROUP_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block transition-all duration-200 hover:translate-x-0.5 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-accent rounded"
-                >
-                  Join WhatsApp Group
-                </a>
-              </li>
-              <li>
-                <a
-                  href={ZOOM_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block transition-all duration-200 hover:translate-x-0.5 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-accent rounded"
-                >
-                  Live Zoom Session
-                </a>
-              </li>
-              <li>
                 <a
                   href={SITE_CONFIG.lms}
                   target="_blank"

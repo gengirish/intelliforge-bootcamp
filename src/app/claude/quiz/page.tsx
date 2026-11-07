@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function ClaudeQuizPage() {
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
+    <main data-hide-chat className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
       <p className="text-sm font-medium uppercase tracking-wider text-accent">
         Claude Certified Architect · Foundations
       </p>

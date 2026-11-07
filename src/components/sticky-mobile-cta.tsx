@@ -38,6 +38,7 @@ export function StickyMobileCta() {
 
   return (
     <div
+      data-sticky-cta
       className={cn(
         "fixed bottom-0 left-0 right-0 z-40 md:hidden",
         "border-t border-border bg-surface/95 backdrop-blur",

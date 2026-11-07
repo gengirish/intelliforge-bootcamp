@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
-import { WhatsAppIcon } from "@/components/icons/whatsapp-icon";
 import { cn } from "@/lib/utils";
 import {
   FREE_LIVE_DEMO_URL,
@@ -20,6 +19,20 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
+  const menuToggleRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setIsMobileMenuOpen(false);
+      menuToggleRef.current?.focus();
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isMobileMenuOpen]);
 
   useEffect(() => {
     let ticking = false;
@@ -131,6 +144,7 @@ export function Header() {
         </div>
 
         <button
+          ref={menuToggleRef}
           type="button"
           aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
           aria-expanded={isMobileMenuOpen}

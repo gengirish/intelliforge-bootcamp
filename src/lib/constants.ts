@@ -37,30 +37,11 @@ export const LMS_SIGNIN_URL = `${SITE_CONFIG.lms}/api/auth/signin`;
 export const LMS_UPSKILL_ROADMAP_URL = `${SITE_CONFIG.lms}/courses/ai-upskill-12-week-roadmap`;
 export const LMS_FEEDBACK_URL = `${SITE_CONFIG.lms}/feedback`;
 
-export const ZOOM_MEETING = {
-  topic: "Why Upskill and How?",
-  time: "Jun 28, 2026 09:00 AM Mumbai, Kolkata, New Delhi",
-  displayShort: "28/06/2026, 9:00 AM IST",
-  displayDate: "Next session — check WhatsApp for schedule",
-  joinUrl:
-    "https://us06web.zoom.us/j/86071939853?pwd=VovRc9JnO1qDKxqK9L3JNJ3cp3KwCB.1",
-  meetingId: "86071939853",
-  passcode: "314874",
-  chatUrl: "https://us06web.zoom.us/launch/jc/86071939853",
-};
-
-export const ZOOM_URL = `${SITE_CONFIG.url}/zoom`;
-
-export const WHATSAPP_GROUP = {
-  name: "AI Roadmap Cohort!",
-  inviteUrl: "https://chat.whatsapp.com/LwxMCJ1EqLm4oLOG0fLqmE",
-};
-
+/** Sign-in and paid-enrolment gated; the real invite links live in env vars. */
 export const WHATSAPP_GROUP_URL = `${SITE_CONFIG.url}/whatsapp`;
 
 export const SPRINT_COHORT_WHATSAPP = {
   name: "BootCamp-UpSkill-Cohort-01",
-  inviteUrl: "https://chat.whatsapp.com/IHnaZegZOWsK37jg8OaB5P",
 };
 
 export const SPRINT_COHORT_WHATSAPP_URL = `${SITE_CONFIG.url}/sprint/whatsapp`;
@@ -120,7 +101,7 @@ export const FOUNDER = {
 export const BUILD_ALONGSIDE_PRODUCTS = [
   {
     name: "LocalFlash",
-    description: "Local-first flash storage and sync for edge deployments.",
+    description: "Live nearby offers for shoppers, with offer publishing and in-store redemption checks for merchants.",
     href: "https://localflash.shop",
     icon: "Zap",
   },
@@ -519,6 +500,8 @@ export const COHORT_2 = {
   launchWeekendShort: "5–6 Dec",
   firstClass: "Saturday, 9 January 2027",
   firstClassShort: "9 Jan 2027",
+  /** 7:00 PM IST on the first class. */
+  firstClassIso: "2027-01-09T13:30:00.000Z",
   format:
     "Six 2-week sprints over 12 weeks, live on Zoom every Saturday and Sunday, 7–10 PM IST.",
   motivations: [
@@ -651,6 +634,14 @@ export const SPRINT_CONFIG = {
   liveScheduleSummary:
     "Live on Zoom every Saturday & Sunday — 7–10 PM IST",
 };
+
+/** Shared by the contact form and its API route. */
+export const CONTACT_FORM_LIMITS = {
+  name: 120,
+  email: 254,
+  phone: 20,
+  message: 2000,
+} as const;
 
 export const NAV_LINKS = [
   { label: "Build-Alongside", href: "#build-alongside" },

@@ -1,6 +1,5 @@
-import { NextResponse } from "next/server";
-import { SPRINT_COHORT_WHATSAPP } from "@/lib/constants";
+import { redirectToCohortLink } from "@/lib/cohort-links";
 
-export function GET() {
-  return NextResponse.redirect(SPRINT_COHORT_WHATSAPP.inviteUrl, 302);
+export function GET(req: Request) {
+  return redirectToCohortLink(req, "SPRINT_WHATSAPP_INVITE_URL");
 }

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import {
+  COHORT_2,
   CTA_MICRO_TRUST,
   FREE_LIVE_DEMO_URL,
   FOUNDER,
@@ -29,7 +30,9 @@ export function Hero() {
 
       <div className="relative z-10 mx-auto max-w-4xl text-center">
         <p className="hero-animate-headline mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-surface/60 px-4 py-1.5 text-sm text-accent">
-          Interview in 3 weeks? · {SPRINT_CONFIG.name} · {SPRINT_CONFIG.priceDisplay}
+          {SPRINT_CONFIG.enrollmentOpen
+            ? `Interview in 3 weeks? · ${SPRINT_CONFIG.name} · ${SPRINT_CONFIG.priceDisplay}`
+            : `${COHORT_2.name} · Enrolment opens ${COHORT_2.launchWeekendShort} · First class ${COHORT_2.firstClassShort}`}
         </p>
 
         <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">

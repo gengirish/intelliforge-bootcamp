@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Send, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import { FadeIn } from "@/components/animations/fade-in";
-import { SITE_CONFIG } from "@/lib/constants";
+import { CONTACT_FORM_LIMITS, SITE_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
@@ -136,6 +136,8 @@ export function ContactForm() {
                   name="name"
                   type="text"
                   required
+                  autoComplete="name"
+                  maxLength={CONTACT_FORM_LIMITS.name}
                   placeholder="Your full name"
                   className="w-full rounded-lg border border-border bg-surface-light px-4 py-3 text-foreground placeholder:text-muted/60 transition-colors duration-200 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 />
@@ -150,6 +152,10 @@ export function ContactForm() {
                   name="email"
                   type="email"
                   required
+                  autoComplete="email"
+                  maxLength={CONTACT_FORM_LIMITS.email}
+                  pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+                  title="Enter a full email address, like you@example.com"
                   placeholder="you@example.com"
                   className="w-full rounded-lg border border-border bg-surface-light px-4 py-3 text-foreground placeholder:text-muted/60 transition-colors duration-200 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 />
@@ -163,6 +169,10 @@ export function ContactForm() {
                   id="phone"
                   name="phone"
                   type="tel"
+                  autoComplete="tel"
+                  maxLength={CONTACT_FORM_LIMITS.phone}
+                  pattern="\+?[0-9 \(\)\.\-]{7,20}"
+                  title="Use digits, spaces and an optional leading +"
                   placeholder="+91 98765 43210"
                   className="w-full rounded-lg border border-border bg-surface-light px-4 py-3 text-foreground placeholder:text-muted/60 transition-colors duration-200 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 />
@@ -177,6 +187,7 @@ export function ContactForm() {
                   name="message"
                   required
                   rows={4}
+                  maxLength={CONTACT_FORM_LIMITS.message}
                   placeholder="Tell us about your interest in the bootcamp..."
                   className="w-full resize-none rounded-lg border border-border bg-surface-light px-4 py-3 text-foreground placeholder:text-muted/60 transition-colors duration-200 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 />

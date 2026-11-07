@@ -6,6 +6,24 @@ import { cn } from "@/lib/utils";
 import { WhatsAppIcon } from "@/components/icons/whatsapp-icon";
 import { WHATSAPP_DEMO_URL } from "@/lib/constants";
 
+const TOOLTIP_DISMISSED_KEY = "whatsapp-tooltip-dismissed";
+
+function readTooltipDismissed() {
+  try {
+    return localStorage.getItem(TOOLTIP_DISMISSED_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function saveTooltipDismissed() {
+  try {
+    localStorage.setItem(TOOLTIP_DISMISSED_KEY, "1");
+  } catch {
+    // Without storage the tooltip just stays closed until the next page load.
+  }
+}
+
 export function WhatsAppFAB() {
   const [showTooltip, setShowTooltip] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -17,7 +35,7 @@ export function WhatsAppFAB() {
   }, []);
 
   useEffect(() => {
-    if (!isVisible || dismissed) return;
+    if (!isVisible || dismissed || readTooltipDismissed()) return;
     const timer = setTimeout(() => setShowTooltip(true), 4000);
     return () => clearTimeout(timer);
   }, [isVisible, dismissed]);
@@ -25,13 +43,13 @@ export function WhatsAppFAB() {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-24 left-4 z-50 flex flex-col items-start gap-3 md:bottom-6 md:left-6">
+    <div className="fixed bottom-32 left-4 z-50 flex flex-col items-start gap-3 md:bottom-6 md:left-6">
       {showTooltip && !dismissed && (
         <div
           className={cn(
-            "relative ml-1 rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground shadow-xl",
+            "relative ml-1 hidden rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground shadow-xl",
             "animate-in fade-in slide-in-from-bottom-2 duration-300",
-            "max-w-[240px]"
+            "max-w-[240px] md:block"
           )}
         >
           <button
@@ -39,6 +57,7 @@ export function WhatsAppFAB() {
             onClick={() => {
               setDismissed(true);
               setShowTooltip(false);
+              saveTooltipDismissed();
             }}
             className="absolute -right-1.5 -top-1.5 rounded-full bg-surface-light p-0.5 text-muted hover:text-foreground transition-colors"
             aria-label="Dismiss"
