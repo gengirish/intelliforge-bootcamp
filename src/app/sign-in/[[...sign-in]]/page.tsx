@@ -30,17 +30,8 @@ export default async function SignInPage({
       <SignIn
         forceRedirectUrl={redirectUrl}
         appearance={{
-          variables: {
-            colorPrimary: "#7C3AED",
-            colorBackground: "#111827",
-            colorForeground: "#E2E8F0",
-            colorInput: "#1E293B",
-            colorInputForeground: "#E2E8F0",
-          },
           elements: {
-            card: "bg-surface border border-border shadow-none",
-            headerTitle: "text-foreground",
-            headerSubtitle: "text-muted",
+            card: "border border-border shadow-none",
           },
         }}
       />
