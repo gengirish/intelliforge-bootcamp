@@ -364,50 +364,6 @@ export const CURRICULUM = [
   },
 ];
 
-/** Learner testimonials — LinkedIn-verified participants. */
-export const LEARNER_TESTIMONIALS = [
-  {
-    name: "Harish Hooli",
-    role: "Director of Engineering, Tiger Analytics",
-    initials: "HH",
-    linkedin: "https://www.linkedin.com/in/harish-hooli/",
-    quote:
-      "The sessions cut through AI hype. You work on patterns Girish uses in production — agents, RAG, and deployment — not toy notebooks.",
-  },
-  {
-    name: "Prasad Kancharla",
-    role: "Technology & Security Professional",
-    initials: "PK",
-    linkedin: "https://www.linkedin.com/in/prasad-kancharla/",
-    quote:
-      "Clear structure from fundamentals to shipping. The live format made it easy to ask questions and stay accountable week over week.",
-  },
-  {
-    name: "Rohini Devan",
-    role: "Senior Cloud Application Administrator, Ellucian",
-    initials: "RD",
-    linkedin: "https://www.linkedin.com/in/rohini-devan-1b068590/",
-    quote:
-      "As someone in cloud operations, I wanted practical AI skills I could apply at work. This was hands-on from day one.",
-  },
-  {
-    name: "Reshma Jabeen",
-    role: "Technology Professional",
-    initials: "RJ",
-    linkedin: "https://www.linkedin.com/in/reshma-jabeen-b8aa7a103/",
-    quote:
-      "Founder-led teaching makes a difference. You see real repos, real trade-offs, and what it takes to ship.",
-  },
-  {
-    name: "Shreya Rajasekar",
-    role: "Technology Professional",
-    initials: "SR",
-    linkedin: "https://www.linkedin.com/in/shreya-rajasekar-5344b897/",
-    quote:
-      "The sprint format pushed me to deploy — not just watch. Leaving with working projects changed how I approach AI at work.",
-  },
-];
-
 export const PRICING = {
   perSprint: {
     name: "Per sprint",

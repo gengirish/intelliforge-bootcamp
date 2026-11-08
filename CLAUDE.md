@@ -19,7 +19,7 @@ npm run db:deploy        # prisma migrate deploy
 npm run db:seed          # seeds the active Sprint row (prisma/seed.ts)
 ```
 
-Env vars live in `.env.local` (not `.env`) — every `db:*` script and the Playwright config read that file explicitly. `.env.example` only documents the WhatsApp/OTP block; the full set also includes `DATABASE_URL`, `DIRECT_URL`, Clerk keys, `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET` / `NEXT_PUBLIC_RAZORPAY_KEY_ID` / `RAZORPAY_WEBHOOK_SECRET`, `LMS_API_URL` / `LMS_API_KEY`, `AGENTMAIL_API_KEY` / `AGENTMAIL_INBOX` / `ADMIN_NOTIFY_EMAIL`, `ADMIN_SECRET`, `CRON_SECRET`, `ZOOM_JOIN_URL` / `WHATSAPP_GROUP_INVITE_URL` / `SPRINT_WHATSAPP_INVITE_URL`.
+Env vars live in `.env.local` (not `.env`) — every `db:*` script and the Playwright config read that file explicitly. `.env.example` only documents the WhatsApp/OTP block; the full set also includes `DATABASE_URL`, `DIRECT_URL`, Clerk keys, `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET` / `NEXT_PUBLIC_RAZORPAY_KEY_ID` / `RAZORPAY_WEBHOOK_SECRET`, `LMS_API_URL` / `LMS_API_KEY`, `BLOB_READ_WRITE_TOKEN` (testimonial media), `AGENTMAIL_API_KEY` / `AGENTMAIL_INBOX` / `ADMIN_NOTIFY_EMAIL`, `ADMIN_SECRET`, `CRON_SECRET`, `ZOOM_JOIN_URL` / `WHATSAPP_GROUP_INVITE_URL` / `SPRINT_WHATSAPP_INVITE_URL`.
 
 Deployed on **Vercel** at `https://upskill.intelliforge.tech`, from the project named **`learning-bootcamp`** (not `intelliforge-bootcamp`). There is no `vercel.json`/`.vercel` in the repo — the project is linked on Vercel's side, so deploy config and env vars change in the dashboard, not here. Pushing to `master` deploys production.
 
@@ -100,6 +100,15 @@ Both degrade gracefully when unset.
 `/waitlist` posts to `/api/waitlist`, which upserts a `WaitlistEntry` keyed on cohort and email, then notifies the admin by email on a best-effort basis. Launch details live in `COHORT_2` in `src/lib/constants.ts`. Deploying this needs `npm run db:deploy`, because the build does not run migrations.
 
 Checkout is closed by `SPRINT_ENROLLMENT_OPEN` in `src/lib/constants.ts`. While false it strips `/sprint` of its price, seats and buy buttons, points every sprint CTA at the waitlist, and makes `POST /sprint/enroll` return 409; orders already open still confirm. Before turning it on: run the seed against production and point `SPRINT_COHORT_WHATSAPP` at the Cohort 2 group.
+
+### Learner testimonials
+
+Learners submit their own testimonials at `/testimonials/submit` (Clerk-gated, `noindex`); approved ones appear on the homepage section and `/testimonials`. Nothing is hand-entered: the old `LEARNER_TESTIMONIALS` constant is gone, and quotes must never be written on a learner's behalf.
+
+- **What "verified" means.** Name and photo are copied server-side from a *verified* Google or LinkedIn external account on the Clerk user ([src/lib/testimonials-server.ts](src/lib/testimonials-server.ts)); users signed in any other way are asked to switch. "Verified learner" means the Clerk id or a verified email matched a `PAID` enrolment at submit time. LinkedIn's OIDC sign-in does not expose the profile URL, so `linkedinUrl` is typed by the learner and labelled as theirs. LinkedIn must be enabled as a social connection in the Clerk dashboard for that option to appear.
+- **Media.** Audio/video is recorded in the browser (`MediaRecorder`) or uploaded, then sent straight to Vercel Blob using tokens from `POST /api/testimonials/upload`, which only allows paths under `testimonials/<clerkUserId>/`. The submit action re-checks the blob with `head()` before saving. Blobs are public with random-suffix URLs, because a function cannot proxy video past the 4.5 MB response limit; replaced or deleted media is removed with `del()`. Media needs `BLOB_READ_WRITE_TOKEN` (connect a Blob store to the Vercel project); without it the form accepts text only.
+- **Review.** Every submission or edit lands as `PENDING` and comes off the site until re-approved. `/admin/testimonials` (same `ADMIN_SECRET` cookie as the waitlist admin) approves, rejects, features, edits transcripts, and deletes. Each row stores the `CONSENT_VERSION` the learner agreed to; bump it in [src/lib/testimonials.ts](src/lib/testimonials.ts) whenever `CONSENT_TEXT` changes.
+- Deploying the table needs `npm run db:deploy`.
 
 ### Content
 

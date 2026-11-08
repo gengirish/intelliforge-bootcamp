@@ -12,5 +12,7 @@ export const config = {
     "/zoom",
     "/whatsapp",
     "/sprint/whatsapp",
+    "/testimonials/submit",
+    "/api/testimonials/upload",
   ],
 };

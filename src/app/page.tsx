@@ -9,15 +9,14 @@ import { ComparisonTable } from "@/components/sections/comparison-table";
 import { Curriculum } from "@/components/sections/curriculum";
 import { SprintLiveSchedule } from "@/components/sprint/SprintLiveSchedule";
 import { WhatsAppFAB } from "@/components/whatsapp-fab-lazy";
+import { Testimonials } from "@/components/sections/testimonials";
+
+/** Approved testimonials come from the database; admin actions also revalidate on change. */
+export const revalidate = 300;
 
 const WhosBehind = dynamic(() =>
   import("@/components/sections/whos-behind").then((m) => ({
     default: m.WhosBehind,
-  }))
-);
-const Testimonials = dynamic(() =>
-  import("@/components/sections/testimonials").then((m) => ({
-    default: m.Testimonials,
   }))
 );
 const FreePreview = dynamic(() =>
