@@ -226,6 +226,38 @@ export async function sendWaitlistNotification(data: {
   });
 }
 
+/** Tells the admin a testimonial is waiting for review. */
+export async function sendTestimonialNotification(data: {
+  name: string;
+  headline: string;
+  provider: string;
+  verifiedLearner: boolean;
+  learnerSprints?: string | null;
+  mediaKind: string;
+  quote: string;
+  isUpdate: boolean;
+}) {
+  const rows = [
+    ["Name", data.name],
+    ["Headline", data.headline],
+    ["Signed in with", data.provider],
+    ["Paid learner", data.verifiedLearner ? `Yes (${data.learnerSprints ?? ""})` : "No match"],
+    ["Media", data.mediaKind === "NONE" ? "Text only" : data.mediaKind.toLowerCase()],
+    ["Quote", data.quote],
+  ]
+    .map(
+      ([label, value]) =>
+        `<tr><td style="padding: 8px 12px 8px 0; color: #94A3B8; vertical-align: top;">${label}</td><td style="padding: 8px 0;">${escapeHtml(value)}</td></tr>`
+    )
+    .join("");
+
+  await agentMailSend({
+    to: ADMIN_EMAIL,
+    subject: `${data.isUpdate ? "Updated" : "New"} testimonial to review: ${data.name.replace(/[\r\n]+/g, " ")}`,
+    html: `<div style="font-family: system-ui, sans-serif; max-width: 600px; margin: 0 auto; background: #0A0F1C; color: #E2E8F0; padding: 32px; border-radius: 12px;"><h2 style="color: #7C3AED; margin-top: 0;">Testimonial waiting for review</h2><table style="width: 100%; border-collapse: collapse;">${rows}</table><p style="margin-top: 24px;"><a href="${SITE_CONFIG.url}/admin/testimonials" style="color: #A78BFA;">Review it in admin</a></p></div>`,
+  });
+}
+
 /**
  * Welcome email to someone who joined a waitlist: confirms their place, points
  * them at the free setup course, and gives them a direct WhatsApp line.

@@ -108,6 +108,60 @@ model WaitlistEntry {
   @@index([cohort, tier])
 }
 
+/// A learner's own testimonial. Identity fields are copied from the Google or
+/// LinkedIn account they signed in with, never typed by them, so the public
+/// card can say which provider vouched for the name and photo.
+model Testimonial {
+  id          String            @id @default(cuid())
+  /// One testimonial per Clerk user; resubmitting edits it and re-queues review.
+  clerkUserId String            @unique
+  status      TestimonialStatus @default(PENDING)
+  featured    Boolean           @default(false)
+
+  /// From the verified OAuth account ("google" or "linkedin").
+  provider    String
+  name        String
+  avatarUrl   String?
+  /// Verified email: used for the paid-learner match and to contact them. Never shown.
+  email       String
+
+  /// Typed by the learner, so shown as self-reported.
+  headline    String
+  linkedinUrl String?
+  quote       String
+
+  mediaKind        TestimonialMedia @default(NONE)
+  mediaUrl         String?
+  mediaPathname    String?
+  mediaContentType String?
+  transcript       String?
+
+  /// Set when the email or Clerk id matches a PAID enrolment at submit time.
+  verifiedLearner Boolean @default(false)
+  /// Comma-separated sprint titles the match found, e.g. "Sprint 1, Sprint 2".
+  learnerSprints  String?
+
+  consentVersion String
+  consentedAt    DateTime  @default(now())
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  reviewedAt     DateTime?
+
+  @@index([status, featured])
+}
+
+enum TestimonialStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum TestimonialMedia {
+  NONE
+  AUDIO
+  VIDEO
+}
+
 enum EnrollmentStatus {
   PENDING
   PAID

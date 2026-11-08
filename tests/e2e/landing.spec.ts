@@ -107,17 +107,22 @@ test.describe("Landing Page — All Sections", () => {
     await expect(page.getByText("Rahul M.")).toHaveCount(0);
   });
 
-  test("learner testimonials with LinkedIn links render", async ({ page }) => {
+  test("testimonials come only from verified submissions", async ({ page }) => {
+    // The old hand-entered quotes are gone; the section shows approved,
+    // sign-in-verified submissions and is absent until there is one.
+    await expect(page.getByText("Harish Hooli")).toHaveCount(0);
     const section = page.locator("#testimonials");
+    if ((await section.count()) === 0) return;
     await section.scrollIntoViewIfNeeded();
-    await expect(section.getByText("What Learners Say")).toBeVisible();
-    await expect(section.getByText("Harish Hooli")).toBeVisible();
-    await expect(section.getByText("Shreya Rajasekar")).toBeVisible();
-    const linkedInLinks = section.getByRole("link", { name: /View on LinkedIn/ });
-    await expect(linkedInLinks).toHaveCount(5);
-    await expect(linkedInLinks.first()).toHaveAttribute(
+    const cards = section.locator("article");
+    const n = await cards.count();
+    expect(n).toBeGreaterThan(0);
+    for (let i = 0; i < n; i++) {
+      await expect(cards.nth(i).getByText(/(Google|LinkedIn) verified/)).toBeVisible();
+    }
+    await expect(section.getByRole("link", { name: /Read all testimonials/ })).toHaveAttribute(
       "href",
-      "https://www.linkedin.com/in/harish-hooli/"
+      "/testimonials"
     );
   });
 
