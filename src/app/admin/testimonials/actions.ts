@@ -20,6 +20,7 @@ function idFrom(form: FormData) {
 function refreshPublicPages() {
   revalidatePath("/");
   revalidatePath("/testimonials");
+  revalidatePath("/waitlist");
   revalidatePath("/admin/testimonials");
 }
 

@@ -497,6 +497,28 @@ export const COHORT_2 = {
     { value: "employer", label: "My employer would pay" },
     { value: "undecided", label: "Not sure yet" },
   ],
+  /** One-pager for learners whose employer would pay. */
+  sponsorHref: "/sponsor",
+} as const;
+
+/**
+ * UTM convention for every link that points at the waitlist. Keep utm_source
+ * to these values so the admin source counts stay comparable:
+ *   ?utm_source=<source>&utm_medium=<post|dm|group|email|pdf|referral>&utm_campaign=cohort2
+ * Waitlisters' own share links add ref=<their code> and utm_medium=referral.
+ */
+export const UTM_SOURCES = ["linkedin", "whatsapp", "newsletter", "ifres"] as const;
+
+/**
+ * "Share your spot" copy shown after someone joins the waitlist. The text is
+ * prefilled, and the learner can edit it before posting. Paste a version from
+ * share.intelliforge.tech here to change it.
+ */
+export const WAITLIST_SHARE = {
+  linkedinPost: (url: string) =>
+    `I've joined the waitlist for ${COHORT_2.name} of the IntelliForge AI Bootcamp: 12 weeks of live, build-first sprints where you ship real AI products (a Claude chatbot, RAG, agents) to production. First class ${COHORT_2.firstClassShort}.\n\nIf you're a developer who wants to ship AI at work, join me:\n${url}`,
+  whatsappMessage: (url: string) =>
+    `I've joined the IntelliForge AI ${COHORT_2.name} waitlist: live AI build sprints, first class ${COHORT_2.firstClassShort}. Join me: ${url}`,
 } as const;
 
 /**

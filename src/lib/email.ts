@@ -199,18 +199,22 @@ export async function sendWaitlistNotification(data: {
   name: string;
   email: string;
   phone?: string;
-  motivation: string;
   tier?: string;
   score?: number;
   source?: string;
+  /** True when they said their employer would pay: a B2B lead. */
+  employerPays?: boolean;
+  /** Name of the waitlister whose share link brought them. */
+  referredByName?: string;
 }) {
   const rows = [
     ["Name", data.name],
     ["Email", data.email],
     ["Phone", data.phone],
-    ["Motivation", data.motivation],
-    ["ICP fit", data.tier ? `Tier ${data.tier} (${data.score}/100)` : undefined],
+    ["ICP fit", data.tier ? `Tier ${data.tier} (${data.score}/100; rises if they answer the motivation question)` : undefined],
+    ["Who pays", data.employerPays ? "Employer: B2B lead, sent the sponsorship one-pager" : undefined],
     ["Source", data.source],
+    ["Referred by", data.referredByName],
   ]
     .filter(([, value]) => value)
     .map(
@@ -221,7 +225,7 @@ export async function sendWaitlistNotification(data: {
 
   await agentMailSend({
     to: ADMIN_EMAIL,
-    subject: `${data.tier ? `[${data.tier}] ` : ""}${data.cohortName} waitlist: ${data.name.replace(/[\r\n]+/g, " ")}`,
+    subject: `${data.tier ? `[${data.tier}] ` : ""}${data.employerPays ? "[Employer] " : ""}${data.cohortName} waitlist: ${data.name.replace(/[\r\n]+/g, " ")}`,
     html: `<div style="font-family: system-ui, sans-serif; max-width: 600px; margin: 0 auto; background: #0A0F1C; color: #E2E8F0; padding: 32px; border-radius: 12px;"><h2 style="color: #7C3AED; margin-top: 0;">New ${data.cohortName} waitlist entry</h2><table style="width: 100%; border-collapse: collapse;">${rows}</table></div>`,
   });
 }
@@ -276,6 +280,10 @@ export async function sendWaitlistConfirmation(data: {
   prepCourseUrl: string;
   whatsappUrl: string;
   tier?: "A" | "B" | "C";
+  /** Their personal "Share your spot" link. */
+  shareUrl?: string;
+  /** Set when their employer would pay: links the sponsorship one-pager. */
+  sponsorUrl?: string;
 }) {
   const firstName = escapeHtml(data.name.trim().split(/\s+/)[0] || "there");
   const button = (href: string, label: string, primary: boolean) =>
@@ -326,6 +334,20 @@ export async function sendWaitlistConfirmation(data: {
         <p>Hi ${firstName},</p>
         ${variant.intro}
 ${variant.steps}
+${
+  data.sponsorUrl
+    ? `
+        <h3 style="color: #E2E8F0; margin-bottom: 4px;">Getting your employer to pay</h3>
+        <p style="margin-top: 0;">You said your employer would pay. This one-page summary covers what the cohort teaches, what you'll ship and what it costs, so you can forward it to your manager or L&amp;D team.</p>
+        <p>${button(data.sponsorUrl, "Open the employer one-pager", false)}</p>`
+    : ""
+}${
+  data.shareUrl
+    ? `
+        <h3 style="color: #E2E8F0; margin-bottom: 4px;">Know someone who'd want this?</h3>
+        <p style="margin-top: 0;">Share your personal link: <a href="${escapeHtml(data.shareUrl)}" style="color: #A78BFA;">${escapeHtml(data.shareUrl)}</a></p>`
+    : ""
+}
 
         <p style="margin-top: 28px;">See you soon,<br />Girish<br /><span style="color: #94A3B8;">IntelliForge AI</span></p>
         <hr style="border: none; border-top: 1px solid #1E293B; margin: 24px 0;" />

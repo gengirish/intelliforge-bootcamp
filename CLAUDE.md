@@ -99,6 +99,12 @@ Both degrade gracefully when unset.
 
 `/waitlist` posts to `/api/waitlist`, which upserts a `WaitlistEntry` keyed on cohort and email, then notifies the admin by email on a best-effort basis. Launch details live in `COHORT_2` in `src/lib/constants.ts`. Deploying this needs `npm run db:deploy`, because the build does not run migrations.
 
+- **Form.** Role, experience and payer are asked up front, because the lead score needs them. Motivation is asked after signup and saved by `PATCH /api/waitlist` using the entry id the POST returns, so `motivation` is nullable. The score in the admin email is computed before that answer.
+- **Share your spot.** Each entry gets a `referralCode`. The success screen offers LinkedIn (prefilled post), WhatsApp and copy-link shares of `/waitlist?ref=<code>`, and a new signup stores its referrer's code in `referredBy`. The share copy is in `WAITLIST_SHARE`, and links are built by `src/lib/waitlist-referral.ts`.
+- **Attribution.** UTMs, referrer, landing path and `ref` are captured first-touch in `src/lib/attribution.ts`. Tag every inbound link per `UTM_SOURCES` in constants (`linkedin|whatsapp|newsletter|ifres`).
+- **Employer payers** are B2B leads. They're tagged `[Employer]` in the admin email, and both the success screen and the welcome email link `/sponsor`, a one-pager built only from constants. `/admin/waitlist` filters on them.
+- **Social proof** on `/waitlist` is the same approved testimonials as the homepage. The section stays hidden until one is approved.
+
 Checkout is closed by `SPRINT_ENROLLMENT_OPEN` in `src/lib/constants.ts`. While false it strips `/sprint` of its price, seats and buy buttons, points every sprint CTA at the waitlist, and makes `POST /sprint/enroll` return 409; orders already open still confirm. Before turning it on: run the seed against production and point `SPRINT_COHORT_WHATSAPP` at the Cohort 2 group.
 
 ### Learner testimonials

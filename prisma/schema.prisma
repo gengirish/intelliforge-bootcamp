@@ -83,7 +83,8 @@ model WaitlistEntry {
   name        String
   email       String
   phone       String?
-  motivation  String
+  /// Asked after signup, so null until the learner answers it.
+  motivation  String?
   consentedAt DateTime @default(now())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -103,9 +104,14 @@ model WaitlistEntry {
   referrer    String?
   landingPath String?
 
+  /// "Share your spot": this entry's own code, and the code of whoever referred it.
+  referralCode String? @unique
+  referredBy   String?
+
   @@unique([cohort, email])
   @@index([cohort])
   @@index([cohort, tier])
+  @@index([referredBy])
 }
 
 /// A learner's own testimonial. Identity fields are copied from the Google or

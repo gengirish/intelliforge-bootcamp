@@ -1,6 +1,6 @@
 /**
  * First-touch lead attribution, kept in the visitor's own browser until they
- * join the waitlist. A visit with UTM tags replaces what was stored, so the
+ * join the waitlist. A visit with UTM tags or a referral code replaces what was stored, so the
  * campaign that brought someone back gets the credit; a plain visit only
  * records itself when nothing is stored yet. Storage can be unavailable
  * (private windows, blocked site data), so every access is guarded and the
@@ -13,6 +13,8 @@ export type Attribution = {
   utmCampaign?: string;
   referrer?: string;
   landingPath?: string;
+  /** Referral code from a waitlister's "Share your spot" link (?ref=). */
+  ref?: string;
 };
 
 const KEY = "if_lead_attribution";
@@ -42,6 +44,7 @@ export function attributionFromPage(): Attribution {
     utmCampaign: clip(p.get("utm_campaign")),
     referrer: externalReferrer(),
     landingPath: clip(window.location.pathname),
+    ref: clip(p.get("ref")),
   };
 }
 
@@ -57,7 +60,7 @@ export function readAttribution(): Attribution | null {
 export function recordAttribution(): void {
   const here = attributionFromPage();
   const stored = readAttribution();
-  if (stored && !here.utmSource) return;
+  if (stored && !here.utmSource && !here.ref) return;
   try {
     window.localStorage.setItem(KEY, JSON.stringify(here));
   } catch {

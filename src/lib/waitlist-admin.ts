@@ -14,6 +14,7 @@ export type WaitlistFilters = {
   motivation: string;
   tier: string;
   source: string;
+  payer: string;
   sort: "newest" | "score";
 };
 
@@ -26,6 +27,7 @@ export function parseWaitlistFilters(
     motivation: get("motivation") ?? "",
     tier: get("tier") ?? "",
     source: get("source") ?? "",
+    payer: get("payer") ?? "",
     sort: get("sort") === "score" ? "score" : "newest",
   };
 }
@@ -44,6 +46,7 @@ export function waitlistWhere({
   motivation,
   tier,
   source,
+  payer,
 }: WaitlistFilters): Prisma.WaitlistEntryWhereInput {
   const and: Prisma.WaitlistEntryWhereInput[] = [];
   if (q) {
@@ -65,6 +68,7 @@ export function waitlistWhere({
   return {
     cohort,
     ...(motivation ? { motivation } : {}),
+    ...(payer ? { payer } : {}),
     ...(tier === "unscored" ? { tier: null } : tier ? { tier } : {}),
     ...(and.length ? { AND: and } : {}),
   };
@@ -83,9 +87,11 @@ export async function findWaitlistEntries(filters: WaitlistFilters, take?: numbe
 
 export async function getWaitlistStats(cohort: string) {
   const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-  const [total, last7Days, byTierRows, sourceRows] = await Promise.all([
+  const [total, last7Days, employerPays, referred, byTierRows, sourceRows] = await Promise.all([
     prisma.waitlistEntry.count({ where: { cohort } }),
     prisma.waitlistEntry.count({ where: { cohort, createdAt: { gte: weekAgo } } }),
+    prisma.waitlistEntry.count({ where: { cohort, payer: "employer" } }),
+    prisma.waitlistEntry.count({ where: { cohort, referredBy: { not: null } } }),
     prisma.waitlistEntry.groupBy({
       by: ["tier"],
       where: { cohort },
@@ -108,5 +114,15 @@ export async function getWaitlistStats(cohort: string) {
   }
   const bySource = [...sourceCounts.entries()].sort((a, b) => b[1] - a[1]);
 
-  return { total, last7Days, byTier, bySource };
+  return { total, last7Days, employerPays, referred, byTier, bySource };
+}
+
+/** How many signups each referral code brought in, keyed by code. */
+export async function getReferralCounts(cohort: string): Promise<Map<string, number>> {
+  const rows = await prisma.waitlistEntry.groupBy({
+    by: ["referredBy"],
+    where: { cohort, referredBy: { not: null } },
+    _count: { _all: true },
+  });
+  return new Map(rows.map((r) => [r.referredBy!, r._count._all]));
 }

@@ -139,6 +139,7 @@ export async function submitTestimonial(_prev: SubmitState, form: FormData): Pro
   // An edit takes the old version off the site until it is re-approved.
   revalidatePath("/");
   revalidatePath("/testimonials");
+  revalidatePath("/waitlist");
 
   if (process.env.AGENTMAIL_API_KEY) {
     await sendTestimonialNotification({
