@@ -5,12 +5,24 @@ import Link from "next/link";
 import { AlertCircle, CheckCircle, Loader2 } from "lucide-react";
 import { attributionFromPage, readAttribution } from "@/lib/attribution";
 import { COHORT_2 } from "@/lib/constants";
+import { FollowUpQuestion, ShareYourSpot, SponsorNote } from "./after-signup";
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
 
 const inputClass =
   "w-full rounded-lg border border-border bg-surface-light px-4 py-3 text-foreground placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary";
 const labelClass = "mb-1.5 block text-sm font-medium text-foreground";
+
+/** Visual required marker; hidden from assistive tech, which reads `required`. */
+function Req() {
+  return (
+    <span aria-hidden="true" className="ml-0.5 text-red-400">
+      *
+    </span>
+  );
+}
+
+type JoinResult = { token: string; referralCode: string } | null;
 
 function ChoiceField({
   name,
@@ -26,6 +38,7 @@ function ChoiceField({
     <div>
       <label htmlFor={id} className={labelClass}>
         {label}
+        <Req />
       </label>
       <select id={id} name={name} required defaultValue="" className={inputClass}>
         <option value="" disabled>
@@ -44,6 +57,8 @@ function ChoiceField({
 export function WaitlistForm() {
   const [status, setStatus] = useState<FormStatus>("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [joined, setJoined] = useState<JoinResult>(null);
+  const [employerPays, setEmployerPays] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -60,7 +75,6 @@ export function WaitlistForm() {
           name: formData.get("name"),
           email: formData.get("email"),
           phone: formData.get("phone"),
-          motivation: formData.get("motivation"),
           role: formData.get("role"),
           experience: formData.get("experience"),
           payer: formData.get("payer"),
@@ -71,6 +85,8 @@ export function WaitlistForm() {
       });
       const data = await res.json();
       if (!data.success) throw new Error(data.error);
+      setJoined(data.data ?? null);
+      setEmployerPays(formData.get("payer") === "employer");
       setStatus("success");
     } catch (err) {
       setStatus("error");
@@ -94,6 +110,12 @@ export function WaitlistForm() {
             You&apos;re on the {COHORT_2.name} waitlist. We&apos;ll contact you
             when enrolment opens on {COHORT_2.launchWeekend}.
           </p>
+
+          {joined && <FollowUpQuestion token={joined.token} />}
+
+          {employerPays && <SponsorNote />}
+
+          <ShareYourSpot referralCode={joined?.referralCode} />
 
           <div>
             <p className="font-semibold">While you wait</p>
@@ -143,9 +165,14 @@ export function WaitlistForm() {
       onSubmit={handleSubmit}
       className="space-y-5 rounded-2xl border border-border bg-surface p-6 sm:p-8"
     >
+      <p className="text-sm text-muted">
+        Fields marked <span className="text-red-400">*</span> are required.
+      </p>
+
       <div>
         <label htmlFor="waitlist-name" className={labelClass}>
           Name
+          <Req />
         </label>
         <input
           id="waitlist-name"
@@ -161,6 +188,7 @@ export function WaitlistForm() {
       <div>
         <label htmlFor="waitlist-email" className={labelClass}>
           Email
+          <Req />
         </label>
         <input
           id="waitlist-email"
@@ -186,28 +214,6 @@ export function WaitlistForm() {
           placeholder="+91 98765 43210"
           className={inputClass}
         />
-      </div>
-
-      <div>
-        <label htmlFor="waitlist-motivation" className={labelClass}>
-          What do you most want from this?
-        </label>
-        <select
-          id="waitlist-motivation"
-          name="motivation"
-          required
-          defaultValue=""
-          className={inputClass}
-        >
-          <option value="" disabled>
-            Choose one
-          </option>
-          {COHORT_2.motivations.map((m) => (
-            <option key={m.value} value={m.value}>
-              {m.label}
-            </option>
-          ))}
-        </select>
       </div>
 
       <ChoiceField
@@ -250,6 +256,7 @@ export function WaitlistForm() {
           <label htmlFor="waitlist-consent">
             Contact me about {COHORT_2.name} by email, and on WhatsApp if I gave
             a number.
+            <Req />
           </label>{" "}
           <Link href="/privacy" className="text-accent hover:underline">
             Privacy policy

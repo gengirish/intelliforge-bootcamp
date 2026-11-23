@@ -3,6 +3,7 @@ import { isAdminSecretConfigured, isAdminSession } from "@/lib/admin-session";
 import { COHORT_2 } from "@/lib/constants";
 import {
   findWaitlistEntries,
+  getReferralCounts,
   getWaitlistStats,
   leadSource,
   parseWaitlistFilters,
@@ -45,6 +46,7 @@ function queryFor(f: WaitlistFilters, patch: Partial<WaitlistFilters> = {}) {
     motivation: next.motivation,
     tier: next.tier,
     source: next.source,
+    payer: next.payer,
     sort: next.sort === "score" ? "score" : "",
   }).filter(([, v]) => v);
   return new URLSearchParams(entries as [string, string][]).toString();
@@ -68,22 +70,26 @@ export default async function AdminWaitlistPage({
   }
 
   const filters = parseWaitlistFilters((k) => params[k]);
-  const { cohort, q, motivation, tier, source, sort } = filters;
-  const filtered = Boolean(q || motivation || tier || source);
+  const { cohort, q, motivation, tier, source, payer, sort } = filters;
+  const filtered = Boolean(q || motivation || tier || source || payer);
 
   let loadError: string | null = null;
   let entries: Awaited<ReturnType<typeof findWaitlistEntries>> = [];
   let stats: Awaited<ReturnType<typeof getWaitlistStats>> = {
     total: 0,
     last7Days: 0,
+    employerPays: 0,
+    referred: 0,
     byTier: {},
     bySource: [],
   };
+  let referralCounts = new Map<string, number>();
 
   try {
-    [entries, stats] = await Promise.all([
+    [entries, stats, referralCounts] = await Promise.all([
       findWaitlistEntries(filters, PAGE_LIMIT),
       getWaitlistStats(cohort),
+      getReferralCounts(cohort),
     ]);
   } catch (err) {
     console.error("[Admin] Failed to load waitlist:", err);
@@ -124,9 +130,17 @@ export default async function AdminWaitlistPage({
         </p>
       ) : (
         <>
-          <section className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          <section className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
             <Stat label="Total leads" value={stats.total} />
             <Stat label="Last 7 days" value={stats.last7Days} />
+            <Link
+              href={`/admin/waitlist?${queryFor(filters, { payer: payer === "employer" ? "" : "employer" })}`}
+              className={`rounded-lg border border-primary/40 bg-primary/10 p-4 transition-colors hover:border-primary ${payer === "employer" ? "ring-2 ring-primary" : ""}`}
+            >
+              <div className="text-2xl font-bold tabular-nums">{stats.employerPays}</div>
+              <div className="mt-1 text-xs">Employer pays · B2B leads</div>
+            </Link>
+            <Stat label="Came via a share link" value={stats.referred} />
             {TIERS.map((t) => (
               <Link
                 key={t.key}
@@ -159,6 +173,7 @@ export default async function AdminWaitlistPage({
           <form method="get" className="mt-6 flex flex-col gap-3 lg:flex-row lg:items-center">
             <input type="hidden" name="cohort" value={cohort} />
             {source && <input type="hidden" name="source" value={source} />}
+            {payer && <input type="hidden" name="payer" value={payer} />}
             <input
               type="search"
               name="q"
@@ -214,7 +229,7 @@ export default async function AdminWaitlistPage({
             </p>
           ) : (
             <div className="mt-4 overflow-x-auto rounded-lg border border-border">
-              <table className="w-full min-w-[1100px] text-left text-sm">
+              <table className="w-full min-w-[1200px] text-left text-sm">
                 <thead className="bg-surface text-muted">
                   <tr>
                     <th className="px-4 py-3 font-medium">Fit</th>
@@ -225,6 +240,7 @@ export default async function AdminWaitlistPage({
                     <th className="px-4 py-3 font-medium">Pays</th>
                     <th className="px-4 py-3 font-medium">Wants</th>
                     <th className="px-4 py-3 font-medium">Source</th>
+                    <th className="px-4 py-3 font-medium">Referred</th>
                     <th className="px-4 py-3 font-medium">Joined (IST)</th>
                   </tr>
                 </thead>
@@ -250,12 +266,20 @@ export default async function AdminWaitlistPage({
                         {e.experience ? EXPERIENCE[e.experience] ?? e.experience : <Dash />}
                       </td>
                       <td className="px-4 py-3">{e.payer ? PAYER[e.payer] ?? e.payer : <Dash />}</td>
-                      <td className="px-4 py-3">{MOTIVATION[e.motivation] ?? e.motivation}</td>
+                      <td className="px-4 py-3">
+                        {e.motivation ? MOTIVATION[e.motivation] ?? e.motivation : <Dash />}
+                      </td>
                       <td className="px-4 py-3">
                         {leadSource(e)}
                         {e.utmCampaign && (
                           <span className="block text-xs text-muted">{e.utmCampaign}</span>
                         )}
+                        {e.referredBy && (
+                          <span className="block text-xs text-muted">via share link</span>
+                        )}
+                      </td>
+                      <td className="px-4 py-3 tabular-nums">
+                        {(e.referralCode && referralCounts.get(e.referralCode)) || <Dash />}
                       </td>
                       <td className="whitespace-nowrap px-4 py-3 text-muted">
                         {dateFmt.format(e.createdAt)}

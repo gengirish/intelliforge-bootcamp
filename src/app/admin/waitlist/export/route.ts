@@ -1,6 +1,7 @@
 import { isAdminSession } from "@/lib/admin-session";
 import {
   findWaitlistEntries,
+  getReferralCounts,
   leadSource,
   parseWaitlistFilters,
 } from "@/lib/waitlist-admin";
@@ -21,12 +22,16 @@ export async function GET(req: Request) {
 
   const { searchParams } = new URL(req.url);
   const filters = parseWaitlistFilters((k) => searchParams.get(k));
-  const entries = await findWaitlistEntries(filters);
+  const [entries, referralCounts] = await Promise.all([
+    findWaitlistEntries(filters),
+    getReferralCounts(filters.cohort),
+  ]);
 
   const header = [
     "created_at", "tier", "score", "name", "email", "phone", "role", "experience",
     "payer", "motivation", "source", "utm_source", "utm_medium", "utm_campaign",
-    "referrer", "landing_path", "consented_at", "cohort",
+    "referrer", "landing_path", "referral_code", "referred_by", "referrals",
+    "consented_at", "cohort",
   ];
   const rows = entries.map((e) =>
     [
@@ -46,6 +51,9 @@ export async function GET(req: Request) {
       e.utmCampaign,
       e.referrer,
       e.landingPath,
+      e.referralCode,
+      e.referredBy,
+      String((e.referralCode && referralCounts.get(e.referralCode)) || 0),
       e.consentedAt.toISOString(),
       e.cohort,
     ]
