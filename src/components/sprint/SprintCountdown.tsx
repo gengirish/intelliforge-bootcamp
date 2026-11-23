@@ -73,7 +73,7 @@ export function SprintCountdown({
         Countdown to Cohort 2 kickoff
       </p>
       <p className="mt-1 text-sm text-muted">
-        First live class · {startLabel} · 7:00 PM IST
+        First live class · {startLabel} · 7:30 AM IST
       </p>
 
       <div

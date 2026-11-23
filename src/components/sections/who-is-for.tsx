@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 const FOR_YOU_ITEMS = [
   "You know basic Python and want to level up to AI engineering",
   "You want to build AI products, not just learn AI theory",
-  "You're ready to commit 15-18 hours/week for 12 weeks",
+  "You're ready to commit 10–13 hours/week for 12 weeks",
   "You want multiple career options — job, freelance, or founder",
   "You value learning from real enterprise practitioners",
 ];

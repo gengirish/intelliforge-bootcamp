@@ -257,7 +257,7 @@ export function SprintLandingClient({
                   <Users className="w-4 h-4" /> Max {total} seats
                 </span>
                 <span className="flex items-center gap-2">
-                  <Clock className="w-4 h-4" /> Sat &amp; Sun · 7–10 PM IST
+                  <Clock className="w-4 h-4" /> Sat &amp; Sun · 7:30–10 AM IST
                 </span>
                 <span className="flex items-center gap-2">
                   <Shield className="w-4 h-4" /> Refundable until first class
@@ -408,7 +408,7 @@ export function SprintLandingClient({
             </h2>
             <p className="text-muted mb-8">
               {price} for this sprint · Two live products in 14 days · Live Zoom on Sat
-              &amp; Sun (7–10 PM IST) · Refundable until first class
+              &amp; Sun (7:30–10 AM IST) · Refundable until first class
             </p>
             <SprintSeatMap
               filled={filled}

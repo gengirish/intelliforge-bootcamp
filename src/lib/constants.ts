@@ -370,7 +370,7 @@ export const PRICING = {
     price: "₹4,999",
     unit: "per 2-week sprint",
     features: [
-      "Live weekend sessions (Sat & Sun, 7–10 PM IST)",
+      "Live weekend sessions (Sat & Sun, 7:30–10 AM IST)",
       "Something deployed to production by the end of every sprint",
       "Full course access on learning.intelliforge.tech",
       "Direct founder mentorship from Girish",
@@ -415,7 +415,7 @@ export const FAQ_ITEMS = [
   {
     question: "What's the time commitment?",
     answer:
-      "Live sessions are on Saturdays and Sundays, 7:00–10:00 PM IST (3 hours per day). Plan for an additional 5–8 hours of project work during the week. Total: approximately 11–14 hours per week for 12 weeks.",
+      "Live sessions are on Saturdays and Sundays, 7:30–10:00 AM IST (2.5 hours per day). Plan for an additional 5–8 hours of project work during the week. Total: approximately 10–13 hours per week for 12 weeks.",
   },
   {
     question: "How does the 12-week bootcamp relate to the sprints?",
@@ -456,10 +456,10 @@ export const COHORT_2 = {
   launchWeekendShort: "5–6 Dec",
   firstClass: "Saturday, 9 January 2027",
   firstClassShort: "9 Jan 2027",
-  /** 7:00 PM IST on the first class. */
-  firstClassIso: "2027-01-09T13:30:00.000Z",
+  /** 7:30 AM IST on the first class. */
+  firstClassIso: "2027-01-09T02:00:00.000Z",
   format:
-    "Six 2-week sprints over 12 weeks, live on Zoom every Saturday and Sunday, 7–10 PM IST.",
+    "Six 2-week sprints over 12 weeks, live on Zoom every Saturday and Sunday, 7:30–10 AM IST.",
   /** Free self-paced setup course waitlisters are pointed at while they wait. */
   prepCourse: {
     name: "Fresher Track Pre-Requisite Guide",
@@ -538,7 +538,7 @@ const SPRINT_ENROLLMENT_OPEN: boolean = false;
 /**
  * The Cohort 2 programme: six 2-week sprints, one Razorpay checkout each. A slug
  * here must have a Sprint row (prisma/seed.ts) with the same price and dates.
- * Classes are Sat & Sun, 7:00 PM IST (13:30 UTC). startIso is the first class and
+ * Classes are Sat & Sun, 7:30–10:00 AM IST (02:00–04:30 UTC). startIso is the first class and
  * endIso the last.
  */
 export const COHORT_2_SPRINTS = [
@@ -550,8 +550,8 @@ export const COHORT_2_SPRINTS = [
     ships: "A Claude chatbot and a RAG system, both deployed to production.",
     dates: "9–17 Jan 2027",
     firstClass: "Saturday, 09/01/2027",
-    startIso: "2027-01-09T13:30:00.000Z",
-    endIso: "2027-01-17T13:30:00.000Z",
+    startIso: "2027-01-09T02:00:00.000Z",
+    endIso: "2027-01-17T02:00:00.000Z",
   },
   {
     number: 2,
@@ -561,8 +561,8 @@ export const COHORT_2_SPRINTS = [
     ships: "A working AI agent with tool calling on a live endpoint.",
     dates: "23–31 Jan 2027",
     firstClass: "Saturday, 23/01/2027",
-    startIso: "2027-01-23T13:30:00.000Z",
-    endIso: "2027-01-31T13:30:00.000Z",
+    startIso: "2027-01-23T02:00:00.000Z",
+    endIso: "2027-01-31T02:00:00.000Z",
   },
   {
     number: 3,
@@ -572,8 +572,8 @@ export const COHORT_2_SPRINTS = [
     ships: "A multi-agent system wired into enterprise integration patterns.",
     dates: "6–14 Feb 2027",
     firstClass: "Saturday, 06/02/2027",
-    startIso: "2027-02-06T13:30:00.000Z",
-    endIso: "2027-02-14T13:30:00.000Z",
+    startIso: "2027-02-06T02:00:00.000Z",
+    endIso: "2027-02-14T02:00:00.000Z",
   },
   {
     number: 4,
@@ -583,8 +583,8 @@ export const COHORT_2_SPRINTS = [
     ships: "A production deployment and an automated AI workflow.",
     dates: "20–28 Feb 2027",
     firstClass: "Saturday, 20/02/2027",
-    startIso: "2027-02-20T13:30:00.000Z",
-    endIso: "2027-02-28T13:30:00.000Z",
+    startIso: "2027-02-20T02:00:00.000Z",
+    endIso: "2027-02-28T02:00:00.000Z",
   },
   {
     number: 5,
@@ -594,8 +594,8 @@ export const COHORT_2_SPRINTS = [
     ships: "The first working version of your own AI micro-SaaS.",
     dates: "6–14 Mar 2027",
     firstClass: "Saturday, 06/03/2027",
-    startIso: "2027-03-06T13:30:00.000Z",
-    endIso: "2027-03-14T13:30:00.000Z",
+    startIso: "2027-03-06T02:00:00.000Z",
+    endIso: "2027-03-14T02:00:00.000Z",
   },
   {
     number: 6,
@@ -605,8 +605,8 @@ export const COHORT_2_SPRINTS = [
     ships: "Your launched product, plus Demo Day and credential issuance.",
     dates: "20–28 Mar 2027",
     firstClass: "Saturday, 20/03/2027",
-    startIso: "2027-03-20T13:30:00.000Z",
-    endIso: "2027-03-28T13:30:00.000Z",
+    startIso: "2027-03-20T02:00:00.000Z",
+    endIso: "2027-03-28T02:00:00.000Z",
   },
 ] as const;
 
@@ -648,7 +648,7 @@ export const SPRINT_CONFIG = {
   urgencyLine:
     "Built for interviews, client pitches, and performance reviews with a deadline — not 'someday' learners.",
   liveScheduleSummary:
-    "Live on Zoom every Saturday & Sunday — 7–10 PM IST",
+    "Live on Zoom every Saturday & Sunday — 7:30–10 AM IST",
 };
 
 /** Shared by the contact form and its API route. */
