@@ -85,7 +85,7 @@ export async function sendSprintEnrollmentConfirmation(data: {
           </a>
         </p>
         <p style="font-size: 13px; color: #94A3B8;">Or <a href="${LMS_SIGNIN_URL}" style="color: #06B6D4;">sign in to LMS</a> first if prompted.</p>
-        <p>${sprint ? `Session 1 is <strong>${sprint.firstClass}</strong>. ` : ""}Live classes run every <strong>Saturday &amp; Sunday</strong> — <strong>7:00–10:00 PM IST</strong>. Zoom links and pre-read materials will be shared in the group.</p>
+        <p>${sprint ? `Session 1 is <strong>${sprint.firstClass}</strong>. ` : ""}Live classes run every <strong>Saturday &amp; Sunday</strong> — <strong>7:30–10:00 AM IST</strong>. Zoom links and pre-read materials will be shared in the group.</p>
         <p style="color: #94A3B8; font-size: 13px;">Payment ID: ${data.paymentId}</p>
         <hr style="border: none; border-top: 1px solid #1E293B; margin: 24px 0;" />
         <p style="color: #94A3B8; font-size: 12px;">IntelliForge AI · <a href="${SITE_CONFIG.url}" style="color: #94A3B8;">upskill.intelliforge.tech</a></p>
@@ -130,7 +130,7 @@ export async function sendBootcampEnrollmentConfirmation(data: {
           </a>
         </p>
         <p style="font-size: 13px; color: #94A3B8;">Or <a href="${LMS_SIGNIN_URL}" style="color: #06B6D4;">sign in to LMS</a> first if prompted.</p>
-        <p>Live sessions run every <strong>Saturday &amp; Sunday</strong>, <strong>7:00–10:00 PM IST</strong> (3 hours per day) over 12 weeks. Schedule details will be shared in WhatsApp.</p>
+        <p>Live sessions run every <strong>Saturday &amp; Sunday</strong>, <strong>7:30–10:00 AM IST</strong> (2.5 hours per day) over 12 weeks. Schedule details will be shared in WhatsApp.</p>
         <p style="color: #94A3B8; font-size: 13px;">Payment ID: ${data.paymentId}</p>
         <hr style="border: none; border-top: 1px solid #1E293B; margin: 24px 0;" />
         <p style="color: #94A3B8; font-size: 12px;">IntelliForge AI · <a href="${SITE_CONFIG.url}" style="color: #94A3B8;">upskill.intelliforge.tech</a></p>

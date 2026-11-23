@@ -54,12 +54,12 @@ test.describe("Sprint Landing Page", () => {
     await expect(page.getByLabel("Show times in")).toBeVisible();
     await expect(page.getByRole("columnheader", { name: "IST (anchor)" })).toBeVisible();
     await expect(page.getByText("Live class", { exact: true })).toBeVisible();
-    await expect(page.getByText("7:00 PM – 10:00 PM").first()).toBeVisible();
+    await expect(page.getByText("7:30 AM – 10:00 AM").first()).toBeVisible();
 
     const timezoneSelect = page.getByLabel("Show times in");
     await timezoneSelect.selectOption("America/Los_Angeles");
     await expect(page.getByRole("columnheader", { name: "PST" })).toBeVisible();
-    await expect(page.getByText("5:30 AM – 8:30 AM").first()).toBeVisible();
+    await expect(page.getByText("6:00 PM – 8:30 PM").first()).toBeVisible();
   });
 
   test("renders curriculum weeks and outcomes", async ({ page }) => {
@@ -167,7 +167,7 @@ test.describe("Sprint Success Page", () => {
       page.getByText(/Session 1 is Saturday, 09\/01\/2027/)
     ).toBeVisible();
     await expect(
-      page.getByText(/7–10 PM IST/)
+      page.getByText(/7:30–10 AM IST/)
     ).toBeVisible();
     await expect(page.getByText("Payment ID: pay_e2e_test")).toBeVisible();
   });

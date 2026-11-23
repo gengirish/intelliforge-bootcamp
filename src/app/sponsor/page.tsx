@@ -65,7 +65,7 @@ export default function SponsorPage() {
           </div>
           <div>
             <dt className="text-sm text-muted">Time commitment</dt>
-            <dd className="font-semibold">Weekends, 7–10 PM IST</dd>
+            <dd className="font-semibold">Weekends, 7:30–10 AM IST</dd>
             <dd className="text-sm text-muted">Outside working hours</dd>
           </div>
         </dl>
