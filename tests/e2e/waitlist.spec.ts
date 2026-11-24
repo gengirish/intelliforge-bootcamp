@@ -45,9 +45,10 @@ test.describe("Cohort 2 waitlist", () => {
     page,
   }) => {
     await page.goto("/waitlist");
-    await expect(page.getByText("₹4,999 per 2-week sprint.")).toBeVisible();
-    await expect(page.getByText(/Joining the waitlist is free/)).toBeVisible();
-    await expect(page.getByText(/Fields marked \* are required/)).toBeVisible();
+    await expect(page.getByRole("listitem").filter({ hasText: "₹4,999 per sprint" })).toBeVisible();
+    await expect(page.getByRole("listitem").filter({ hasText: "Free to join" })).toBeVisible();
+    await expect(page.getByText(/no upfront fee/)).toBeVisible();
+    await expect(page.getByText(/^\* Required\./)).toBeVisible();
     await expect(page.getByRole("textbox", { name: "Name", exact: true })).toHaveAttribute("required", "");
     // Motivation moved to after signup.
     await expect(page.getByLabel(/what do you most want/i)).toHaveCount(0);
@@ -115,8 +116,10 @@ test.describe("Cohort 2 waitlist", () => {
       }
     });
     await fillForm(page);
-    await page.getByLabel(/what do you most want from this/i).selectOption("ship-at-work");
-    await page.getByRole("button", { name: "Save answer" }).click();
+    await page
+      .getByRole("group", { name: /what do you most want from this/i })
+      .getByRole("button", { name: "Ship AI in my current job" })
+      .click();
     await expect(page.getByText(/Thanks, that helps us plan/)).toBeVisible();
     expect(patch).toEqual({ token: "entry-1", motivation: "ship-at-work" });
   });
