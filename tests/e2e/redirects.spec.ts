@@ -50,8 +50,6 @@ test.describe("robots.txt", () => {
 });
 
 test.describe("Floating widgets", () => {
-  test.use({ viewport: { width: 632, height: 900 } });
-
   // The real widget loads from another origin and would add a second launcher.
   test.beforeEach(async ({ page }) => {
     await page.route("**/embed.js", (route) => route.abort());
@@ -67,56 +65,10 @@ test.describe("Floating widgets", () => {
     });
   }
 
-  test("chat launcher clears the sticky CTA bar", async ({ page }) => {
-    await page.goto("/");
-    await addChatLauncher(page);
-
-    const bar = await page.locator("[data-sticky-cta]").boundingBox();
-    await expect
-      .poll(async () => {
-        const launcher = await page.locator("#if-chat-launcher").boundingBox();
-        return launcher!.y + launcher!.height;
-      })
-      .toBeLessThanOrEqual(bar!.y);
-  });
-
-  test("WhatsApp button clears the sticky CTA bar and shows no tooltip", async ({
-    page,
-  }) => {
-    await page.goto("/");
-    const button = page.getByRole("link", { name: "Chat on WhatsApp" });
-    await expect(button).toBeVisible({ timeout: 15_000 });
-
-    const bar = await page.locator("[data-sticky-cta]").boundingBox();
-    const box = await button.boundingBox();
-    expect(box!.y + box!.height).toBeLessThanOrEqual(bar!.y);
-
-    await page.waitForTimeout(4_500);
-    await expect(page.getByText("Have questions?", { exact: true }).first()).toBeHidden();
-  });
-
   test("chat launcher is hidden on the mock exam", async ({ page }) => {
     await page.goto("/claude/quiz");
     await addChatLauncher(page);
     await expect(page.locator("#if-chat-launcher")).toBeHidden();
-  });
-});
-
-test.describe("Mobile menu", () => {
-  test.use({ viewport: { width: 632, height: 900 } });
-
-  test("closes on Escape and returns focus to the toggle", async ({ page }) => {
-    await page.goto("/");
-    const open = page.getByRole("button", { name: "Open menu" });
-    await open.click();
-    await expect(page.getByRole("button", { name: "Close menu" })).toHaveAttribute(
-      "aria-expanded",
-      "true"
-    );
-
-    await page.keyboard.press("Escape");
-    await expect(open).toHaveAttribute("aria-expanded", "false");
-    await expect(open).toBeFocused();
   });
 });
 
@@ -141,7 +93,7 @@ test.describe("POST /api/contact validation", () => {
   }
 
   test("form inputs carry limits and autocomplete", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/contact");
     const name = page.getByLabel("Name *");
     await expect(name).toHaveAttribute("autocomplete", "name");
     await expect(name).toHaveAttribute("maxlength", "120");

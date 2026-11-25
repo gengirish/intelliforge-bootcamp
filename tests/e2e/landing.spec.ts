@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("Landing Page — All Sections", () => {
+test.describe("Landing Page", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/");
     await page.waitForLoadState("domcontentloaded");
@@ -24,87 +24,105 @@ test.describe("Landing Page — All Sections", () => {
     expect(body.byteLength).toBeLessThan(10_000);
   });
 
-  test("header renders with logo and nav links", async ({ page }) => {
+  test("header has the wordmark and in-page links", async ({ page }) => {
     const header = page.locator("header");
-    await expect(header).toBeVisible();
     await expect(header.getByText("IntelliForge AI Bootcamp")).toBeVisible();
-    await expect(header.getByRole("link", { name: "Curriculum" })).toBeVisible();
-    await expect(header.getByRole("link", { name: "Pricing" })).toBeVisible();
+    await expect(header.getByRole("link", { name: "Curriculum" })).toHaveAttribute(
+      "href",
+      "#curriculum"
+    );
+    await expect(header.getByRole("link", { name: "FAQ" })).toHaveAttribute("href", "#faq");
   });
 
-  test("hero section renders headline and CTAs", async ({ page }) => {
-    await expect(page.getByText("Ship proof they can click.")).toBeVisible();
-    await expect(page.getByText("Not another portfolio toy.")).toBeVisible();
+  test("hero is the waitlist, written as one sentence", async ({ page }) => {
     await expect(
-      page.getByRole("link", { name: /Join the Cohort 2 waitlist/ }).first()
+      page.getByRole("heading", { level: 1, name: "Ship AI in the job you already have." })
     ).toBeVisible();
+    const form = page.getByRole("form", { name: "Join the Cohort 2 waitlist" });
+    for (const label of [
+      "Your name",
+      "What you work in",
+      "Years of work experience",
+      "What you want from the course",
+      "Who would pay",
+      "Your email",
+    ]) {
+      await expect(form.getByLabel(label)).toBeAttached();
+    }
+    await expect(form.getByRole("button", { name: "Count me in" })).toBeVisible();
+  });
+
+  test("an incomplete sentence is flagged, not sent", async ({ page }) => {
+    let posted = false;
+    await page.route("**/api/waitlist", (route) => {
+      posted = true;
+      return route.fulfill({ json: { success: true, data: null } });
+    });
+    const form = page.getByRole("form", { name: "Join the Cohort 2 waitlist" });
+    await form.getByRole("button", { name: "Count me in" }).click();
+    await expect(form.getByRole("alert")).toContainText("Fill in the blanks");
+    await expect(page.getByLabel("Your name")).toBeFocused();
+    await expect(page.getByLabel("Your name")).toHaveAttribute("aria-invalid", "true");
+    expect(posted).toBe(false);
+  });
+
+  test("a finished sentence joins the waitlist with every answer", async ({ page }) => {
+    let body: Record<string, unknown> = {};
+    await page.route("**/api/waitlist", async (route) => {
+      body = route.request().postDataJSON();
+      await route.fulfill({
+        json: { success: true, data: { token: "t1", referralCode: "abc123" } },
+      });
+    });
+
+    await page.getByLabel("Your name").fill("Priya Raman");
+    await page.getByLabel("What you work in").selectOption("cloud-devops");
+    await page.getByLabel("Years of work experience").selectOption("6-10");
+    await page.getByLabel("What you want from the course").selectOption("ship-at-work");
+    await page.getByLabel("Who would pay").selectOption("self");
+    await page.getByLabel("Your email").fill("priya@example.com");
+    // The blank shows the chosen phrase, so the sentence reads back as written.
     await expect(
-      page.getByRole("link", { name: /Try the free demo — live, no signup/ }).first()
+      page.locator('span[aria-hidden="true"]', { hasText: "cloud, DevOps or SRE" })
     ).toBeVisible();
+    await page.getByRole("checkbox").check();
+    await page.getByRole("button", { name: "Count me in, Priya" }).click();
+
+    await expect(page.getByText("You're on the list, Priya.")).toBeVisible();
+    expect(body).toMatchObject({
+      name: "Priya Raman",
+      email: "priya@example.com",
+      role: "cloud-devops",
+      experience: "6-10",
+      motivation: "ship-at-work",
+      payer: "self",
+      consent: true,
+    });
   });
 
-  test("trust badges are visible", async ({ page }) => {
-    await expect(page.getByText("Founder-taught by Girish").first()).toBeVisible();
-    await expect(page.getByText("2 live URLs in 14 days", { exact: true }).first()).toBeVisible();
-    await expect(page.getByText("Recruiter-checkable credential").first()).toBeVisible();
+  test("free demo link opens the LMS demo in a new tab", async ({ page }) => {
+    const demo = page.getByRole("link", { name: /free demo class/ });
+    await expect(demo).toHaveAttribute("href", /learning\.intelliforge\.tech\/demo/);
+    await expect(demo).toHaveAttribute("target", "_blank");
   });
 
-  test("build-alongside section renders with kill line", async ({ page }) => {
-    const section = page.locator("#build-alongside");
-    await section.scrollIntoViewIfNeeded();
-    await expect(section.getByText("Build-Alongside: Ship on a")).toBeVisible();
-    await expect(section.getByText(/Ask any bootcamp for the repo/)).toBeVisible();
-    await expect(section.getByRole("link", { name: /LocalFlash/ })).toBeVisible();
-    await expect(section.getByRole("link", { name: /Maidaan/ })).toBeVisible();
-    await expect(section.getByRole("link", { name: /ForgeAhead/ })).toBeVisible();
-    await expect(section.getByRole("link", { name: /Chronicle/ })).toBeVisible();
-  });
-
-  test("verifiable credential section renders", async ({ page }) => {
-    const section = page.locator("#credential");
-    await section.scrollIntoViewIfNeeded();
-    await expect(section.getByRole("heading", { name: /A Credential Recruiters Can/ })).toBeVisible();
-    await expect(section.getByText("certs.intelliforge.tech").first()).toBeVisible();
-  });
-
-  test("comparison table renders three columns", async ({ page }) => {
-    const section = page.locator("#comparison");
-    await section.scrollIntoViewIfNeeded();
-    await expect(page.getByText("How We Compare")).toBeVisible();
-    await expect(page.getByText("Recorded AI courses")).toBeVisible();
-    await expect(page.getByText("University AI certificates")).toBeVisible();
-  });
-
-  test("curriculum section renders 3 phases", async ({ page }) => {
+  test("curriculum lists the six sprints and links to them", async ({ page }) => {
+    await page.getByRole("link", { name: "Curriculum" }).click();
     const section = page.locator("#curriculum");
-    await section.scrollIntoViewIfNeeded();
-    await expect(page.getByText("12 Weeks. Six Sprints. One Shipped Product.")).toBeVisible();
-    await expect(page.getByText("Phase 1: Ship Your First Agent")).toBeVisible();
-    await expect(page.getByText("Phase 2: Ship Multi-Agent Systems")).toBeVisible();
-    await expect(page.getByText("Phase 3: Ship Your Product")).toBeVisible();
+    await expect(section).toBeInViewport();
+    await expect(section.locator("li")).toHaveCount(6);
+    await expect(section.getByText("Chatbot + RAG")).toBeVisible();
+    await expect(section.getByText("Launch & Demo Day")).toBeVisible();
+    await expect(section.getByText(/₹4,999 per sprint/)).toBeVisible();
+    await expect(section.getByText(/₹49,999|₹74,999|₹12,999/)).toHaveCount(0);
+    await expect(section.getByRole("link", { name: "See all six sprints" })).toHaveAttribute(
+      "href",
+      "/sprint/all"
+    );
   });
 
-  test("live schedule section has timezone selector and no past-cohort seats", async ({ page }) => {
-    const section = page.locator("#live-schedule");
-    await section.scrollIntoViewIfNeeded();
-    await expect(section.getByText("Every Saturday & Sunday")).toBeVisible();
-    await expect(section.getByLabel("Show times in")).toBeVisible();
-    await expect(section.getByText("Live class", { exact: true })).toBeVisible();
-    await expect(section.getByText(/Cohort 2 kicks off/)).toBeVisible();
-    await expect(section.getByLabel(/Cohort seat map:/)).toHaveCount(0);
-  });
-
-  test("who's behind section renders founder Girish", async ({ page }) => {
-    const section = page.locator("#whos-behind");
-    await section.scrollIntoViewIfNeeded();
-    await expect(page.getByText("Who's Behind This")).toBeVisible();
-    await expect(page.getByText("Girish").first()).toBeVisible();
-    await expect(page.getByText("Founder & Principal Engineer")).toBeVisible();
-    await expect(page.getByText("14 years")).toBeVisible();
-    await expect(
-      page.getByText("IntelliForge Ships Real Products for Real Clients")
-    ).toHaveCount(0);
-    await expect(page.getByText("Rahul M.")).toHaveCount(0);
+  test("founder is named", async ({ page }) => {
+    await expect(page.getByText(/Girish Hiremath, founder & principal engineer/)).toBeVisible();
   });
 
   test("testimonials come only from verified submissions", async ({ page }) => {
@@ -126,61 +144,29 @@ test.describe("Landing Page — All Sections", () => {
     );
   });
 
-  test("pricing section shows one price per sprint", async ({ page }) => {
-    const section = page.locator("#pricing");
-    await section.scrollIntoViewIfNeeded();
-    await expect(
-      section.getByRole("heading", { name: /₹4,999 per sprint/ })
-    ).toBeVisible();
-    await expect(section.getByText("₹29,994", { exact: true })).toBeVisible();
-    await expect(section.getByText(/₹49,999|₹74,999|₹12,999/)).toHaveCount(0);
-    await expect(section.getByRole("button", { name: /Enrol/ })).toHaveCount(0);
-    await expect(
-      section.getByRole("link", { name: /Join the Cohort 2 waitlist/ })
-    ).toHaveAttribute("href", "/waitlist");
-    await expect(
-      section.getByRole("link", { name: "See all 6 sprints" })
-    ).toHaveAttribute("href", "/sprint/all");
+  test("FAQ answers open in place", async ({ page }) => {
+    const faq = page.locator("#faq");
+    await faq.getByText("What's the refund policy?").click();
+    await expect(faq.getByText(/refundable in full until its first class/)).toBeVisible();
   });
 
-  test("FAQ section renders and accordion works", async ({ page }) => {
-    await page.getByText("Questions? Answered").scrollIntoViewIfNeeded();
-    await expect(page.getByText("Questions? Answered")).toBeVisible();
-
-    const firstQuestion = page.getByRole("button", { name: "What makes IntelliForge" });
-    await expect(firstQuestion).toBeVisible();
-
-    await firstQuestion.click();
-    await page.waitForTimeout(400);
-    const faqSection = page.locator("#faq");
-    await expect(faqSection.getByText(/Ask any bootcamp for the repo you'll contribute to/)).toBeVisible();
-  });
-
-  test("final CTA section renders with sprint as primary", async ({ page }) => {
-    const finalCta = page.locator("section", {
-      has: page.getByRole("heading", { name: /Ask any bootcamp for the repo/ }),
-    });
-    await finalCta.scrollIntoViewIfNeeded();
-    await expect(
-      finalCta.getByRole("link", { name: /Join the Cohort 2 waitlist/ })
-    ).toBeVisible();
-    await expect(
-      finalCta.getByRole("link", { name: /Try the free demo — live, no signup/ })
-    ).toBeVisible();
-  });
-
-  test("footer renders with copyright and funnel links", async ({ page }) => {
-    await page.getByText("© 2026 IntelliForge AI").scrollIntoViewIfNeeded();
-    const footer = page.locator("footer");
+  test("footer carries contact and funnel links", async ({ page }) => {
+    const footer = page.getByRole("contentinfo");
     await expect(footer.getByText("© 2026 IntelliForge AI")).toBeVisible();
     await expect(footer.getByText("alerts@intelliforge.tech")).toBeVisible();
-    await expect(footer.getByText("Graduate wins")).toBeVisible();
-  });
-
-  test("no animated stat counters on page", async ({ page }) => {
-    await expect(page.getByText("Years Enterprise Experience")).not.toBeVisible();
-    await expect(page.getByText("Fortune 500 Clients Served")).not.toBeVisible();
-    await expect(page.getByText("0+", { exact: true })).not.toBeVisible();
+    await expect(footer.getByRole("link", { name: "Graduate wins" })).toBeVisible();
+    await expect(footer.getByRole("link", { name: "Learning Platform" })).toHaveAttribute(
+      "href",
+      "https://learning.intelliforge.tech"
+    );
+    await expect(footer.getByRole("link", { name: /IntelliForge AI main site/ })).toHaveAttribute(
+      "href",
+      "https://www.intelliforge.tech"
+    );
+    await expect(footer.getByRole("link", { name: "Contact" })).toHaveAttribute(
+      "href",
+      "/contact"
+    );
   });
 });
 

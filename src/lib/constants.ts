@@ -697,3 +697,48 @@ export const FUNNEL_STEPS = [
     external: true,
   },
 ];
+
+type OptionValue<T extends readonly { value: string }[]> = T[number]["value"];
+
+/**
+ * Homepage copy. The hero is the waitlist form written as one sentence the
+ * visitor completes, so each option needs a phrase that reads inside it. The
+ * values are the ones /api/waitlist accepts, so the sentence can't drift from
+ * the lead score.
+ */
+export const HOME = {
+  headline: "Ship AI in the job you already have.",
+  subhead:
+    "Twelve weekends of live, build-first sprints for working engineers. You leave with AI running in production, not a certificate of attendance.",
+  sentence: {
+    roles: {
+      software: "software development",
+      "data-ml": "data, ML or analytics",
+      "cloud-devops": "cloud, DevOps or SRE",
+      "qa-security-infra": "QA, security or IT infra",
+      "eng-lead": "engineering leadership",
+      "non-engineering": "product, design or another role",
+      student: "nothing yet, I'm a student",
+    } satisfies Record<OptionValue<typeof COHORT_2.roles>, string>,
+    experience: {
+      "0-2": "0–2 years",
+      "3-5": "3–5 years",
+      "6-10": "6–10 years",
+      "11-15": "11–15 years",
+      "15+": "15+ years",
+    } satisfies Record<OptionValue<typeof COHORT_2.experience>, string>,
+    motivations: {
+      "ship-at-work": "ship AI in my current job",
+      "job-move": "prepare for a job move",
+      "own-product": "build my own product",
+      other: "do something else with AI",
+    } satisfies Record<OptionValue<typeof COHORT_2.motivations>, string>,
+    payers: {
+      self: "I'd pay for it myself",
+      employer: "my employer would pay",
+      undecided: "I'm not sure who'd pay",
+    } satisfies Record<OptionValue<typeof COHORT_2.payers>, string>,
+  },
+  shipsHeading: "Twelve weekends. Six things you ship.",
+  demoLine: "Not sure yet? Sit in on a free demo class",
+} as const;
