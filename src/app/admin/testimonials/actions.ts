@@ -4,8 +4,13 @@ import { del } from "@vercel/blob";
 import { revalidatePath } from "next/cache";
 import { isAdminSession } from "@/lib/admin-session";
 import { prisma } from "@/lib/prisma";
-import { TESTIMONIAL_LIMITS } from "@/lib/testimonials";
-import { isTestimonialMediaConfigured } from "@/lib/testimonials-server";
+import {
+  TESTIMONIAL_LIMITS,
+  formatPaymentEvidence,
+  readPaymentEvidence,
+  validatePaymentEvidence,
+} from "@/lib/testimonials";
+import { isTestimonialMediaConfigured, listLearnerPrograms } from "@/lib/testimonials-server";
 
 async function requireAdmin() {
   if (!(await isAdminSession())) throw new Error("Not signed in as admin.");
@@ -58,6 +63,53 @@ export async function saveTestimonialTranscript(form: FormData): Promise<void> {
   await prisma.testimonial.update({
     where: { id: idFrom(form) },
     data: { transcript: transcript || null },
+  });
+  refreshPublicPages();
+}
+
+/**
+ * Verifies a learner who paid off-platform (UPI, bank transfer), where no
+ * enrolment row exists for the automatic match. The admin has checked the
+ * payment against the bank or UPI statement; the reference is kept as a private
+ * audit note and the public badge shows only the program.
+ */
+export async function verifyLearnerPayment(form: FormData): Promise<void> {
+  await requireAdmin();
+  const id = idFrom(form);
+  const input = readPaymentEvidence(form);
+  const errors = validatePaymentEvidence(input, { programs: await listLearnerPrograms() });
+  const first = Object.values(errors)[0];
+  if (first) throw new Error(first);
+
+  const row = await prisma.testimonial.findUniqueOrThrow({ where: { id }, select: { learnerVerifiedVia: true } });
+  // An automatic enrolment match is stronger evidence; don't overwrite it.
+  if (row.learnerVerifiedVia === "ENROLMENT") return;
+
+  await prisma.testimonial.update({
+    where: { id },
+    data: {
+      verifiedLearner: true,
+      learnerSprints: input.program,
+      learnerVerifiedVia: "PAYMENT_RECORD",
+      learnerEvidence: formatPaymentEvidence(input),
+      learnerVerifiedAt: new Date(),
+    },
+  });
+  refreshPublicPages();
+}
+
+/** Undoes verifyLearnerPayment, e.g. after entering the wrong learner. Leaves enrolment matches alone. */
+export async function clearLearnerPayment(form: FormData): Promise<void> {
+  await requireAdmin();
+  await prisma.testimonial.updateMany({
+    where: { id: idFrom(form), learnerVerifiedVia: "PAYMENT_RECORD" },
+    data: {
+      verifiedLearner: false,
+      learnerSprints: null,
+      learnerVerifiedVia: null,
+      learnerEvidence: null,
+      learnerVerifiedAt: null,
+    },
   });
   refreshPublicPages();
 }

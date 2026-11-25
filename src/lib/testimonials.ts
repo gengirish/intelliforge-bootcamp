@@ -39,6 +39,16 @@ export function normalizeProvider(raw: string | null | undefined): TestimonialPr
   return null;
 }
 
+/**
+ * Names come from the sign-in provider exactly as the learner set them there,
+ * which is sometimes all lowercase. Capitalise those for display only; a name
+ * with any capital letter is left as written ("van der Berg", "McKay").
+ */
+export function displayName(name: string): string {
+  if (name !== name.toLowerCase()) return name;
+  return name.replace(/(^|[\s'-])(\p{L})/gu, (_, sep: string, ch: string) => sep + ch.toUpperCase());
+}
+
 export type MediaKind = "NONE" | "AUDIO" | "VIDEO";
 
 export function mediaKindFor(contentType: string): MediaKind | null {
@@ -113,4 +123,58 @@ export function validateTestimonial(input: TestimonialInput): FieldErrors {
 /** Blob pathname prefix for a user's uploads, so the server can check ownership. */
 export function mediaPrefixFor(clerkUserId: string): string {
   return `testimonials/${clerkUserId.replace(/[^A-Za-z0-9_-]/g, "")}/`;
+}
+
+/**
+ * Off-platform payment evidence an admin records to verify a learner who paid
+ * by UPI or bank transfer, so no enrolment row exists to match. The note is a
+ * private audit trail; the public badge shows only the program.
+ */
+export const PAYMENT_METHODS = ["UPI", "Bank transfer"] as const;
+export type PaymentMethod = (typeof PAYMENT_METHODS)[number];
+
+/** UPI UTRs are 12 digits; bank references vary, so allow 6–35 letters and digits. */
+export const PAYMENT_REFERENCE_PATTERN = "[A-Za-z0-9]{6,35}";
+
+export interface PaymentEvidenceInput {
+  method: string;
+  reference: string;
+  /** YYYY-MM-DD, from an <input type="date">. */
+  paidOn: string;
+  program: string;
+}
+
+export type PaymentEvidenceErrors = Partial<Record<keyof PaymentEvidenceInput, string>>;
+
+export function readPaymentEvidence(form: FormData): PaymentEvidenceInput {
+  const text = (k: string) => String(form.get(k) ?? "").trim();
+  return {
+    method: text("method"),
+    reference: text("reference").replace(/\s+/g, ""),
+    paidOn: text("paidOn"),
+    program: text("program"),
+  };
+}
+
+export function validatePaymentEvidence(
+  input: PaymentEvidenceInput,
+  opts: { programs: readonly string[]; today?: Date }
+): PaymentEvidenceErrors {
+  const errors: PaymentEvidenceErrors = {};
+  if (!PAYMENT_METHODS.includes(input.method as PaymentMethod)) errors.method = "Choose UPI or bank transfer.";
+  if (!new RegExp(`^${PAYMENT_REFERENCE_PATTERN}$`).test(input.reference))
+    errors.reference = "Enter the UTR or bank reference: 6–35 letters and digits.";
+
+  const day = /^\d{4}-\d{2}-\d{2}$/.test(input.paidOn) ? new Date(`${input.paidOn}T00:00:00Z`) : null;
+  const today = (opts.today ?? new Date()).toISOString().slice(0, 10);
+  if (!day || Number.isNaN(day.getTime())) errors.paidOn = "Enter the date the payment arrived.";
+  else if (input.paidOn > today) errors.paidOn = "The payment date can't be in the future.";
+
+  if (!opts.programs.includes(input.program)) errors.program = "Choose what they paid for.";
+  return errors;
+}
+
+/** The private audit note, e.g. "UPI · ref 412345678901 · received 2026-06-10". */
+export function formatPaymentEvidence(input: PaymentEvidenceInput): string {
+  return `${input.method} · ref ${input.reference} · received ${input.paidOn}`;
 }

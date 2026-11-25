@@ -142,10 +142,16 @@ model Testimonial {
   mediaContentType String?
   transcript       String?
 
-  /// Set when the email or Clerk id matches a PAID enrolment at submit time.
+  /// Set when the email or Clerk id matches a PAID enrolment at submit time, or
+  /// when an admin confirms an off-platform payment (see learnerVerifiedVia).
   verifiedLearner Boolean @default(false)
   /// Comma-separated sprint titles the match found, e.g. "Sprint 1, Sprint 2".
   learnerSprints  String?
+  /// How verifiedLearner was established. Null when it is false.
+  learnerVerifiedVia LearnerVerification?
+  /// Admin's audit note for a PAYMENT_RECORD check: method, reference, date. Never shown publicly.
+  learnerEvidence    String?
+  learnerVerifiedAt  DateTime?
 
   consentVersion String
   consentedAt    DateTime  @default(now())
@@ -160,6 +166,13 @@ enum TestimonialStatus {
   PENDING
   APPROVED
   REJECTED
+}
+
+/// ENROLMENT: matched a PAID enrolment row automatically at submit time.
+/// PAYMENT_RECORD: an admin checked a UPI or bank payment against IntelliForge's records.
+enum LearnerVerification {
+  ENROLMENT
+  PAYMENT_RECORD
 }
 
 enum TestimonialMedia {

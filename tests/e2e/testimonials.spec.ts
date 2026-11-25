@@ -1,5 +1,9 @@
 import { test, expect } from "@playwright/test";
 import {
+  displayName,
+  formatPaymentEvidence,
+  readPaymentEvidence,
+  validatePaymentEvidence,
   normalizeLinkedinUrl,
   normalizeProvider,
   readTestimonialForm,
@@ -9,6 +13,33 @@ import {
 } from "../../src/lib/testimonials";
 
 test.describe("Testimonial rules", () => {
+  test("capitalises all-lowercase names for display only", () => {
+    expect(displayName("prasad inchal")).toBe("Prasad Inchal");
+    expect(displayName("anne-marie o'neil")).toBe("Anne-Marie O'Neil");
+    expect(displayName("Ravi Bandakkanavar")).toBe("Ravi Bandakkanavar");
+    expect(displayName("Jan van der Berg")).toBe("Jan van der Berg");
+  });
+
+  test("validates off-platform payment evidence before an admin can verify a learner", () => {
+    const programs = ["12-week Bootcamp", "2-Week AI Sprint — Cohort 1"];
+    const today = new Date("2026-11-25T10:00:00Z");
+    const form = new FormData();
+    form.set("method", "UPI");
+    form.set("reference", " 4123 4567 8901 ");
+    form.set("paidOn", "2026-06-10");
+    form.set("program", "2-Week AI Sprint — Cohort 1");
+    const input = readPaymentEvidence(form);
+    expect(input.reference).toBe("412345678901");
+    expect(validatePaymentEvidence(input, { programs, today })).toEqual({});
+    expect(formatPaymentEvidence(input)).toBe("UPI · ref 412345678901 · received 2026-06-10");
+
+    const bad = validatePaymentEvidence(
+      { method: "Cash", reference: "12-34", paidOn: "2026-12-01", program: "Sprint 9" },
+      { programs, today }
+    );
+    expect(Object.keys(bad).sort()).toEqual(["method", "paidOn", "program", "reference"]);
+  });
+
   test("maps Clerk provider ids to Google or LinkedIn only", () => {
     expect(normalizeProvider("oauth_google")).toBe("google");
     expect(normalizeProvider("google")).toBe("google");
@@ -52,7 +83,12 @@ test.describe("Testimonial pages", () => {
   test("public page explains how testimonials are verified", async ({ page }) => {
     await page.goto("/testimonials");
     await expect(page.getByRole("heading", { level: 1, name: "What learners say" })).toBeVisible();
-    await expect(page.getByText(/signing in with Google or\s+LinkedIn/)).toBeVisible();
+    await expect(page.getByText(/own Google or LinkedIn account/)).toBeVisible();
+    await expect(page.getByText("Their words, unedited")).toBeVisible();
+    await expect(page.getByRole("link", { name: /Join the Cohort 2 waitlist/ })).toHaveAttribute(
+      "href",
+      "/waitlist"
+    );
     await expect(page.getByRole("link", { name: "Share your testimonial" })).toHaveAttribute(
       "href",
       "/testimonials/submit"
