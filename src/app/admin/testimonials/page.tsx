@@ -1,15 +1,23 @@
 import Link from "next/link";
 import { isAdminSecretConfigured, isAdminSession } from "@/lib/admin-session";
 import { prisma } from "@/lib/prisma";
-import { PROVIDER_LABEL, normalizeProvider } from "@/lib/testimonials";
+import {
+  PAYMENT_METHODS,
+  PAYMENT_REFERENCE_PATTERN,
+  PROVIDER_LABEL,
+  normalizeProvider,
+} from "@/lib/testimonials";
+import { listLearnerPrograms } from "@/lib/testimonials-server";
 import { cn } from "@/lib/utils";
 import { AdminSignIn } from "../admin-sign-in";
 import { adminSignOut } from "../actions";
 import {
+  clearLearnerPayment,
   deleteTestimonial,
   saveTestimonialTranscript,
   setTestimonialStatus,
   toggleTestimonialFeatured,
+  verifyLearnerPayment,
 } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -22,6 +30,9 @@ const TABS = [
 type Tab = (typeof TABS)[number]["key"];
 
 const dateFmt = new Intl.DateTimeFormat("en-IN", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Kolkata" });
+
+const dayFmt = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kolkata" });
+const field = "rounded-lg border border-border bg-surface-light px-3 py-1.5 text-sm text-foreground";
 
 const btn = "rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors";
 
@@ -42,15 +53,18 @@ export default async function AdminTestimonialsPage({
   let loadError: string | null = null;
   let rows: Awaited<ReturnType<typeof prisma.testimonial.findMany>> = [];
   let counts: Record<string, number> = {};
+  let programs: string[] = [];
   try {
-    const [list, grouped] = await Promise.all([
+    const [list, grouped, programList] = await Promise.all([
       prisma.testimonial.findMany({
         where: { status: tab },
         orderBy: tab === "APPROVED" ? [{ featured: "desc" }, { reviewedAt: "desc" }] : [{ updatedAt: "desc" }],
       }),
       prisma.testimonial.groupBy({ by: ["status"], _count: true }),
+      listLearnerPrograms(),
     ]);
     rows = list;
+    programs = programList;
     counts = Object.fromEntries(grouped.map((g) => [g.status, g._count]));
   } catch (err) {
     console.error("[Admin testimonials] Load failed:", err);
@@ -112,7 +126,17 @@ export default async function AdminTestimonialsPage({
                   <dt>Email</dt><dd className="text-foreground">{t.email}</dd>
                   <dt>Paid learner</dt>
                   <dd className={t.verifiedLearner ? "text-green-400" : "text-amber-400"}>
-                    {t.verifiedLearner ? t.learnerSprints : "No paid enrolment matched"}
+                    {!t.verifiedLearner && "No paid enrolment matched"}
+                    {t.verifiedLearner && t.learnerVerifiedVia === "PAYMENT_RECORD" && (
+                      <>
+                        {t.learnerSprints} · payment confirmed by admin
+                        {t.learnerVerifiedAt && ` ${dateFmt.format(t.learnerVerifiedAt)}`}
+                        <span className="block text-muted">{t.learnerEvidence}</span>
+                      </>
+                    )}
+                    {t.verifiedLearner && t.learnerVerifiedVia !== "PAYMENT_RECORD" && (
+                      <>{t.learnerSprints} · matched enrolment</>
+                    )}
                   </dd>
                   <dt>Consent</dt><dd>{t.consentVersion} · {dateFmt.format(t.consentedAt)}</dd>
                   <dt>Updated</dt><dd>{dateFmt.format(t.updatedAt)}</dd>
@@ -148,6 +172,59 @@ export default async function AdminTestimonialsPage({
                     <button className={cn(btn, "border-border hover:bg-surface-light")}>Save transcript</button>
                   </form>
                 </div>
+              )}
+
+              {!t.verifiedLearner && (
+                <details className="mt-4 rounded-lg border border-border p-4">
+                  <summary className="cursor-pointer text-sm font-medium text-foreground">
+                    Paid by UPI or bank transfer? Confirm the payment
+                  </summary>
+                  <p className="mt-2 text-sm text-muted">
+                    Check the payment on your bank or UPI statement first. The reference stays private as an
+                    audit note; the public badge shows only the program.
+                  </p>
+                  <form action={verifyLearnerPayment} className="mt-3 grid gap-3 sm:grid-cols-2">
+                    <input type="hidden" name="id" value={t.id} />
+                    <label className="grid gap-1 text-sm text-muted">
+                      Method
+                      <select name="method" required defaultValue="UPI" className={field}>
+                        {PAYMENT_METHODS.map((m) => <option key={m}>{m}</option>)}
+                      </select>
+                    </label>
+                    <label className="grid gap-1 text-sm text-muted">
+                      UTR / bank reference
+                      <input
+                        name="reference" required pattern={PAYMENT_REFERENCE_PATTERN} inputMode="text"
+                        autoComplete="off" placeholder="12-digit UTR" className={field}
+                        title="6–35 letters and digits, no spaces"
+                      />
+                    </label>
+                    <label className="grid gap-1 text-sm text-muted">
+                      Received on
+                      <input name="paidOn" type="date" required max={dayFmt.format(new Date())} className={field} />
+                    </label>
+                    <label className="grid gap-1 text-sm text-muted">
+                      Paid for
+                      <select name="program" required defaultValue="" className={field}>
+                        <option value="" disabled>Choose…</option>
+                        {programs.map((p) => <option key={p}>{p}</option>)}
+                      </select>
+                    </label>
+                    <div className="sm:col-span-2">
+                      <button className={cn(btn, "border-green-500/40 bg-green-500/10 text-green-300 hover:bg-green-500/20")}>
+                        Mark as verified learner
+                      </button>
+                    </div>
+                  </form>
+                </details>
+              )}
+              {t.learnerVerifiedVia === "PAYMENT_RECORD" && (
+                <form action={clearLearnerPayment} className="mt-3">
+                  <input type="hidden" name="id" value={t.id} />
+                  <button className="text-xs text-muted underline hover:text-foreground">
+                    Remove payment confirmation
+                  </button>
+                </form>
               )}
 
               <div className="mt-5 flex flex-wrap gap-2 border-t border-border pt-4">

@@ -74,7 +74,17 @@ export async function submitTestimonial(_prev: SubmitState, form: FormData): Pro
 
   const existing = await prisma.testimonial.findUnique({
     where: { clerkUserId: identity.userId },
-    select: { id: true, mediaUrl: true, mediaPathname: true, mediaKind: true, mediaContentType: true },
+    select: {
+      id: true,
+      mediaUrl: true,
+      mediaPathname: true,
+      mediaKind: true,
+      mediaContentType: true,
+      learnerVerifiedVia: true,
+      learnerSprints: true,
+      learnerEvidence: true,
+      learnerVerifiedAt: true,
+    },
   });
 
   let media: CheckedMedia = NO_MEDIA;
@@ -101,6 +111,34 @@ export async function submitTestimonial(_prev: SubmitState, form: FormData): Pro
     console.error("[Testimonials] Paid-learner lookup failed:", err);
   }
 
+  // An enrolment match wins. Otherwise keep a payment an admin already checked:
+  // editing the quote doesn't change whether they paid.
+  const matched = programs.length > 0;
+  const keptPayment = !matched && existing?.learnerVerifiedVia === "PAYMENT_RECORD" ? existing : null;
+  const learner = matched
+    ? {
+        verifiedLearner: true,
+        learnerSprints: programs.join(", "),
+        learnerVerifiedVia: "ENROLMENT" as const,
+        learnerEvidence: null,
+        learnerVerifiedAt: new Date(),
+      }
+    : keptPayment
+      ? {
+          verifiedLearner: true,
+          learnerSprints: keptPayment.learnerSprints,
+          learnerVerifiedVia: "PAYMENT_RECORD" as const,
+          learnerEvidence: keptPayment.learnerEvidence,
+          learnerVerifiedAt: keptPayment.learnerVerifiedAt,
+        }
+      : {
+          verifiedLearner: false,
+          learnerSprints: null,
+          learnerVerifiedVia: null,
+          learnerEvidence: null,
+          learnerVerifiedAt: null,
+        };
+
   const data = {
     status: "PENDING" as const,
     featured: false,
@@ -117,8 +155,7 @@ export async function submitTestimonial(_prev: SubmitState, form: FormData): Pro
     mediaPathname: media.pathname,
     mediaContentType: media.contentType,
     transcript: media.kind === "NONE" ? null : input.transcript,
-    verifiedLearner: programs.length > 0,
-    learnerSprints: programs.length > 0 ? programs.join(", ") : null,
+    ...learner,
     consentVersion: CONSENT_VERSION,
     consentedAt: new Date(),
   };

@@ -81,6 +81,15 @@ export async function findPaidPrograms(userId: string, emails: string[]): Promis
   return titles;
 }
 
+/**
+ * Programs an admin can attribute an off-platform payment to, titled exactly as
+ * findPaidPrograms titles an automatic match, so both badges read the same.
+ */
+export async function listLearnerPrograms(): Promise<string[]> {
+  const sprints = await prisma.sprint.findMany({ orderBy: { startDate: "asc" }, select: { title: true } });
+  return ["12-week Bootcamp", ...new Set(sprints.map((s) => s.title))];
+}
+
 export type PublicTestimonial = Awaited<ReturnType<typeof getApprovedTestimonials>>[number];
 
 /**
@@ -111,6 +120,8 @@ export async function getApprovedTestimonials(opts: { limit?: number; featuredFi
         transcript: true,
         verifiedLearner: true,
         learnerSprints: true,
+        // How the badge was earned; the evidence note itself stays private.
+        learnerVerifiedVia: true,
         featured: true,
       },
     });

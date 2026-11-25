@@ -240,6 +240,7 @@ export function TestimonialForm({ accounts, learnerPrograms, mediaEnabled, media
             transcript: null,
             verifiedLearner: learnerPrograms.length > 0,
             learnerSprints: learnerPrograms.join(", ") || null,
+            learnerVerifiedVia: learnerPrograms.length > 0 ? "ENROLMENT" : null,
             featured: false,
           }}
         />
