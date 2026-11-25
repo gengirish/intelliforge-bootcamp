@@ -20,9 +20,9 @@ const ogImage = {
 export const metadata: Metadata = {
   metadataBase: new URL("https://upskill.intelliforge.tech"),
   manifest: "/site.webmanifest",
-  title: "IntelliForge AI Bootcamp — Ship Proof Before Your Interview.",
+  title: "IntelliForge AI Bootcamp — Ship AI in the job you already have.",
   description:
-    "Interview in weeks, not months? Ship two live AI products in 14 days and earn a recruiter-checkable credential. Founder-taught by Girish. Based in Hyderabad, India.",
+    "Twelve weekends of live, build-first AI sprints for working engineers: chatbots, RAG, agents and your own product, deployed to production. Founder-taught by Girish. ₹4,999 per sprint.",
   keywords: [
     "AI bootcamp",
     "AI agents",
@@ -38,9 +38,9 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "IntelliForge AI" }],
   openGraph: {
-    title: "IntelliForge AI Bootcamp — Ship Proof Before Your Interview.",
+    title: "IntelliForge AI Bootcamp — Ship AI in the job you already have.",
     description:
-      "Two live deploy URLs in 14 days. Recruiter-checkable credential. Founder-taught sprint and bootcamp.",
+      "Twelve weekends of live AI build sprints for working engineers. Founder-taught. ₹4,999 per sprint.",
     url: "https://upskill.intelliforge.tech",
     siteName: "IntelliForge AI Bootcamp",
     type: "website",
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "IntelliForge AI Bootcamp",
     description:
-      "Don't show up with tutorials. Ship proof they can click — two live deploy URLs in 14 days plus a verifiable credential.",
+      "Twelve weekends of live AI build sprints for working engineers. You leave with AI running in production.",
     images: [ogImage],
   },
 };

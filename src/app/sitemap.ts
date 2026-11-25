@@ -15,6 +15,7 @@ const ROUTES: { path: string; priority: number; changeFrequency: MetadataRoute.S
   { path: "/claude/quiz", priority: 0.8, changeFrequency: "weekly" },
   { path: "/claude/review", priority: 0.7, changeFrequency: "weekly" },
   { path: "/claude/foundations", priority: 0.7, changeFrequency: "monthly" },
+  { path: "/contact", priority: 0.3, changeFrequency: "yearly" },
   { path: "/terms", priority: 0.2, changeFrequency: "yearly" },
   { path: "/privacy", priority: 0.2, changeFrequency: "yearly" },
 ];

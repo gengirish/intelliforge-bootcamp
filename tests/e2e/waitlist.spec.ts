@@ -1,17 +1,12 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Cohort 2 waitlist", () => {
-  test("home banner announces Cohort 2 and links to the waitlist", async ({
+  test("home announces Cohort 2 and is itself the waitlist form", async ({
     page,
   }) => {
     await page.goto("/");
-    const banner = page.locator('[class*="z-[60]"]');
-    await expect(banner.getByText(/Cohort 2 opens 5–6 Dec/)).toBeVisible();
-    await banner.getByRole("link", { name: "Join the waitlist →" }).click();
-    await expect(page).toHaveURL(/\/waitlist$/);
-    await expect(
-      page.getByRole("heading", { name: "Join the Cohort 2 waitlist" })
-    ).toBeVisible();
+    await expect(page.getByText(/Cohort 2 opens 5–6 Dec · first class 9 Jan 2027/)).toBeVisible();
+    await expect(page.getByRole("form", { name: "Join the Cohort 2 waitlist" })).toBeVisible();
   });
 
   test("sprint page announces Cohort 2 dates", async ({ page }) => {

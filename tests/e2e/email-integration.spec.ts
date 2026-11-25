@@ -4,140 +4,14 @@ import { envLocal } from "./helpers/env-local";
 /** These two round-trip through AgentMail, so they need a real key to mean anything. */
 const HAS_AGENTMAIL = envLocal("AGENTMAIL_API_KEY", "") !== "";
 
-test.describe("Email Integration — Contact Form & New Sections", () => {
+test.describe("Email Integration — Contact Form", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/contact");
     await page.waitForLoadState("domcontentloaded");
-  });
-
-  test.describe("Announcement Banner", () => {
-    test("renders with waitlist link and dismiss button", async ({ page }) => {
-      const banner = page.locator('[class*="z-[60]"]');
-      await expect(banner).toBeVisible();
-      await expect(banner.getByText(/Cohort 2 opens/)).toBeVisible();
-
-      const waitlistLink = banner.getByRole("link", { name: "Join the waitlist →" });
-      await expect(waitlistLink).toBeVisible();
-      await expect(waitlistLink).toHaveAttribute("href", "/waitlist");
-    });
-
-    test("can be dismissed with X button", async ({ page }) => {
-      const banner = page.locator('[class*="z-[60]"]');
-      await expect(banner).toBeVisible();
-
-      const dismissBtn = page.getByRole("button", { name: /dismiss/i });
-      await dismissBtn.click();
-      await page.waitForTimeout(300);
-      await expect(banner).not.toBeVisible();
-    });
-  });
-
-  test.describe("Hero — Free Class CTA", () => {
-    test("shows the free demo link pointing to LMS", async ({ page }) => {
-      // Same label is reused by the free-preview and final CTAs; the hero's is first.
-      const freeClassLink = page
-        .getByRole("link", { name: "Try the free demo — live, no signup" })
-        .first();
-      await expect(freeClassLink).toBeVisible();
-      await expect(freeClassLink).toHaveAttribute(
-        "href",
-        /learning\.intelliforge\.tech/
-      );
-      await expect(freeClassLink).toHaveAttribute("target", "_blank");
-    });
-  });
-
-  test.describe("Free Preview Section", () => {
-    test("renders heading and 3 session cards", async ({ page }) => {
-      const section = page.locator("#free-preview");
-      await section.scrollIntoViewIfNeeded();
-      await page.waitForTimeout(500);
-
-      await expect(page.locator("#free-preview-heading")).toContainText(
-        "Try the Free Live Demo First."
-      );
-
-      await expect(page.getByText("Build Your First AI Agent")).toBeVisible();
-      await expect(page.getByText("RAG Pipeline Crash Course")).toBeVisible();
-      await expect(page.getByText("Vibe Coding Live Demo")).toBeVisible();
-    });
-
-    test("session cards show duration and level badges", async ({ page }) => {
-      const section = page.locator("#free-preview");
-      await section.scrollIntoViewIfNeeded();
-      await page.waitForTimeout(500);
-
-      await expect(page.getByText("60 min")).toBeVisible();
-      await expect(page.getByText("Beginner")).toBeVisible();
-      await expect(page.getByText("45 min")).toBeVisible();
-      await expect(page.getByText("Intermediate")).toBeVisible();
-      await expect(page.getByText("30 min")).toBeVisible();
-      await expect(page.getByText("All Levels")).toBeVisible();
-    });
-
-    test("has a free demo CTA linking to LMS", async ({ page }) => {
-      const section = page.locator("#free-preview");
-      await section.scrollIntoViewIfNeeded();
-      await page.waitForTimeout(500);
-
-      const cta = section.getByRole("link", { name: /Try the free demo/i });
-      await expect(cta).toBeVisible();
-      await expect(cta).toHaveAttribute("href", /learning\.intelliforge\.tech/);
-    });
-
-    test("shows no-commitment message", async ({ page }) => {
-      const section = page.locator("#free-preview");
-      await section.scrollIntoViewIfNeeded();
-      await page.waitForTimeout(500);
-
-      await expect(
-        section.getByText("Live demo · No signup · See the curriculum before you pay")
-      ).toBeVisible();
-    });
-  });
-
-  test.describe("Pricing — LMS Cross-link", () => {
-    test("shows free class link below pricing", async ({ page }) => {
-      const section = page.locator("#pricing");
-      await section.scrollIntoViewIfNeeded();
-      await page.waitForTimeout(500);
-
-      const lmsLink = section.getByRole("link", {
-        name: /Not ready to pay\? Try the free live demo first/i,
-      });
-      await expect(lmsLink).toBeVisible();
-      await expect(lmsLink).toHaveAttribute("href", /learning\.intelliforge\.tech/);
-    });
-  });
-
-  test.describe("Final CTA — Dual Path", () => {
-    test("has sprint and free demo CTAs", async ({ page }) => {
-      const finalCtaSection = page.locator("section", {
-        has: page.getByText("Ask any bootcamp for the repo"),
-      });
-
-      const sprintCTA = finalCtaSection.getByRole("link", {
-        name: /Join the Cohort 2 waitlist/,
-      });
-      await expect(sprintCTA).toBeVisible();
-      await expect(sprintCTA).toHaveAttribute("href", "/waitlist");
-
-      const freeDemoCTA = finalCtaSection.getByRole("link", {
-        name: /Try the free demo — live, no signup/,
-      });
-      await expect(freeDemoCTA).toBeVisible();
-      await expect(freeDemoCTA).toHaveAttribute(
-        "href",
-        /learning\.intelliforge\.tech/
-      );
-    });
   });
 
   test.describe("Contact Form Section", () => {
     test("renders form with all fields", async ({ page }) => {
-      const section = page.locator("#contact");
-      await section.scrollIntoViewIfNeeded();
-      await page.waitForTimeout(500);
 
       await expect(page.getByText("Have Questions?")).toBeVisible();
       await expect(page.getByText("Get in Touch.")).toBeVisible();
@@ -154,8 +28,6 @@ test.describe("Email Integration — Contact Form & New Sections", () => {
 
     test("shows contact info alongside form", async ({ page }) => {
       const section = page.locator("#contact");
-      await section.scrollIntoViewIfNeeded();
-      await page.waitForTimeout(500);
 
       await expect(section.getByText("alerts@intelliforge.tech")).toBeVisible();
       await expect(section.getByText("+91 85559 60837")).toBeVisible();
@@ -163,9 +35,6 @@ test.describe("Email Integration — Contact Form & New Sections", () => {
     });
 
     test("validates required fields before submit", async ({ page }) => {
-      const section = page.locator("#contact");
-      await section.scrollIntoViewIfNeeded();
-      await page.waitForTimeout(500);
 
       const submitBtn = page.getByRole("button", { name: /Send Message/i });
       await submitBtn.click();
@@ -182,9 +51,6 @@ test.describe("Email Integration — Contact Form & New Sections", () => {
         !HAS_AGENTMAIL,
         "sends a real email — needs AGENTMAIL_API_KEY in .env.local"
       );
-      const section = page.locator("#contact");
-      await section.scrollIntoViewIfNeeded();
-      await page.waitForTimeout(500);
 
       await page.getByLabel("Name *").fill("E2E Test User");
       await page.getByLabel("Email *").fill("intelliforge@agentmail.to");
@@ -201,50 +67,6 @@ test.describe("Email Integration — Contact Form & New Sections", () => {
       await expect(
         page.getByText(/Message sent.*get back to you/i)
       ).toBeVisible({ timeout: 15000 });
-    });
-  });
-
-  test.describe("Footer — LMS Links", () => {
-    test("shows Learning Platform and main site links", async ({ page }) => {
-      const footer = page.locator("footer");
-      await footer.scrollIntoViewIfNeeded();
-      await page.waitForTimeout(300);
-
-      const lmsLink = footer.getByRole("link", { name: "Learning Platform" });
-      await expect(lmsLink).toBeVisible();
-      await expect(lmsLink).toHaveAttribute(
-        "href",
-        "https://learning.intelliforge.tech"
-      );
-
-      const mainLink = footer.getByRole("link", {
-        name: /IntelliForge AI.*Main/i,
-      });
-      await expect(mainLink).toBeVisible();
-      await expect(mainLink).toHaveAttribute(
-        "href",
-        "https://www.intelliforge.tech"
-      );
-    });
-  });
-
-  test.describe("Navigation — Contact link", () => {
-    test("nav bar includes Contact link", async ({ page }) => {
-      const contactNavLink = page
-        .locator("header")
-        .getByRole("link", { name: "Contact" });
-      await expect(contactNavLink).toBeVisible();
-    });
-
-    test("Contact nav link scrolls to contact form", async ({ page }) => {
-      await page
-        .locator("header")
-        .getByRole("link", { name: "Contact" })
-        .click();
-      await page.waitForTimeout(1000);
-
-      const section = page.locator("#contact");
-      await expect(section).toBeInViewport();
     });
   });
 
